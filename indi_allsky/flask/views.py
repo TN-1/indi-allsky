@@ -5183,6 +5183,18 @@ class SystemInfoView(TemplateView):
         return context
 
 
+class ShellView(TemplateView):
+    page_title = 'Shell'
+    decorators = [login_required]
+
+    def dispatch_request(self):
+        if not app.config['LOGIN_DISABLED']:
+            if not current_user.is_admin:
+                return app.login_manager.unauthorized()
+
+        return super(ShellView, self).dispatch_request()
+
+
     def getUptime(self):
         uptime_s = time.time() - psutil.boot_time()
 
@@ -11943,6 +11955,7 @@ bp_allsky.add_url_rule('/config/restore', view_func=ConfigRestoreView.as_view('c
 bp_allsky.add_url_rule('/ajax/config/restore', view_func=AjaxConfigRestoreView.as_view('ajax_config_restore_view'))
 
 bp_allsky.add_url_rule('/system', view_func=SystemInfoView.as_view('system_view', template_name='system.html'))
+bp_allsky.add_url_rule('/system/shell', view_func=ShellView.as_view('shell_view', template_name='shell.html'))
 bp_allsky.add_url_rule('/ajax/system', view_func=AjaxSystemInfoView.as_view('ajax_system_view'))
 bp_allsky.add_url_rule('/ajax/settime', view_func=AjaxSetTimeView.as_view('ajax_settime_view'))
 bp_allsky.add_url_rule('/ajax/settimezone', view_func=AjaxSetTimezoneView.as_view('ajax_settimezone_view'))
