@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
+{% block head %}
+<script>
+    var camera_id = {{ camera_id }};
+</script>
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('indi_allsky.static', filename='css/xterm.css') }}" />
 <script src="{{ url_for('indi_allsky.static', filename='js/xterm.js') }}"></script>
 <script src="{{ url_for('indi_allsky.static', filename='js/xterm-addon-fit.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 
 <style>
     /* Ensure the terminal card and container expand to fill available vertical space */
@@ -43,61 +50,77 @@
 </div>
 
 <script>
-    const term = new Terminal({
-        cursorBlink: true,
-        theme: {
-            background: '#212529', // Match bootstrap dark card
+    document.addEventListener("DOMContentLoaded", () => {
+        const term = new Terminal({
+            cursorBlink: true,
+            theme: {
+                background: '#212529', // Match bootstrap dark card
+            }
+        });
+        const fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        
+        term.open(document.getElementById('terminal'));
+        
+        // Simple connection logic
+        const socket = io("/pty", {
+            path: "/indi-allsky/socket.io"
+        });
+
+        socket.on("pty-output", function (data) {
+            if (data.output) {
+                term.write(data.output);
+            }
+        });
+
+        socket.on("connect", () => {
+            console.log("PTY: Socket connected SID=" + socket.id);
+            term.write("\r\n\x1b[32mConnected to server.\x1b[0m\r\n");
+            socket.emit("ping");
+            // Delay slightly to ensure xterm.js has finished rendering
+            setTimeout(fitToscreen, 200);
+        });
+
+        socket.on("disconnect", (reason) => {
+            console.log("PTY: Socket disconnected:", reason);
+            term.write("\r\n\x1b[31mDisconnected from server (" + reason + ").\x1b[0m\r\n");
+        });
+
+        socket.on("connect_error", (error) => {
+            console.log("PTY: Connect Error:", error);
+            term.write("\r\n\x1b[33mConnection error, retrying...\x1b[0m\r\n");
+        });
+
+        socket.on("pong", () => {
+            console.log("PTY: Received PONG from server");
+        });
+
+        term.onData((data) => {
+            // console.log("browser terminal received new data:", data);
+            socket.emit("pty-input", { input: data });
+        });
+
+        function fitToscreen() {
+            fitAddon.fit();
+            const dims = { cols: term.cols, rows: term.rows };
+            console.log("sending new dimensions to server's pty", dims);
+            socket.emit("resize", dims);
         }
+
+        function debounce(func, wait_ms) {
+            let timeout;
+            return function (...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait_ms);
+            };
+        }
+
+        const wait_ms = 50;
+        window.onresize = debounce(fitToscreen, wait_ms);
+
+        // Initial fit
+        setTimeout(fitToscreen, 10);
     });
-    const fitAddon = new FitAddon.FitAddon();
-    term.loadAddon(fitAddon);
-    
-    term.open(document.getElementById('terminal'));
-    
-    // Function to handle resizing correctly
-    function resizeTerminal() {
-        fitAddon.fit();
-    }
-
-    // Initial fit
-    setTimeout(resizeTerminal, 10);
-
-    term.writeln('                                               :::::::::::                                          ');
-    term.writeln('                                          ::=+*#%%@@@@@%%#*+=::                                     ');
-    term.writeln('                                      ::-+#@@@@@@%%#**#%@@@@@@#+-::                                 ');
-    term.writeln('                                     -+#@@@@%#+-::::::::::=+#@@@@%+=:                               ');
-    term.writeln('                                  ::-#@@@@+-:::=-::::*@@#-::::=#@@@#=::                             ');
-    term.writeln('                                 ::*@@@%+:::::=@=:::-@##@#:=*-::-*@@@#-:                            ');
-    term.writeln('                                :-%@@@+::--:::=@=:::+@-:+@-+@-::::-*@@%-:                           ');
-    term.writeln('                               :-%@@%-::-@+:::=@=:::+@+:-+-*@:-%#-::+@@@-:                          ');
-    term.writeln('                              :-%@@*:::::@+:::-@=:::-@@@*::*@=@@*-+::-%@%-:                         ');
-    term.writeln('                             ::#@@#:-*-::@*:::-@+::::-*@@#:#@@%-::%+::-@@%::                        ');
-    term.writeln('                             :=@@@-:#@#::%*:::-@+::::::-#@:%@%%:::+#-+:*@@+:                        ');
-    term.writeln('                             :%@@%:-@=@+:%#:::-@+:::*@::+@:%#=@=::-@#@--@@%::                       ');
-    term.writeln('                            :-@@@*:*@*@@:#%=**:@%%%*+@#+@#:@*:#%:::#%-::@@@=:                       ');
-    term.writeln('                            :+@@@=-@+--@+*@@@@:@@@@#:%@@@-:@+:=@+::%*:::#@@+:                       ');
-    term.writeln('                         ::-=#@@@+====================++================#@@%--::                    ');
-    term.writeln('                      ::=#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*=:                  ');
-    term.writeln('                     :-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*:                 ');
-    term.writeln('                    :-%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#:                ');
-    term.writeln('                    :+@@@@@@@-::=@@@-:::=@@@@@@#::-@@@-::::::--=+#@@@@@@-::=@@@@@@@-:               ');
-    term.writeln('                    :#@@@@@@@-::=@@@-::::-@@@@@#::-@@@-::-**++=-::-*@@@@-::=@@@@@@@+:               ');
-    term.writeln('                    :*@@@@@@@-::=@@@-::+::-%@@@#::-@@@-::=@@@@@@#:::+@@@-::=@@@@@@@+:               ');
-    term.writeln('                    :*@@@@@@@-::=@@@-::##-:-%@@#::-@@@-::=@@@@@@@*:::%@@-::=@@@@@@@+:               ');
-    term.writeln('                    :*@@@@@@@-::=@@@-::#@%-:-%@#::-@@@-::=@@@@@@@%:::*@@-::=@@@@@@@+:               ');
-    term.writeln('                    :*@@@@@@@-::=@@@-::#@@%-:-##::-@@@-::=@@@@@@@*:::#@@-::=@@@@@@@+:               ');
-    term.writeln('                    :*@@@@@@@-::=@@@-::#@@@%-::+::-@@@-::=@@@@@@#-::=@@@-::=@@@@@@@+:               ');
-    term.writeln('                    :+@@@@@@@-::=@@@-::#@@@@@-::::-@@@-::-***+=-:::=@@@@-::=@@@@@@@-:               ');
-    term.writeln('                    :-@@@@@@@-::=@@@-::#@@@@@@-:::-@@@-:::::::::=*%@@@@@-::=@@@@@@%:                ');
-    term.writeln('                     :=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%-:                ');
-    term.writeln('                      :-*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%+::                 ');
-    term.writeln('                        ::=++**********************###**********************++=::                   ');
-    term.writeln('                            :::::::::::::::::::::::::::::::::::::::::::::::::                       ');
-    term.writeln('Welcome to \x1b[1;32mindi-allsky\x1b[0m');
-    term.writeln('\x1b[1;31mCAUTION:\x1b[0m You are in a live system shell. Exercise extreme caution.');
-    term.writeln('INDEV: This is a visual preview of the terminal.');
-    term.write('$ ');
-
-    window.addEventListener('resize', resizeTerminal);
 </script>
 {% endblock %}

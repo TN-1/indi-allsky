@@ -1,24 +1,29 @@
 import os
 import json
+import logging
 from pathlib import Path
 from logging.config import dictConfig
 
 #from sqlalchemy.pool import NullPool
 from flask import Flask
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
-
-from flask_login import LoginManager
+from flask_socketio import SocketIO
 
 db = SQLAlchemy()
 migrate = Migrate()
 csrf = CSRFProtect()
+socketio = SocketIO()
+
+from flask_login import LoginManager
 
 from .views import bp_allsky  # noqa: E402
 from .auth_views import bp_auth_allsky  # noqa: E402
 from .syncapi_views import bp_syncapi_allsky  # noqa: E402
 from .actionapi_views import bp_actionapi_allsky  # noqa: E402
+from .terminal import register_terminal_events  # noqa: E402
 
 
 dictConfig({
@@ -96,6 +101,9 @@ def create_app():
     #}
 
     csrf.init_app(app)
+
+    socketio.init_app(app, path='/indi-allsky/socket.io', async_mode='threading', engineio_logger=logging.getLogger('indi_allsky'))
+    register_terminal_events(socketio)
 
     app.register_blueprint(bp_allsky)
     app.register_blueprint(bp_auth_allsky)
