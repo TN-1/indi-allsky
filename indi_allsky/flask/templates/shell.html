@@ -62,33 +62,37 @@
         
         term.open(document.getElementById('terminal'));
         
-        // Simple connection logic
-        const socket = io("/pty", {
-            path: "/indi-allsky/socket.io"
+        // Connect to default namespace with known working path
+        const socket = io({
+            path: "/indi-allsky/socket.io",
+            transports: ['websocket']
         });
 
         socket.on("pty-output", function (data) {
             if (data.output) {
+                console.log("PTY Output received:", data.output);
                 term.write(data.output);
             }
         });
 
         socket.on("connect", () => {
-            console.log("PTY: Socket connected SID=" + socket.id);
+            console.log("PTY: Connected via WebSocket SID=" + socket.id);
             term.write("\r\n\x1b[32mConnected to server.\x1b[0m\r\n");
-            socket.emit("ping");
-            // Delay slightly to ensure xterm.js has finished rendering
-            setTimeout(fitToscreen, 200);
+            // Delay slightly to ensure server handlers are registered and ready
+            setTimeout(() => {
+                socket.emit("ping");
+                fitToscreen();
+            }, 300);
         });
 
         socket.on("disconnect", (reason) => {
-            console.log("PTY: Socket disconnected:", reason);
+            console.log("PTY: Disconnected:", reason);
             term.write("\r\n\x1b[31mDisconnected from server (" + reason + ").\x1b[0m\r\n");
         });
 
         socket.on("connect_error", (error) => {
-            console.log("PTY: Connect Error:", error);
-            term.write("\r\n\x1b[33mConnection error, retrying...\x1b[0m\r\n");
+            console.log("PTY: WebSocket Error:", error);
+            term.write("\r\n\x1b[33mWebSocket connection failed. Retrying...\x1b[0m\r\n");
         });
 
         socket.on("pong", () => {
@@ -96,7 +100,6 @@
         });
 
         term.onData((data) => {
-            // console.log("browser terminal received new data:", data);
             socket.emit("pty-input", { input: data });
         });
 
@@ -120,7 +123,7 @@
         window.onresize = debounce(fitToscreen, wait_ms);
 
         // Initial fit
-        setTimeout(fitToscreen, 10);
+        setTimeout(fitToscreen, 50);
     });
 </script>
 {% endblock %}

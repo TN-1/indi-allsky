@@ -22,12 +22,12 @@ def set_winsize(fd, row, col):
     try:
         winsize = struct.pack("HHHH", int(row), int(col), 0, 0)
         fcntl.ioctl(fd, termios.TIOCSWINSZ, winsize)
-        logger.debug(f"PTY: Resized to {row}x{col}")
+        logger.info(f"PTY: Winsize set to {row}x{col}")
     except Exception as e:
         logger.error(f"PTY: set_winsize error: {e}")
 
 def register_terminal_events(socketio):
-    logger.info("PTY: REGISTERING HANDLERS MANUALLY...")
+    logger.info("PTY: REGISTERING EXPLICIT DEFAULT NAMESPACE HANDLERS...")
 
     def read_and_forward_pty_output():
         max_read_bytes = 1024 * 20
@@ -40,7 +40,7 @@ def register_terminal_events(socketio):
                     (data_ready, _, _) = select.select([fd], [], [], 0)
                     if data_ready:
                         output = os.read(fd, max_read_bytes).decode(errors="ignore")
-                        socketio.emit("pty-output", {"output": output}, namespace="/pty")
+                        socketio.emit("pty-output", {"output": output}, namespace="/")
                 except Exception as e:
                     logger.error(f"PTY: Read error: {e}")
                     terminal_state["fd"] = None
@@ -52,14 +52,15 @@ def register_terminal_events(socketio):
                 terminal_state["background_task_started"] = False
                 break
 
-    def pty_connect(auth=None):
+    @socketio.on("connect", namespace="/")
+    def on_connect(*args, **kwargs):
         sid = getattr(request, 'sid', 'unknown')
-        logger.info(f"PTY: CONNECT namespace=/pty SID={sid} auth={auth}")
+        logger.info(f"PTY: CONNECT namespace=/ SID={sid}")
         
         if terminal_state.get("child_pid"):
             try:
                 os.kill(terminal_state["child_pid"], 0)
-                logger.info(f"PTY: Reusing existing PID {terminal_state['child_pid']}")
+                logger.info(f"PTY: Reusing PID {terminal_state['child_pid']}")
                 if not terminal_state["background_task_started"]:
                     terminal_state["background_task_started"] = True
                     socketio.start_background_task(target=read_and_forward_pty_output)
@@ -68,7 +69,6 @@ def register_terminal_events(socketio):
                     os.write(terminal_state["fd"], b"\n")
                 return
             except OSError:
-                logger.info("PTY: Process is dead, cleaning up")
                 terminal_state["child_pid"] = None
                 terminal_state["fd"] = None
 
@@ -89,8 +89,9 @@ def register_terminal_events(socketio):
             socketio.start_background_task(target=read_and_forward_pty_output)
             logger.info(f"PTY: FORKED BASH PID {child_pid}")
 
-    def pty_input(data):
-        logger.debug(f"PTY: INPUT received")
+    @socketio.on("pty-input", namespace="/")
+    def on_input(data):
+        logger.info("PTY: INPUT received")
         fd = terminal_state.get("fd")
         if fd:
             try:
@@ -98,31 +99,21 @@ def register_terminal_events(socketio):
             except OSError as e:
                 logger.error(f"PTY: Write error: {e}")
 
-    def pty_resize(data):
+    @socketio.on("resize", namespace="/")
+    def on_resize(data):
         logger.info(f"PTY: RESIZE received: {data}")
         fd = terminal_state.get("fd")
         if fd:
             set_winsize(fd, data["rows"], data["cols"])
 
-    def pty_ping():
+    @socketio.on("ping", namespace="/")
+    def on_ping():
         sid = getattr(request, 'sid', 'unknown')
         logger.info(f"PTY: PING received SID={sid}")
-        socketio.emit("pong", namespace="/pty")
+        socketio.emit("pong", namespace="/")
 
-    def pty_disconnect():
-        sid = getattr(request, 'sid', 'unknown')
-        logger.info(f"PTY: DISCONNECT SID={sid}")
+    @socketio.on_error_default
+    def default_error_handler(e):
+        logger.error(f"PTY: SOCKET ERROR: {e}")
 
-    def global_connect():
-        sid = getattr(request, 'sid', 'unknown')
-        logger.info(f"GLOBAL CONNECT SID={sid}")
-
-    # Register handlers manually without decorators
-    socketio.on_event("connect", global_connect)
-    socketio.on_event("connect", pty_connect, namespace="/pty")
-    socketio.on_event("disconnect", pty_disconnect, namespace="/pty")
-    socketio.on_event("pty-input", pty_input, namespace="/pty")
-    socketio.on_event("resize", pty_resize, namespace="/pty")
-    socketio.on_event("ping", pty_ping, namespace="/pty")
-
-    logger.info("PTY: ALL HANDLERS REGISTERED MANUALLY")
+    logger.info("PTY: EXPLICIT HANDLERS REGISTERED")
