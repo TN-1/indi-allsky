@@ -754,7 +754,9 @@ if [[ "$DISTRO" == "debian_13" ]]; then
         udisks2 \
         dnsmasq-base \
         polkitd \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [ "$CPU_BITS" != "32" ]; then
@@ -922,7 +924,9 @@ elif [[ "$DISTRO" == "debian_12" ]]; then
         udisks2 \
         dnsmasq-base \
         polkitd \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1073,7 +1077,9 @@ elif [[ "$DISTRO" == "debian_11" ]]; then
         udisks2 \
         dnsmasq-base \
         policykit-1 \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1211,7 +1217,9 @@ elif [[ "$DISTRO" == "debian_10" ]]; then
         libgpiod2 \
         i2c-tools \
         policykit-1 \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1368,7 +1376,9 @@ elif [[ "$DISTRO" == "ubuntu_24.04" ]]; then
         udisks2 \
         dnsmasq-base \
         polkitd \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1539,7 +1549,9 @@ elif [[ "$DISTRO" == "ubuntu_22.04" ]]; then
         udisks2 \
         dnsmasq-base \
         policykit-1 \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1697,7 +1709,9 @@ elif [[ "$DISTRO" == "ubuntu_20.04" ]]; then
         network-manager \
         udisks2 \
         policykit-1 \
-        dbus-user-session
+        dbus-user-session \
+        nodejs \
+        npm
 
 
     if [[ "$USE_MYSQL_DATABASE" == "true" ]]; then
@@ -1883,6 +1897,11 @@ if [ "${GPIO_PYTHON_MODULES}" == "true" ]; then
 fi
 
 pip3 install "${PIP_REQ_ARGS[@]}"
+
+
+echo "**** CSS compilation with Tailwind/daisyUI ****"
+npm install --no-fund --no-audit
+npm run build
 
 
 # some modules do not have their prerequisites set

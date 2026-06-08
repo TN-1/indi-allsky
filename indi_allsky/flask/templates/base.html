@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html data-theme="dark">
   <head>
 <title>{% block title %}{% endblock %}</title>
 <link rel="icon" type="image/png" href="{{ url_for('indi_allsky.static', filename='images/favicon_32.png') }}" sizes="32x32">
@@ -9,6 +9,7 @@
 <script src="{{ url_for('indi_allsky.static', filename='js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ url_for('indi_allsky.static', filename='bootstrap/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('indi_allsky.static', filename='js/indi-allsky-tabs.js') }}"></script>
+<link href="{{ url_for('indi_allsky.static', filename='css/dist.css') }}" rel="stylesheet">
 <style>
 .container{
     max-width: 2000px;
@@ -405,6 +406,19 @@ function updateStatus(data) {
 }
 
 $( document ).ready(function() {
+    // Theme selection persistence
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        $('html').attr('data-theme', savedTheme);
+        $(`input[name="theme-dropdown"][value="${savedTheme}"]`).prop('checked', true);
+    }
+
+    $('input[name="theme-dropdown"]').on('change', function() {
+        const theme = $(this).val();
+        $('html').attr('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    });
+
     // Load notifications when ready
     loadNotification({'camera_id' : camera_id});
 
