@@ -18,93 +18,178 @@
 
     {% block head %}{% endblock %}
   </head>
-  <body class="bg-dark bg-opacity-75">
-<div class="container-fluid overflow-hidden">
-    <div class="row vh-100 overflow-auto">
-        <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-dark d-flex sticky-top">
-            <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
-                <div>
-                    <a id="indi_allsky_anchor" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none" href="https://github.com/aaronwmorris/indi-allsky" target="_blank">
-                        <div class="fs-5 d-none d-sm-inline">
-                            <img src="{{ url_for('indi_allsky.static', filename='images/logo_outline_full.png') }}" height="100" alt="indi-allsky">
-                        </div>
+  <body class="bg-base-300 min-h-screen">
+<div class="drawer lg:drawer-open">
+    <input id="main-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+        <!-- Header for mobile -->
+        <div class="navbar bg-base-100 lg:hidden shadow-sm z-10">
+            <div class="flex-none">
+                <label for="main-drawer" class="btn btn-square btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </label>
+            </div>
+            <div class="flex-1 px-2 mx-2">
+                <img src="{{ url_for('indi_allsky.static', filename='images/logo_outline_full.png') }}" height="32" class="h-8 w-auto" alt="indi-allsky">
+            </div>
+        </div>
+
+        <main class="p-4 lg:p-8 grow overflow-auto">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <div class="drawer-side z-30">
+        <label for="main-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="flex flex-col w-80 min-h-full bg-base-200 text-base-content border-r border-base-content/5">
+            <!-- Sidebar Header / Logo -->
+            <div class="px-6 py-8 flex items-center justify-center">
+                <a href="https://github.com/aaronwmorris/indi-allsky" target="_blank">
+                    <img src="{{ url_for('indi_allsky.static', filename='images/logo_outline_full.png') }}" class="h-20 w-auto transition-transform hover:scale-105" alt="indi-allsky">
+                </a>
+            </div>
+
+            <!-- Camera Selector -->
+            <div class="px-6 py-2 mb-4">
+                <form id="form_camera_select" onSubmit="return false;">
+                    {{ form_camera_select.CAMERA_SELECT(class='select select-bordered select-sm w-full font-bold text-warning bg-neutral focus:outline-offset-0') }}
+                </form>
+                <div class="text-[10px] uppercase tracking-wider opacity-40 mt-2 px-1 font-semibold">Cameras Available: {{ camera_count }}</div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul class="menu menu-md p-4 pt-0 grow">
+                <li>
+                    <a href="{{ url_for('indi_allsky.index_view') }}">
+                        <img src="{{ url_for('indi_allsky.static', filename='svg/house-fill.svg') }}" class="w-5 h-5 opacity-70" alt="Latest">
+                        Latest
                     </a>
-                </div>
+                </li>
+                <li>
+                    <a href="{{ url_for('indi_allsky.image_loop_view') }}">
+                        <img src="{{ url_for('indi_allsky.static', filename='svg/repeat.svg') }}" class="w-5 h-5 opacity-70" alt="Loop">
+                        Loop
+                    </a>
+                </li>
 
-                <div class="d-none d-sm-inline" style="width:100%">
-                </div>
-
-                <div class="flex-shrink-1 d-sm-inline">
-                    <div>
-                        <form id="form_camera_select" onSubmit="return false;">
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    {{ form_camera_select.CAMERA_SELECT(class='text-warning fw-bold form-select bg-secondary', style='font-size: 12px;') }}
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="text-secondary d-none d-sm-inline" style="font-size:10px">Cameras Available: {{ camera_count }}</div>
-                </div>
-
-                <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item">
-                        <a href="{{ url_for('indi_allsky.index_view') }}" class="nav-link link-info px-sm-0 px-2">
-                            <img src="{{ url_for('indi_allsky.static', filename='svg/house-fill.svg') }}" width="16" height="16" alt="Latest"><span class="ms-1 d-none d-sm-inline">Latest</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('indi_allsky.image_loop_view') }}" class="nav-link link-info px-sm-0 px-2">
-                            <img src="{{ url_for('indi_allsky.static', filename='svg/repeat.svg') }}" width="16" height="16" alt="Loop"><span class="ms-1 d-none d-sm-inline">Loop</span></a>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="#" class="nav-link link-info dropdown-toggle px-sm-0 px-1" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fs-5 bi-bootstrap"></i>
-                            <img src="{{ url_for('indi_allsky.static', filename='svg/collection-play-fill.svg') }}" width="16" height="16" alt="Media">
-                            <span class="ms-1 d-none d-sm-inline">Media</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdown">
-                            <li>
-                                <a href="{{ url_for('indi_allsky.gallery_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/grid-3x2-gap-fill.svg') }}" width="16" height="16" alt="Image Viewer"><span class="ms-1 d-none d-sm-inline">Gallery</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.imageviewer_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/image-fill.svg') }}" width="16" height="16" alt="Image Viewer"><span class="ms-1 d-none d-sm-inline">Images</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.videoviewer_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/film.svg') }}" width="16" height="16" alt="Timelapse Viewer"><span class="ms-1 d-none d-sm-inline">Timelapses</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.mini_videoviewer_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/film.svg') }}" width="16" height="16" alt="Mini Timelapse Viewer"><span class="ms-1 d-none d-sm-inline">Mini-Timelapses</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.latest_panorama_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/aspect-ratio.svg') }}" width="16" height="16" alt="Panorama"><span class="ms-1 d-none d-sm-inline">Panorama</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.panorama_loop_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/repeat.svg') }}" width="16" height="16" alt="Panorama Loop"><span class="ms-1 d-none d-sm-inline">Panorama Loop</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.realtime_keogram_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/input-cursor.svg') }}" width="16" height="16" alt="Realtime Keogram"><span class="ms-1 d-none d-sm-inline">Realtime Keogram</span></a>
-                            </li>
-                            <li>
-                                <a href="{{ url_for('indi_allsky.longterm_keogram_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/distribute-horizontal.svg') }}" width="16" height="16" alt="Long Term Keogram"><span class="ms-1 d-none d-sm-inline">Long Term Keogram</span></a>
-                            </li>
+                <!-- Media Section -->
+                <li>
+                    <details>
+                        <summary>
+                            <img src="{{ url_for('indi_allsky.static', filename='svg/collection-play-fill.svg') }}" class="w-5 h-5 opacity-70" alt="Media">
+                            Media
+                        </summary>
+                        <ul>
+                            <li><a href="{{ url_for('indi_allsky.gallery_view') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('indi_allsky.imageviewer_view') }}">Images</a></li>
+                            <li><a href="{{ url_for('indi_allsky.videoviewer_view') }}">Timelapses</a></li>
+                            <li><a href="{{ url_for('indi_allsky.mini_videoviewer_view') }}">Mini-Timelapses</a></li>
+                            <li><a href="{{ url_for('indi_allsky.latest_panorama_view') }}">Panorama</a></li>
+                            <li><a href="{{ url_for('indi_allsky.panorama_loop_view') }}">Panorama Loop</a></li>
+                            <li><a href="{{ url_for('indi_allsky.realtime_keogram_view') }}">Realtime Keogram</a></li>
+                            <li><a href="{{ url_for('indi_allsky.longterm_keogram_view') }}">Long Term Keogram</a></li>
                             {% if current_user.is_authenticated or login_disabled %}
-                            <li>
-                                <a href="{{ url_for('indi_allsky.fitsimageviewer_view') }}" class="dropdown-item">
-                                    <img src="{{ url_for('indi_allsky.static', filename='svg/image-fill.svg') }}" width="16" height="16" alt="FITS Viewer"><span class="ms-1 d-none d-sm-inline">FITS Viewer</span></a>
-                            </li>
+                            <li><a href="{{ url_for('indi_allsky.fitsimageviewer_view') }}">FITS Viewer</a></li>
                             {% endif %}
                         </ul>
-                    </li>
+                    </details>
+                </li>
+
+                <!-- Info Section -->
+                <li>
+                    <details>
+                        <summary>
+                            <img src="{{ url_for('indi_allsky.static', filename='svg/info-square-fill.svg') }}" class="w-5 h-5 opacity-70" alt="Info">
+                            Info
+                        </summary>
+                        <ul>
+                            <li><a href="{{ url_for('indi_allsky.sqm_view') }}">SQM</a></li>
+                            <li><a href="{{ url_for('indi_allsky.chart_view') }}">Charts</a></li>
+                            <li><a href="{{ url_for('indi_allsky.sensor_panel_view') }}">Sensor Panel</a></li>
+                            {% if current_user.is_authenticated or login_disabled %}
+                            <li><a href="{{ url_for('indi_allsky.darks_view') }}">Dark Library</a></li>
+                            <li><a href="{{ url_for('indi_allsky.rolling_adu_view') }}">ADU History</a></li>
+                            <li><a href="{{ url_for('indi_allsky.image_lag_view') }}">Image Lag</a></li>
+                            <li><a href="{{ url_for('indi_allsky.filespaceusage_view') }}">File Space Usage</a></li>
+                            <li><a href="{{ url_for('indi_allsky.camera_lens_view') }}">Camera Info</a></li>
+                            {% endif %}
+                        </ul>
+                    </details>
+                </li>
+
+                <!-- Tools Section -->
+                <li>
+                    <details>
+                        <summary>
+                            <img src="{{ url_for('indi_allsky.static', filename='svg/tools.svg') }}" class="w-5 h-5 opacity-70" alt="Tools">
+                            Tools
+                        </summary>
+                        <ul>
+                            <li><a href="{{ url_for('indi_allsky.virtualsky_view') }}">VirtualSky</a></li>
+                            <li><a href="{{ url_for('indi_allsky.camera_simulator_view') }}">Camera Simulator</a></li>
+                            <li><a href="{{ url_for('indi_allsky.astropanel_view') }}">Astropanel</a></li>
+                            {% if current_user.is_authenticated or login_disabled %}
+                            <li><a href="{{ url_for('indi_allsky.generate_view') }}">Generate</a></li>
+                            <li><a href="{{ url_for('indi_allsky.focus_view') }}">Focus</a></li>
+                            <li><a href="{{ url_for('indi_allsky.image_processing_view') }}">Process FITS</a></li>
+                            <li><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}">Image Circle Helper</a></li>
+                            <li><a href="{{ url_for('indi_allsky.mask_view') }}">Mask Base</a></li>
+                            <li><a href="{{ url_for('indi_allsky.log_view') }}">Log</a></li>
+                            <li><a href="{{ url_for('indi_allsky.support_info_view') }}">Support Info</a></li>
+                            {% endif %}
+                        </ul>
+                    </details>
+                </li>
+
+                <!-- System Section -->
+                {% if current_user.is_authenticated or login_disabled %}
+                <li>
+                    <details>
+                        <summary>
+                            <img src="{{ url_for('indi_allsky.static', filename='svg/gear-fill.svg') }}" class="w-5 h-5 opacity-70" alt="System">
+                            System
+                        </summary>
+                        <ul>
+                            <li><a href="{{ url_for('indi_allsky.config_view') }}">Config</a></li>
+                            <li><a href="{{ url_for('indi_allsky.network_manager_view') }}">Network</a></li>
+                            <li><a href="{{ url_for('indi_allsky.drive_manager_view') }}">Drives</a></li>
+                            <li><a href="{{ url_for('indi_allsky.manual_gpio_view') }}">GPIO Control</a></li>
+                            <li><a href="{{ url_for('indi_allsky.system_view') }}">System Info</a></li>
+                        </ul>
+                    </details>
+                </li>
+                {% endif %}
+            </ul>
+            </ul>
+
+            <!-- Bottom Panel -->
+            <div class="p-6 bg-base-300/50 border-t border-base-content/5">
+                <div id="status_text" class="text-[11px] leading-relaxed mb-6 opacity-80">{{ status_text|safe }}</div>
+                
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="avatar placeholder">
+                        <div class="bg-neutral text-neutral-content rounded-full w-10 h-10 shadow-sm border border-base-content/10">
+                            <span class="text-sm font-bold">{{ current_user.username[:1]|upper if current_user.is_authenticated else '?' }}</span>
+                        </div>
+                    </div>
+                    <div class="text-sm font-medium truncate grow">{{ username_text|safe }}</div>
+                </div>
+
+                <div class="flex flex-row gap-2">
+                    <!-- Theme Selector -->
+                    <div class="dropdown dropdown-top grow">
+                        <div tabindex="0" role="button" class="btn btn-sm btn-outline btn-block border-base-content/20 hover:bg-base-content/5 hover:border-base-content/30 text-xs">
+                            Theme
+                            <svg width="10px" height="10px" class="fill-current opacity-60" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048"><path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path></svg>
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-40 menu menu-sm p-2 shadow-xl bg-base-100 rounded-lg w-52 mb-2 border border-base-content/10">
+                            <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-ghost justify-start font-normal" aria-label="Default" value="default"/></li>
+                            <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-ghost justify-start font-normal" aria-label="Light" value="light"/></li>
+                            <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-ghost justify-start font-normal" aria-label="Dark" value="dark"/></li>
+                            <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-ghost justify-start font-normal" aria-label="Night" value="night"/></li>
+                            <li><input type="radio" name="theme-dropdown" class="theme-controller btn btn-sm btn-ghost justify-start font-normal" aria-label="Dracula" value="dracula"/></li>
+                        </ul>
+                    </div>
 
                     <li class="dropdown">
                         <a href="#" class="nav-link link-info dropdown-toggle px-sm-0 px-1" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -236,57 +321,37 @@
                     </li>
                     {% endif %}
 
-                </ul>
-
-                <div class="py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1 d-none d-sm-inline">
-                    <hr>
-                    <div id="status_text">{{ status_text|safe }}</div>
-                    <hr>
-                    <div>{{ username_text|safe }}</div>
+                    <!-- Login/Logout -->
+                    <li class="nav-item ms-lg-2">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth_indi_allsky.logout_view') }}" class="btn btn-sm btn-error px-4">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('auth_indi_allsky.login_view') }}" class="btn btn-sm btn-primary px-4">Login</a>
+                    {% endif %}
+                    </li>
                 </div>
             </div>
         </div>
-        <div class="col-xl col-9 d-flex flex-column h-sm-100">
-            <main class="row vh-100 overflow-auto">
-                <div class="col pt-4">
-                  {% block content %}{% endblock %}
-                </div>
-            </main>
-            <!---
-            <footer class="row bg-light py-4 mt-auto">
-                <div class="col"> Footer content here... </div>
-            </footer>
-            -->
-        </div>
     </div>
 
-<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="notificationLabel"></h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="notification_date"></div>
-        <br>
-        <div id="notification_body"></div>
-      </div>
-      <div class="modal-footer">
-        <button id="ack_button" type="button" class="btn btn-primary" data-bs-dismiss="modal">Acknowledge</button>
-      </div>
+<!-- daisyUI Modal for Notifications -->
+<dialog id="notificationModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg" id="notificationLabel"></h3>
+    <div id="notification_date" class="text-sm opacity-70 mb-4"></div>
+    <p id="notification_body" class="py-4"></p>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button id="ack_button" class="btn btn-primary">Acknowledge</button>
+      </form>
     </div>
   </div>
-</div>
+</dialog>
 
 </div>
 
 <script>
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
-})
-
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
@@ -344,16 +409,19 @@ function showNotification(data) {
         ackNotification(data.id, showNotification);
     });
 
-    notification_modal = $("#notificationModal");
-    notificationTitle = notificationModal.querySelector('.modal-title');
-    notificationDate = notificationModal.querySelector('#notification_date');
-    notificationBody = notificationModal.querySelector('#notification_body');
+    const modal = document.getElementById("notificationModal");
+    const label = document.getElementById('notificationLabel');
+    const date = document.getElementById('notification_date');
+    const body = document.getElementById('notification_body');
 
-    notificationTitle.textContent = "Notification: " + data.category;
-    notificationDate.textContent = "Date: " + data.createDate;
-    notificationBody.textContent = data.notification;
-
-    notification_modal.modal('show');
+    if (modal && label && date && body) {
+        label.textContent = "Notification: " + data.category;
+        date.textContent = "Date: " + data.createDate;
+        body.textContent = data.notification;
+        modal.showModal();
+    } else {
+        console.error("Could not find notification modal elements");
+    }
 }
 
 
