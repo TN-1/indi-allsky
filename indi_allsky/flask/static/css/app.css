@@ -1,4 +1,4 @@
-@import "tailwindcss";
-@plugin "daisyui";
-
-/* Custom overrides can go here */
+@import "tailwindcss" prefix(tw);
+@plugin "daisyui" {
+  themes: all;
+}
