@@ -17,6 +17,13 @@ import psutil
 import dbus
 import ephem
 from pprint import pformat  # noqa: F401
+import pty
+import select
+import termios
+import struct
+import fcntl
+import threading
+import simple_websocket
 
 from passlib.hash import argon2
 
@@ -35,6 +42,7 @@ from flask import Response
 from flask import url_for
 from flask import send_from_directory
 from flask import send_file
+from flask import abort
 from flask import current_app as app
 
 from flask_login import login_required
@@ -5181,6 +5189,102 @@ class SystemInfoView(TemplateView):
 
 
         return context
+
+
+class ShellWSView(BaseView):
+    methods = ['GET']
+    # decorators = [login_required] # Removing to debug connection handshake
+
+    def set_winsize(self, fd, row, col):
+        try:
+            winsize = struct.pack("HHHH", int(row), int(col), 0, 0)
+            fcntl.ioctl(fd, termios.TIOCSWINSZ, winsize)
+        except Exception:
+            pass
+
+    def dispatch_request(self):
+        app.logger.info(f"PTY WS DEBUG: Request from {request.remote_addr}")
+        app.logger.info(f"PTY WS DEBUG: Cookies: {dict(request.cookies)}")
+        app.logger.info(f"PTY WS DEBUG: User Authenticated: {current_user.is_authenticated}")
+        
+        if not app.config['LOGIN_DISABLED']:
+            if not current_user.is_authenticated or not current_user.is_admin:
+                app.logger.warning(f"PTY WS DEBUG: Auth failed for user {current_user}")
+                return abort(403)
+
+        is_ws = simple_websocket.is_websocket(request.environ)
+        app.logger.info(f"PTY WS DEBUG: is_websocket={is_ws}")
+        
+        if is_ws:
+            try:
+                ws = simple_websocket.Server(request.environ)
+                app.logger.info("PTY WS: WebSocket server initialized, handling...")
+                self.handle_websocket(ws)
+            except simple_websocket.ConnectionClosed:
+                app.logger.info("PTY WS: Connection closed")
+            except Exception as e:
+                app.logger.error(f"PTY WS: Error in handle_websocket: {e}")
+            return ''
+        
+        app.logger.warning("PTY WS: Not a websocket request")
+        return abort(400)
+
+    def handle_websocket(self, ws):
+        (child_pid, fd) = pty.fork()
+        if child_pid == 0:
+            os.environ['TERM'] = 'xterm-256color'
+            os.execvp("/bin/bash", ["bash"])
+        else:
+            self.set_winsize(fd, 24, 80)
+
+            def read_from_pty():
+                while True:
+                    try:
+                        (data_ready, _, _) = select.select([fd], [], [], 0.1)
+                        if data_ready:
+                            data = os.read(fd, 1024 * 20)
+                            if not data:
+                                break
+                            ws.send(data.decode(errors='ignore'))
+                    except Exception:
+                        break
+                try:
+                    ws.close()
+                except:
+                    pass
+
+            t = threading.Thread(target=read_from_pty)
+            t.daemon = True
+            t.start()
+
+            while True:
+                try:
+                    data = ws.receive()
+                    if data is None:
+                        break
+
+                    if isinstance(data, str) and data.startswith('{') and data.endswith('}'):
+                        try:
+                            msg = json.loads(data)
+                            if msg.get('type') == 'resize':
+                                self.set_winsize(fd, msg['rows'], msg['cols'])
+                                continue
+                            elif msg.get('type') == 'input':
+                                os.write(fd, msg['input'].encode())
+                                continue
+                        except:
+                            pass
+
+                    os.write(fd, data.encode() if isinstance(data, str) else data)
+                except Exception:
+                    break
+
+            try:
+                os.close(fd)
+                os.kill(child_pid, 9)
+                os.waitpid(child_pid, 0)
+            except:
+                pass
 
 
 class ShellView(TemplateView):
@@ -11956,6 +12060,7 @@ bp_allsky.add_url_rule('/ajax/config/restore', view_func=AjaxConfigRestoreView.a
 
 bp_allsky.add_url_rule('/system', view_func=SystemInfoView.as_view('system_view', template_name='system.html'))
 bp_allsky.add_url_rule('/system/shell', view_func=ShellView.as_view('shell_view', template_name='shell.html'))
+bp_allsky.add_url_rule('/system/shell/ws', view_func=ShellWSView.as_view('shell_ws_view'))
 bp_allsky.add_url_rule('/ajax/system', view_func=AjaxSystemInfoView.as_view('ajax_system_view'))
 bp_allsky.add_url_rule('/ajax/settime', view_func=AjaxSetTimeView.as_view('ajax_settime_view'))
 bp_allsky.add_url_rule('/ajax/settimezone', view_func=AjaxSetTimezoneView.as_view('ajax_settimezone_view'))

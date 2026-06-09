@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="{{ url_for('indi_allsky.static', filename='css/xterm.css') }}" />
 <script src="{{ url_for('indi_allsky.static', filename='js/xterm.js') }}"></script>
 <script src="{{ url_for('indi_allsky.static', filename='js/xterm-addon-fit.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 
 <style>
     /* Ensure the terminal card and container expand to fill available vertical space */
@@ -62,52 +61,46 @@
         
         term.open(document.getElementById('terminal'));
         
-        // Connect to default namespace with known working path
-        const socket = io({
-            path: "/indi-allsky/socket.io",
-            transports: ['websocket']
-        });
+        // Construct WebSocket URL
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = protocol + '//' + window.location.host + "{{ url_for('indi_allsky.shell_ws_view') }}";
+        
+        console.log("Connecting to WebSocket:", wsUrl);
+        const socket = new WebSocket(wsUrl);
 
-        socket.on("pty-output", function (data) {
-            if (data.output) {
-                console.log("PTY Output received:", data.output);
-                term.write(data.output);
-            }
-        });
+        socket.onmessage = function (event) {
+            term.write(event.data);
+        };
 
-        socket.on("connect", () => {
-            console.log("PTY: Connected via WebSocket SID=" + socket.id);
+        socket.onopen = () => {
+            console.log("PTY: Connected via WebSocket");
             term.write("\r\n\x1b[32mConnected to server.\x1b[0m\r\n");
-            // Delay slightly to ensure server handlers are registered and ready
             setTimeout(() => {
-                socket.emit("ping");
                 fitToscreen();
             }, 300);
-        });
+        };
 
-        socket.on("disconnect", (reason) => {
-            console.log("PTY: Disconnected:", reason);
-            term.write("\r\n\x1b[31mDisconnected from server (" + reason + ").\x1b[0m\r\n");
-        });
+        socket.onclose = (event) => {
+            console.log("PTY: Disconnected:", event.reason);
+            term.write("\r\n\x1b[31mDisconnected from server.\x1b[0m\r\n");
+        };
 
-        socket.on("connect_error", (error) => {
+        socket.onerror = (error) => {
             console.log("PTY: WebSocket Error:", error);
-            term.write("\r\n\x1b[33mWebSocket connection failed. Retrying...\x1b[0m\r\n");
-        });
-
-        socket.on("pong", () => {
-            console.log("PTY: Received PONG from server");
-        });
+            term.write("\r\n\x1b[33mWebSocket connection failed.\x1b[0m\r\n");
+        };
 
         term.onData((data) => {
-            socket.emit("pty-input", { input: data });
+            socket.send(data);
         });
 
         function fitToscreen() {
             fitAddon.fit();
-            const dims = { cols: term.cols, rows: term.rows };
+            const dims = { type: 'resize', cols: term.cols, rows: term.rows };
             console.log("sending new dimensions to server's pty", dims);
-            socket.emit("resize", dims);
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(dims));
+            }
         }
 
         function debounce(func, wait_ms) {

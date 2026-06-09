@@ -46,7 +46,7 @@ The project uses a dual configuration system:
 Implementation of a browser-based terminal to allow administrative tasks via the Web UI.
 
 ### Current Status: Research Paused
-Extensive research (documented in `indi_allsky/flask/TERMINAL_RESEARCH.md`) has identified a fundamental disconnect between the Socket.IO engine and Python application handlers when running within Gunicorn worker processes.
+Extensive research (documented in `indi_allsky/flask/TERMINAL_RESEARCH.md`) has identified a fundamental disconnect between the Socket.IO engine and Python application handlers when running within Gunicorn worker processes. A subsequent attempt to hijack the Gunicorn socket directly using `simple-websocket` also failed to establish a connection through the Apache proxy.
 
 ### Core Components
 - **Frontend**: `xterm.js` for terminal rendering and input handling, hosted locally.

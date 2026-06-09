@@ -47,6 +47,10 @@ Even with handlers consolidated into the application factory (`__init__.py`), th
 *   **Approach**: Moved all handlers, state, and PTY logic into `indi_allsky/flask/__init__.py` to eliminate every possible module/timing variable.
 *   **Result**: Failed. Proved that even with zero dependencies, the engine and handlers are disconnected in the Gunicorn environment.
 
+### Attempt 7: Socket Hijack (`simple-websocket`)
+*   **Approach**: Used the `simple-websocket` library to take over the Gunicorn socket directly within a Flask route (`/system/shell/ws`). This bypasses the Socket.IO framework entirely and uses raw browser WebSockets.
+*   **Result**: Failed. Browser reports immediate connection failure. Server-side logs (syslog local7) do not show the request reaching the Flask view, suggesting the connection is being closed or redirected during the handshake (possibly by `login_required` or Apache/Gunicorn headers).
+
 ---
 
 ## 3. Future Recommendations
