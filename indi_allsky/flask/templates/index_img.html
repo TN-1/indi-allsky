@@ -161,13 +161,20 @@ $( document ).ready(function() {
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
-    <div class="row">
-        <div class="text-muted text-center" id="message">Loading...</div>
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
+    <div class="tw:flex tw:justify-center">
+        <div class="tw:text-base-content tw:text-center tw:font-medium" id="message">
+            Loading...
+        </div>
     </div>
-    <div class="row h-75 align-items-center">
-        <div class="col-12 text-center">
-            <img id="latest-image" class="fit">
+
+    <div class="tw:h-3/4 tw:flex tw:items-center tw:justify-center">
+        <div class="tw:w-full tw:text-center">
+            <img id="latest-image" 
+                class="fit tw:mx-auto tw:max-h-full tw:max-w-full tw:object-contain" 
+                alt=""
+                onerror="this.style.display='none';"
+                onload="this.style.display='block';">
         </div>
     </div>
 </div>
