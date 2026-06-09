@@ -23,6 +23,8 @@ until [ -d "node_modules/tailwindcss" ]; do
   sleep 1
 done
 
+echo "Render Tailwind CSS"
+npx @tailwindcss/cli -i ./indi_allsky/flask/static/css/app.css -o ./indi_allsky/flask/static/css/dist.css
 echo "Starting Tailwind CSS watcher..."
 npx @tailwindcss/cli -i ./indi_allsky/flask/static/css/app.css -o ./indi_allsky/flask/static/css/dist.css --watch > /dev/null 2>&1 &
 TAILWIND_PID=$!
