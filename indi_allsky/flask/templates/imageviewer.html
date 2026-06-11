@@ -96,111 +96,117 @@ function closeFullscreen() {
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-<form id="form_viewer" onSubmit="return false;">
-    {{ form_viewer.csrf_token }}
-    <div class="text-danger my-2" id="csrf_token-error"></div>
+    <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:flex tw:flex-col tw:gap-4">
+        
+        <form id="form_viewer" onsubmit="return false;" class="tw:flex tw:flex-col tw:gap-4">
+            {{ form_viewer.csrf_token }}
+            <div class="tw:text-error tw:text-sm tw:my-1 tw:font-semibold" id="csrf_token-error"></div>
 
-    <div class="form-group row">
-        <div class="col-sm-1">
-            {{ form_viewer.YEAR_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            <?-- form-control until there is a better layout -->
-            {{ form_viewer.YEAR_SELECT(class='form-control bg-secondary') }}
-            <div id="YEAR_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div class="tw:flex tw:flex-wrap tw:items-center tw:gap-6">
+                
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_viewer.YEAR_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    <div class="tw:flex tw:flex-col">
+                        {{ form_viewer.YEAR_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                        <div id="YEAR_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                        
+                        <div class="tw:hidden">
+                            {{ form_viewer.CAMERA_ID(class='tw:input') }}
+                        </div>
+                        <div id="CAMERA_ID-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-            {{ form_viewer.CAMERA_ID(class='form-control bg-secondary') }}
-            <div id="CAMERA_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_viewer.MONTH_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    <div class="tw:flex tw:flex-col">
+                        {{ form_viewer.MONTH_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                        <div id="MONTH_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-        <div class="col-sm-1">
-            {{ form_viewer.MONTH_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_viewer.MONTH_SELECT(class='form-select bg-secondary') }}
-            <div id="MONTH_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_viewer.DAY_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    <div class="tw:flex tw:flex-col">
+                        {{ form_viewer.DAY_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                        <div id="DAY_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-        <div class="col-sm-1">
-            {{ form_viewer.DAY_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            {{ form_viewer.DAY_SELECT(class='form-select bg-secondary') }}
-            <div id="DAY_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_viewer.HOUR_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    <div class="tw:flex tw:flex-col">
+                        {{ form_viewer.HOUR_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                        <div id="HOUR_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-        <div class="col-sm-1">
-            {{ form_viewer.HOUR_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            {{ form_viewer.HOUR_SELECT(class='form-select bg-secondary') }}
-            <div id="HOUR_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-
-        <div class="col-sm-1">
-            {{ form_viewer.IMG_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_viewer.IMG_SELECT(class='form-select bg-secondary') }}
-            <div id="IMG_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <form id="form_image_exclude" onSubmit="return false;">
-        <div class="col-sm-1">
-            <div class="form-switch">
-                {{ form_image_exclude.EXCLUDE_EXCLUDE(class='form-check-input') }}
-                <div id="EXCLUDE_EXCLUDE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_viewer.IMG_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    <div class="tw:flex tw:flex-col">
+                        {{ form_viewer.IMG_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                        <div id="IMG_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
             </div>
-            <div>
-                {{ form_image_exclude.EXCLUDE_IMAGE_ID(class='form-control bg-secondary') }}
-                <div id="EXCLUDE_IMAGE_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            {{ form_image_exclude.EXCLUDE_EXCLUDE.label }}
-        </div>
-
         </form>
 
-        <div class="col-sm-4"></div>
+        <div class="tw:flex tw:flex-wrap tw:items-center tw:justify-between tw:border-t tw:border-base-content/10 tw:pt-3 tw:gap-4">
+            
+            <form id="form_image_exclude" onsubmit="return false;" class="tw:flex tw:items-center tw:gap-4">
+                {{ form_image_exclude.csrf_token }}
+                <div class="tw:text-error tw:text-xs" id="csrf_token-error2"></div>
+                
+                <div class="tw:flex tw:items-center tw:gap-3">
+                    {{ form_image_exclude.EXCLUDE_EXCLUDE(class='tw:toggle tw:toggle-error tw:toggle-sm') }}
+                    {{ form_image_exclude.EXCLUDE_EXCLUDE.label(class='tw:label-text tw:font-semibold cursor-pointer') }}
+                </div>
+                
+                <div class="tw:hidden">
+                    {{ form_image_exclude.EXCLUDE_IMAGE_ID(class='tw:input') }}
+                </div>
+                <div id="EXCLUDE_IMAGE_ID-error" class="tw:text-error tw:text-xs" style="display: none;"></div>
+                <div id="EXCLUDE_EXCLUDE-error" class="tw:text-error tw:text-xs" style="display: none;"></div>
+            </form>
 
-        <div class="col-sm-1">
-            {{ form_image_exclude.csrf_token }}
-            <div class="text-danger my-2" id="csrf_token-error2"></div>
-            {{ form_viewer.FILTER_DETECTIONS.label }}
-        </div>
-
-        <div class="col-sm-1">
-            <div class="form-switch">
-                {{ form_viewer.FILTER_DETECTIONS(class='form-check-input') }}
-                <div id="FILTER_DETECTIONS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div class="tw:flex tw:items-center tw:gap-6">
+                <div class="tw:flex tw:items-center tw:gap-3">
+                    {{ form_viewer.FILTER_DETECTIONS.label(class='tw:label-text tw:font-semibold') }}
+                    {{ form_viewer.FILTER_DETECTIONS(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
+                    <div id="FILTER_DETECTIONS-error" class="tw:text-error tw:text-xs" style="display: none;"></div>
+                </div>
+                
+                <div class="tw:flex tw:items-center">
+                    <div class="loader" id="loader_filter"></div>
+                </div>
             </div>
         </div>
-        <div class="col-sm-1">
-            <div class="loader" id="loader_filter"></div>
-        </div>
+
+        <div id="success-message" class="tw:text-success tw:text-sm tw:font-medium tw:text-center" style="display: none;"></div>
+        <div id="failure-message" class="tw:text-error tw:text-sm tw:font-medium tw:text-center" style="display: none;"></div>
     </div>
 
-    <div id="success-message" class="text-success" style="display: none;"></div>
-    <div id="failure-message" class="invalid-feedback text-danger" style="display: none;"></div>
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10">
+    </div>
 
-</form>
-
-<hr>
-
-<div class="row h-75 align-items-center">
-    <div class="col-12 text-center">
-        <div style="font-size:10px">
-            Use arrow keys, WASD, or VIM keys to cycle images - Hour: Up/Down - Image: Left/Right - x: Exclude
+    <div class="tw:grow tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-4">
+        
+        <div class="tw:text-base-content/60 tw:text-center tw:text-xs tw:tracking-wide tw:bg-base-content/5 tw:px-4 tw:py-1.5 tw:rounded-full tw:font-medium">
+            Use arrow keys, <span class="tw:font-bold tw:text-base-content/80">WASD</span>, or <span class="tw:font-bold tw:text-base-content/80">VIM keys</span> to cycle — Hour: <span class="tw:text-primary tw:font-bold">Up/Down</span> — Image: <span class="tw:text-primary tw:font-bold">Left/Right</span> — <span class="tw:text-error tw:font-bold">x</span>: Exclude
         </div>
 
-        <img id="image" class="fit">
+        <div class="tw:w-full tw:text-center tw:flex-1 tw:min-h-0">
+            <img id="image" 
+                 class="fit tw:mx-auto tw:max-h-[70vh] tw:max-w-full tw:object-contain" 
+                 alt=""
+                 onerror="this.style.display='none';"
+                 onload="this.style.display='block';">
+        </div>
 
-        <div style="margin-top: 20px;">
+        <div class="tw:flex tw:flex-wrap tw:justify-center tw:gap-2 tw:mt-2" id="action-links-wrapper">
             <span id="virtualsky_here"></span>
             <span id="loop_here"></span>
             <span id="mini_generate_here"></span>
@@ -214,7 +220,6 @@ function closeFullscreen() {
             <span id="panorama_loop_here"></span>
         </div>
     </div>
-</div>
 
 </div>
 

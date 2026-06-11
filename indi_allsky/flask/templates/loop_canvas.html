@@ -221,45 +221,49 @@ $( document ).ready(function() {
 {% endblock %}
 
 {% block content %}
-<form id="form_history" onSubmit="return false;">
-    <div class="form-group row">
-        <div class="col-sm-1">
-            {{ form_history.HISTORY_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_history.HISTORY_SELECT(class='form-select bg-secondary') }}
-        </div>
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-        <div class="col-sm-1">
-            {{ form_history.FRAMEDELAY_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_history.FRAMEDELAY_SELECT(class='form-select bg-secondary') }}
-        </div>
+    <form id="form_history" onsubmit="return false;" class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl">
+        <div class="tw:flex tw:flex-wrap tw:items-center tw:gap-6">
+            
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_history.HISTORY_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                {{ form_history.HISTORY_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+            </div>
 
-        <div class="col-sm-1">
-            {{ form_history.ROCK_CHECKBOX.label(class='col-form-label') }}
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_history.FRAMEDELAY_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                {{ form_history.FRAMEDELAY_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-3">
+                {{ form_history.ROCK_CHECKBOX.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:tooltip tw:tooltip-right" data-tip="Rocks the images from newest to oldest to newest">
+                    {{ form_history.ROCK_CHECKBOX(class='tw:checkbox tw:checkbox-primary tw:checkbox-sm') }}
+                </div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:ml-auto">
+                <div class="loader" id="loader_loop"></div>
+            </div>
+
         </div>
-        <div class="col-sm-1">
-            <span data-bs-toggle="tooltip" data-bs-placement="right" title="Rocks the images from newest to oldest to newest">
-            {{ form_history.ROCK_CHECKBOX(class='form-check-input bg-secondary') }}
-            </span>
-        </div>
-        <div class="col-sm-1">
-            <div class="loader" id="loader_loop"></div>
+    </form>
+
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10">
+    </div>
+
+    <div class="tw:flex tw:justify-center">
+        <div class="tw:text-base-content tw:text-center tw:font-medium" id="message"></div>
+    </div>
+
+    <div class="tw:h-3/4 tw:flex tw:items-center tw:justify-center">
+        <div class="tw:w-full tw:text-center">
+            <canvas id="canvas" class="tw:mx-auto tw:max-h-full tw:max-w-full tw:object-contain"></canvas>
         </div>
     </div>
-</form>
 
-<hr>
-
-<div class="row">
-    <div class="text-muted text-center" id="message"></div>
-</div>
-<div class="row">
-    <div class="text-center">
-        <canvas id="canvas"></canvas>
-    </div>
 </div>
 
 <script>
