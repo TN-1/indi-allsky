@@ -28,57 +28,71 @@ var youtube__enable = {{ youtube__enable }};
 {% endblock %}
 
 {% block content %}
-<form id="form_video_viewer" onSubmit="return false;">
-    {{ form_video_viewer.csrf_token }}
-    <div class="text-danger my-2" id="csrf_token-error"></div>
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-    <div class="form-group row">
-        <div class="col-sm-1">
-            {{ form_video_viewer.YEAR_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_video_viewer.YEAR_SELECT(class='form-select bg-secondary') }}
-            <div id="YEAR_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+    <form id="form_video_viewer" onsubmit="return false;" class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl">
+        {{ form_video_viewer.csrf_token }}
+        <div class="tw:text-error tw:text-sm tw:my-1 tw:font-semibold" id="csrf_token-error"></div>
 
-            {{ form_video_viewer.CAMERA_ID(class='form-control bg-secondary') }}
-            <div id="CAMERA_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+        <div class="tw:flex tw:flex-wrap tw:items-center tw:gap-6">
+            
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_video_viewer.YEAR_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_video_viewer.YEAR_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="YEAR_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    
+                    <div class="tw:hidden">
+                        {{ form_video_viewer.CAMERA_ID(class='tw:input') }}
+                    </div>
+                    <div id="CAMERA_ID-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
 
-        <div class="col-sm-1">
-            {{ form_video_viewer.MONTH_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_video_viewer.MONTH_SELECT(class='form-select bg-secondary') }}
-            <div id="MONTH_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_video_viewer.MONTH_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_video_viewer.MONTH_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="MONTH_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
 
-        <div class="col-sm-2">
-            {{ form_video_viewer.TIMEOFDAY_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_video_viewer.TIMEOFDAY_SELECT(class='form-select bg-secondary') }}
-            <div id="TIMEOFDAY_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-        <div class="col-sm-1">
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_video_viewer.TIMEOFDAY_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_video_viewer.TIMEOFDAY_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="TIMEOFDAY_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
+
             {% if current_user.is_authenticated or login_disabled %}
-            <a href="{{ url_for('indi_allsky.generate_view') }}" class="text-decoration-none link-info">
-                <span class="badge pill bg-success">Generate</span>
-            </a>
+            <div class="tw:flex tw:items-center">
+                <a href="{{ url_for('indi_allsky.generate_view') }}" class="tw:btn tw:btn-success tw:btn-sm tw:text-xs tw:font-bold tw:gap-1 tw:no-underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21l8.982-8.982M18 13.665L19 12l-8.982-8.982M4 10h16M4 14h16" />
+                    </svg>
+                    Generate
+                </a>
+            </div>
             {% endif %}
+
+            <div class="tw:flex tw:items-center tw:ml-auto">
+                <div class="loader" id="loader_filter"></div>
+            </div>
+
         </div>
-        <div class="col-sm-1">
-            <div class="loader" id="loader_filter"></div>
-        </div>
+
+        <div id="success-message" class="tw:text-success tw:text-sm tw:font-medium tw:text-center tw:mt-3" style="display: none;"></div>
+        <div id="failure-message" class="tw:text-error tw:text-sm tw:font-medium tw:text-center tw:mt-3" style="display: none;"></div>
+    </form>
+
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10">
     </div>
 
-    <div id="success-message" class="text-success" style="display: none;"></div>
-    <div id="failure-message" class="invalid-feedback text-danger" style="display: none;"></div>
+    <div id="videos_div" class="tw:w-full tw:grow">
+        </div>
 
-</form>
-
-<hr>
-
-<div id="videos_div">
 </div>
 
 <script>
