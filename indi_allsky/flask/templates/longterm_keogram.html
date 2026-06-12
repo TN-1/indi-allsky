@@ -109,88 +109,92 @@ function closeFullscreen() {
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-<div id="longterm_keogram_form_div">
-    <form id="form_longterm_keogram" onSubmit="return false; "autocomplete="off">
-        <div class="form-group row" style="font-size:12px">
-            {{ form_longterm_keogram.CAMERA_ID() }}
+    <div id="longterm_keogram_form_div" class="tw:w-full">
+        <form id="form_longterm_keogram" onSubmit="return false;" autocomplete="off" class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl">
+            
+            <div class="tw:hidden">
+                {{ form_longterm_keogram.CAMERA_ID() }}
+            </div>
 
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.END_SELECT.label(class='col-form-label') }}
-            </div>
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.DAYS_SELECT.label(class='col-form-label') }}
-            </div>
-            <div class="col-sm-1">
-                {{ form_longterm_keogram.PIXELS_SELECT.label(class='col-form-label') }}
-            </div>
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.ALIGNMENT_SELECT.label(class='col-form-label') }}
-            </div>
-            <div class="col-sm-1">
-                {{ form_longterm_keogram.OFFSET_SELECT.label(class='col-form-label') }}
-            </div>
-            <div class="col-sm-1">
-                {{ form_longterm_keogram.REVERSE.label(class='col-form-label') }}
-                <div class="form-switch">
-                    {{ form_longterm_keogram.REVERSE(class='form-check-input') }}
+            <div class="tw:flex tw:flex-wrap tw:items-center tw:gap-6">
+                
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.END_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.END_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
                 </div>
-            </div>
-            <div class="col-sm-2">
-                <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Long-Term-Keogram" class="text-decoration-none link-info" target="_blank">Long Term Keogram Wiki</a></div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.END_SELECT(class='form-select bg-secondary') }}
-            </div>
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.DAYS_SELECT(class='form-select bg-secondary') }}
-            </div>
-            <div class="col-sm-1">
-                {{ form_longterm_keogram.PIXELS_SELECT(class='form-select bg-secondary') }}
-            </div>
-            <div class="col-sm-2">
-                {{ form_longterm_keogram.ALIGNMENT_SELECT(class='form-select bg-secondary') }}
-            </div>
-            <div class="col-sm-1">
-                {{ form_longterm_keogram.OFFSET_SELECT(class='form-select bg-secondary') }}
-            </div>
-            <div class="col-sm-1" style="font-size:12px">
-                {{ form_longterm_keogram.LABEL.label(class='col-form-label') }}
-                <div class="form-switch">
-                    {{ form_longterm_keogram.LABEL(class='form-check-input') }}
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.DAYS_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.DAYS_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
                 </div>
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.PIXELS_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.PIXELS_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                </div>
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.ALIGNMENT_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.ALIGNMENT_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                </div>
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.OFFSET_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.OFFSET_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                </div>
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.REVERSE.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.REVERSE(class='toggle toggle-primary toggle-sm') }}
+                </div>
+
+                <div class="tw:flex tw:items-center tw:gap-2">
+                    {{ form_longterm_keogram.LABEL.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                    {{ form_longterm_keogram.LABEL(class='toggle toggle-primary toggle-sm') }}
+                </div>
+
+                <div class="tw:flex tw:items-center tw:gap-3 tw:ml-auto">
+                    <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Long-Term-Keogram" 
+                       class="tw:btn tw:btn-ghost tw:btn-sm tw:text-xs tw:text-info tw:no-underline" 
+                       target="_blank">
+                       Wiki
+                    </a>
+                    
+                    <button id="generate-button" class="tw:btn tw:btn-success tw:btn-sm tw:text-xs tw:font-bold">Generate</button>
+                </div>
+
             </div>
-            <div class="col-sm-1">
-                <button id="generate-button" class="btn btn-success">Generate</button>
-            </div>
-        </div>
-    </form>
+        </form>
 
-    <hr>
-
-    <div class="row">
-        <div class="text-success text-center" id="success_message" style="display: none;"></div>
-        <div class="text-danger text-center" id="failure_message" style="display: none;"></div>
-        <div class="text-muted text-center" id="message"></div>
-    </div>
-</div>
-
-<div class="row h-75 align-items-center">
-    <div class="col-12 text-center">
-        <img id="keogram-image" class="fit">
-
-        <div style="margin-top: 20px;">
-            <span id="processing_time"></span>
-            <span id="img_download"></span>
+        <div class="tw:w-full tw:mt-2">
+            <div class="tw:text-success tw:text-sm tw:font-medium tw:text-center" id="success_message" style="display: none;"></div>
+            <div class="tw:text-error tw:text-sm tw:font-medium tw:text-center" id="failure_message" style="display: none;"></div>
+            <div class="tw:text-base-content tw:text-center tw:font-medium" id="message"></div>
         </div>
     </div>
-</div>
+
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10 tw:m-0">
+    </div>
+
+    <div class="tw:h-3/4 tw:flex tw:items-center tw:justify-center">
+        <div class="tw:w-full tw:text-center">
+            <img id="keogram-image" 
+                 class="fit tw:mx-auto tw:max-h-full tw:max-w-full tw:object-contain" 
+                 style="display: none;"
+                 onerror="this.style.display='none';"
+                 onload="this.style.display='block';">
+        </div>
+    </div>
+
+    <div class="tw:flex tw:justify-center tw:items-center tw:gap-4 tw:mt-2 tw:text-xs tw:text-base-content/70">
+        <span id="processing_time" class="tw:font-mono"></span>
+        <span id="img_download" class="tw:flex tw:gap-2"></span>
+    </div>
 
 </div>
-
 
 <script>
 function init() {
