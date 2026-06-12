@@ -95,91 +95,92 @@ function closeFullscreen() {
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-<form id="form_fits_viewer" onSubmit="return false;">
-    {{ form_fits_viewer.csrf_token }}
-    <div class="text-danger my-2" id="csrf_token-error"></div>
+    <form id="form_fits_viewer" onSubmit="return false;" class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl">
+        {{ form_fits_viewer.csrf_token }}
+        <div class="tw:text-error tw:text-sm tw:my-1 tw:font-semibold" id="csrf_token-error"></div>
 
-    <div class="form-group row">
-        <div class="col-sm-1">
-            {{ form_fits_viewer.YEAR_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            <?-- form-control until there is a better layout -->
-            {{ form_fits_viewer.YEAR_SELECT(class='form-control bg-secondary') }}
-            <div id="YEAR_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:flex tw:flex-wrap tw:items-center tw:gap-6">
+            
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_fits_viewer.YEAR_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_fits_viewer.YEAR_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="YEAR_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                    
+                    <div class="tw:hidden">
+                        {{ form_fits_viewer.CAMERA_ID(class='tw:input') }}
+                    </div>
+                    <div id="CAMERA_ID-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
 
-            {{ form_fits_viewer.CAMERA_ID(class='form-control bg-secondary') }}
-            <div id="CAMERA_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_fits_viewer.MONTH_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_fits_viewer.MONTH_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="MONTH_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_fits_viewer.DAY_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_fits_viewer.DAY_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="DAY_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_fits_viewer.HOUR_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_fits_viewer.HOUR_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="HOUR_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-2">
+                {{ form_fits_viewer.IMG_SELECT.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
+                <div class="tw:flex tw:flex-col">
+                    {{ form_fits_viewer.IMG_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:bg-base-100 tw:text-base-content') }}
+                    <div id="IMG_SELECT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="col-sm-1">
-            {{ form_fits_viewer.MONTH_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_fits_viewer.MONTH_SELECT(class='form-select bg-secondary') }}
-            <div id="MONTH_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+        <div id="success-message" class="tw:text-success tw:text-sm tw:font-medium tw:text-center tw:mt-3" style="display: none;"></div>
+        <div id="failure-message" class="tw:text-error tw:text-sm tw:font-medium tw:text-center tw:mt-3" style="display: none;"></div>
+    </form>
 
-        <div class="col-sm-1">
-            {{ form_fits_viewer.DAY_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            {{ form_fits_viewer.DAY_SELECT(class='form-select bg-secondary') }}
-            <div id="DAY_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10">
+    </div>
 
-        <div class="col-sm-1">
-            {{ form_fits_viewer.HOUR_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-1">
-            {{ form_fits_viewer.HOUR_SELECT(class='form-select bg-secondary') }}
-            <div id="HOUR_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-
-        <div class="col-sm-1">
-            {{ form_fits_viewer.IMG_SELECT.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-2">
-            {{ form_fits_viewer.IMG_SELECT(class='form-select bg-secondary') }}
-            <div id="IMG_SELECT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+    <div class="tw:w-full tw:flex tw:justify-center">
+        <div class="tw:badge tw:badge-outline tw:text-[11px] tw:font-medium tw:text-base-content/50 tw:py-3 tw:px-4 tw:gap-1.5 tw:border-base-content/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5h18M3 14.25h18M3 6.75h18M3 18h18" />
+            </svg>
+            Controls: Arrow keys, WASD, or VIM keys — Hour: Up/Down | Image: Left/Right
         </div>
     </div>
 
-    <div class="form-group row">
-    </div>
-
-    <div id="success-message" class="text-success" style="display: none;"></div>
-    <div id="failure-message" class="invalid-feedback text-danger" style="display: none;"></div>
-
-</form>
-
-<hr>
-
-<div class="row">
-    <div class="col-12 text-center">
-        <div class="text-center" style="font-size:10px">
-            Use arrow keys, WASD, or VIM keys to cycle images - Hour: Up/Down - Image: Left/Right
+    <div class="tw:h-3/4 tw:flex tw:items-center tw:justify-center">
+        <div class="tw:w-full tw:text-center">
+            <img id="fits-image" 
+                 class="fit tw:mx-auto tw:max-h-full tw:max-w-full tw:object-contain" 
+                 style="display: none;"
+                 onerror="this.style.display='none';"
+                 onload="this.style.display='block';">
         </div>
     </div>
-</div>
 
-
-<div class="row align-items-center">
-    <div class="col-12 text-center">
-        <img id="fits-image" class="fit">
+    <div class="tw:flex tw:justify-center tw:items-center tw:gap-4 tw:mt-2 tw:text-xs tw:text-base-content/70">
+        <span id="fits_download" class="tw:flex tw:gap-2"></span>
+        <span id="fits_processing" class="tw:font-mono"></span>
     </div>
-</div>
-
-<div class="row align-items-center">
-    <div class="col-12 text-center">
-        <div style="margin-top: 20px;">
-            <span id="fits_download"></span>
-            <span id="fits_processing"></span>
-        </div>
-    </div>
-</div>
 
 </div>
 

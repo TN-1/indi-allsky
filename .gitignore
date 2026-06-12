@@ -29,5 +29,5 @@ ssl.key
 de421.bsp
 *.h5
 indi_allsky/flask/static/css/dist.css
-*.db
+local_dev.*
 node_modules/
