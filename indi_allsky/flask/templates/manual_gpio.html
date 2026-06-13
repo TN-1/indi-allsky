@@ -22,81 +22,53 @@ var pin_states = {{ pin_states | tojson }};
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
+<div class="tw:w-full tw:space-y-6 tw:p-2">
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-12">
-        Click the buttons to toggle the pin state
+    <div class="tw:space-y-3">
+        <div class="tw:alert tw:alert-info tw:shadow-sm tw:rounded-xl">
+            <span class="tw:text-xs">
+                <strong>Note:</strong> Some pins read HIGH by default (e.g., Raspberry Pi GPIOs 1-8 have internal pull-ups enabled).
+            </span>
+        </div>
+        <div class="tw:alert tw:alert-warning tw:shadow-sm tw:rounded-xl">
+            <span class="tw:text-xs">
+                <strong>Warning:</strong> Manual control of Dew Heater and Fan pins can lock GPIOs and interfere with automatic management.
+            </span>
+        </div>
     </div>
-</div>
 
-<hr>
+    <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-xl">
+        <div class="tw:card-body tw:p-6">
+            <h2 class="tw:card-title tw:text-xs tw:uppercase tw:tracking-widest tw:mb-4">GPIO Pin State Control</h2>
+            
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+                {% for i in range(3) %}
+                <div class="tw:flex tw:items-center tw:justify-between tw:bg-base-300 tw:p-4 tw:rounded-lg tw:border tw:border-base-300">
+                    <span class="tw:font-mono tw:text-sm tw:font-bold">Pin {{ pin_names[i] }}</span>
+                    <button id="pin-{{ i+1 }}-button" 
+                            class="tw:btn tw:btn-sm tw:btn-neutral tw:btn-disabled tw:rounded-lg tw:w-20">
+                        N/A
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-12">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Some pins will read HIGH by default due to the internal pull-up being enabled at boot.  Raspberry Pi GPIOs 1-8 have pull-ups enabled by default.</div>
+            <div class="tw:flex tw:items-center tw:gap-6 tw:mt-6 tw:pt-6 tw:border-t tw:border-base-300">
+                <label class="tw:flex tw:items-center tw:gap-3 tw:cursor-pointer">
+                    <input type="checkbox" id="PIN_CONFIRM1" name="PIN_CONFIRM1" value="y" class="tw:checkbox tw:checkbox-primary">
+                    <span class="tw:text-xs tw:font-bold tw:uppercase">Confirm Manual Override</span>
+                </label>
+                
+                <div id="pin-loader" class="tw:loading tw:loading-spinner tw:loading-sm tw:text-info tw:hidden"></div>
+            </div>
+        </div>
     </div>
-</div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-12">
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> It is not recommended to manually control the Dew Heater and Fan pins here.  If you try, it will result in a locked GPIO which may prevent indi-allsky from managing the devices or an error here.</div>
+    <div class="tw:w-full">
+        <div id="success-message" class="tw:alert tw:alert-success tw:hidden tw:text-xs"></div>
+        <div id="failure-message" class="tw:alert tw:alert-error tw:hidden tw:text-xs"></div>
     </div>
-</div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-      Pin {{ pin_names[0] }}
-    </div>
-    <div class="col-sm-2">
-        <button id="pin-1-button" class="btn btn-dark" disabled="disabled">n/a</button>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-      Pin {{ pin_names[1] }}
-    </div>
-    <div class="col-sm-2">
-        <button id="pin-2-button" class="btn btn-dark" disabled="disabled">n/a</button>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-      Pin {{ pin_names[2] }}
-    </div>
-    <div class="col-sm-2">
-        <button id="pin-3-button" class="btn btn-dark" disabled="disabled">n/a</button>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        <span id="pin-loader" class="spinner-border" aria-hidden="true"></span>
-    </div>
-    <div class="col-sm-2">
-        <input class="form-check-input" id="PIN_CONFIRM1" name="PIN_CONFIRM1" type="checkbox" value="y"> Confirm
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-5">
-        <div id="success-message" class="alert alert-success" role="alert" style="display: none;"></div>
-        <div id="failure-message" class="alert alert-danger" role="alert" style="display: none;"></div>
-    </div>
 </div>
 
 <script>

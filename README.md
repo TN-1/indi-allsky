@@ -19,14 +19,14 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] astropanel.html
 - [x] base.html
 - [x] camera_simulator.html
-- [ ] cameraLens.html
+- [x] cameraLens.html
 - [ ] cameras.html
 - [ ] chart.html
 - [ ] config.html
 - [ ] config_list.html
 - [ ] config_restore.html
 - [x] darks.html
-- [ ] drive_manager.html
+- [x] drive_manager.html
 - [x] filespaceusage.html
 - [x] fitsimageviewer.html
 - [x] focus.html
@@ -43,7 +43,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] longterm_keogram.html
 - [x] loop_canvas.html
 - [x] loop_img.html
-- [ ] manual_gpio.html
+- [x] manual_gpio.html
 - [x] mask.html
 - [ ] mini_generate.html
 - [x] minivideoviewer.html
@@ -59,7 +59,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [ ] users.html
 - [ ] videoviewer.html
 - [ ] view_image.html
-- [ ] virtualsky.html
+- [x] virtualsky.html
 - [ ] watch_video.html
 
 ## To Test
