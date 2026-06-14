@@ -3,19 +3,6 @@
 {% block title %}{{ website_title }}: {{ page_title }}{% endblock %}
 
 {% block head %}
-<style>
-#nav-camera-tab, #nav-image-tab, #nav-processing-tab, #nav-location-tab, #nav-admin-tab, #nav-filetransfer-tab, #nav-s3-tab, #nav-syncapi-tab, #nav-youtube-tab, #nav-mqtt-tab, #nav-devices-tab, #nav-sensors-tab, #nav-adsb-tab, #nav-sat_track-tab, #nav-timelapse-tab, #nav-overlays-tab {
-    width: 150px;
-    margin-top: 10px;
-    margin-right: 5px;
-    height: 50px;
-}
-
-.strikethrough{
-    text-decoration: line-through;
-}
-
-</style>
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 </script>
@@ -23,187 +10,159 @@ var camera_id = {{ camera_id }};
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
-    <form id="form_config" onSubmit="return false;" autocomplete="off">
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link link-danger bg-dark active" id="nav-camera-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-camera" type="button" role="tab" aria-controls="nav-camera"
-                    aria-selected="true">Camera</button>
-                <button class="nav-link link-light bg-dark" id="nav-image-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image"
-                    aria-selected="false">Image</button>
-                <button class="nav-link link-success bg-dark" id="nav-processing-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-processing" type="button" role="tab" aria-controls="nav-processing"
-                    aria-selected="false">Processing</button>
-                <button class="nav-link link-secondary bg-dark" id="nav-overlays-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-overlays" type="button" role="tab" aria-controls="nav-overlays"
-                    aria-selected="false">Overlays</button>
-                <button class="nav-link link-primary bg-dark" id="nav-timelapse-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-timelapse" type="button" role="tab" aria-controls="nav-timelapse"
-                    aria-selected="false">Timelapse</button>
-                <button class="nav-link link-info bg-dark" id="nav-location-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-location" type="button" role="tab" aria-controls="nav-location"
-                    aria-selected="false">Location</button>
-                <button class="nav-link link-warning bg-dark" id="nav-admin-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-admin" type="button" role="tab" aria-controls="nav-admin"
-                    aria-selected="false">Admin</button>
-                <button class="nav-link link-primary bg-dark" id="nav-filetransfer-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-filetransfer" type="button" role="tab" aria-controls="nav-filetransfer"
-                    aria-selected="false">File Transfer</button>
-                <button class="nav-link link-info bg-dark" id="nav-mqtt-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-mqtt" type="button" role="tab" aria-controls="nav-mqtt"
-                    aria-selected="false">MQTT</button>
-                <button class="nav-link link-danger bg-dark" id="nav-youtube-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-youtube" type="button" role="tab" aria-controls="nav-youtube"
-                    aria-selected="false">YouTube</button>
-                <button class="nav-link link-secondary bg-dark" id="nav-s3-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-s3" type="button" role="tab" aria-controls="nav-s3"
-                    aria-selected="false">Object Storage</button>
-                <button class="nav-link link-light bg-dark" id="nav-syncapi-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-syncapi" type="button" role="tab" aria-controls="nav-syncapi"
-                    aria-selected="false">SyncAPI</button>
-                <button class="nav-link link-primary bg-dark" id="nav-sensors-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-sensors" type="button" role="tab" aria-controls="nav-sensors"
-                    aria-selected="false">Sensors</button>
-                <button class="nav-link link-danger bg-dark" id="nav-devices-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-devices" type="button" role="tab" aria-controls="nav-devices"
-                    aria-selected="false">Devices</button>
-                <button class="nav-link link-secondary bg-dark" id="nav-adsb-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-adsb" type="button" role="tab" aria-controls="nav-adsb"
-                    aria-selected="false">ADS-B</button>
-                <button class="nav-link link-light bg-dark" id="nav-sat_track-tab" data-bs-toggle="tab"
-                    data-bs-target="#nav-sat_track" type="button" role="tab" aria-controls="nav-sat_track"
-                    aria-selected="false" style="font-size:14px">Satellite Tracking</button>
+<div class="tw:w-full tw:h-full">
+    <form id="form_config" onsubmit="return false;" autocomplete="off" class="tw:flex tw:flex-col tw:gap-6">
+        
+        {% if longitude_validation_message %}
+        <div class="tw:w-full">
+            {{ longitude_validation_message | safe }}
+        </div>
+        {% endif %}
+
+        {% if fits_enabled or mark_detections_enabled %}
+        <div class="tw:flex tw:flex-col tw:gap-2.5 tw:w-full">
+            {% if fits_enabled %}
+            <div class="tw:alert tw:alert-warning tw:bg-warning/5 tw:border-warning/10 tw:text-warning tw:text-xs tw:rounded-xl tw:py-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="tw:stroke-current tw:shrink-0 tw:h-4 tw:w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span><span class="tw:font-bold">System Warning:</span> Saving FITS files is currently enabled <span class="tw:underline tw:font-semibold">[Image tab]</span>.</span>
             </div>
-        </nav>
+            {% endif %}
 
-
-        <!-- should be above tab contents -->
-        <div>{{ longitude_validation_message | safe }}</div>
-
-        {% if fits_enabled %}
-        <hr>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Saving FITS files is enabled [Image
-            tab]</div>
+            {% if mark_detections_enabled %}
+            <div class="tw:alert tw:alert-warning tw:bg-warning/5 tw:border-warning/10 tw:text-warning tw:text-xs tw:rounded-xl tw:py-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="tw:stroke-current tw:shrink-0 tw:h-4 tw:w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span><span class="tw:font-bold">System Warning:</span> Mark Detections on Image is currently enabled <span class="tw:underline tw:font-semibold">[Processing tab]</span>.</span>
+            </div>
+            {% endif %}
+        </div>
         {% endif %}
 
-        {% if mark_detections_enabled %}
-        <hr>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Mark Detections on Image is enabled
-            [Processing tab]</div>
-        {% endif %}
-
-        <hr>
-
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-camera" role="tabpanel" aria-labelledby="nav-camera-tab">
+        <div role="tablist" class="tw:tabs tw:tabs-boxed tw:bg-base-300/40 tw:p-2 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-wrap tw:gap-1" id="nav-tab">
+            
+            <input type="radio" name="config_tabs" role="tab" id="nav-camera-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Camera" checked />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/camera.html' %}
-            </div><!-- end camera tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-image" role="tabpanel" aria-labelledby="nav-image-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-image-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Image" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/image.html' %}
-            </div><!-- end image tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-overlays" role="tabpanel" aria-labelledby="nav-overlays-tab">
-                {% include 'config/overlays.html' %}
-            </div><!-- end overlays tab -->
-
-            <div class="tab-pane fade" id="nav-timelapse" role="tabpanel" aria-labelledby="nav-timelapse-tab">
-                {% include 'config/timelapse.html' %}
-            </div><!-- end timelapse tab -->
-
-            <div class="tab-pane fade" id="nav-processing" role="tabpanel" aria-labelledby="nav-processing-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-processing-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Processing" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/processing.html' %}
-            </div><!-- end processing tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-overlays-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Overlays" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
+                {% include 'config/overlays.html' %}
+            </div>
+
+            <input type="radio" name="config_tabs" role="tab" id="nav-timelapse-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Timelapse" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
+                {% include 'config/timelapse.html' %}
+            </div>
+
+            <input type="radio" name="config_tabs" role="tab" id="nav-location-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Location" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/location.html' %}
-            </div><!-- end location tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-admin-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Admin" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/admin.html' %}
-            </div><!-- end admin tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-filetransfer" role="tabpanel" aria-labelledby="nav-filetransfer-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-filetransfer-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="File Transfer" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/filetransfer.html' %}
-            </div><!-- end filetransfer tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-mqtt" role="tabpanel" aria-labelledby="nav-mqtt-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-mqtt-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="MQTT" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/mqtt.html' %}
-            </div><!-- end mqtt tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-youtube" role="tabpanel" aria-labelledby="nav-youtube-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-youtube-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="YouTube" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/youtube.html' %}
-            </div><!-- end youtubetab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-s3" role="tabpanel" aria-labelledby="nav-s3-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-s3-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Object Storage" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/s3.html' %}
-            </div><!-- end s3 tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-syncapi" role="tabpanel" aria-labelledby="nav-syncapi-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-syncapi-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="SyncAPI" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/syncapi.html' %}
-            </div><!-- end syncapi tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-sensors" role="tabpanel" aria-labelledby="nav-sensors-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-sensors-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Sensors" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/sensors.html' %}
-            </div><!-- end sensors tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-devices" role="tabpanel" aria-labelledby="nav-devices-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-devices-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Devices" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/devices.html' %}
-            </div><!-- end devices tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-adsb" role="tabpanel" aria-labelledby="nav-adsb-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-adsb-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="ADS-B" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/adsb.html' %}
-            </div><!-- end adsb tab -->
+            </div>
 
-            <div class="tab-pane fade" id="nav-sat_track" role="tabpanel" aria-labelledby="nav-sat_track-tab">
+            <input type="radio" name="config_tabs" role="tab" id="nav-sat_track-tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase tw:whitespace-nowrap checked:tw:bg-primary checked:tw:text-primary-content" aria-label="Satellite Tracking" />
+            <div role="tabpanel" class="tw:tab-content tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:w-full tw:mt-3">
                 {% include 'config/sat_track.html' %}
-            </div><!-- end sat_track tab -->
+            </div>
+
         </div>
 
-        <hr>
-        <hr>
-        <hr>
-
-        <div class="form-group row">
-            <div class="col-sm-2">
-                {{ form_config.RELOAD_ON_SAVE.label }}
-            </div>
-            <div class="col-sm-1">
-                <div class="form-switch">
-                    {{ form_config.RELOAD_ON_SAVE(class='form-check-input') }}
-                    <div id="RELOAD_ON_SAVE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-5 tw:w-full">
+            
+            <div class="tw:flex tw:flex-col md:tw:flex-row tw:items-start md:tw:items-center tw:justify-between tw:bg-base-300/40 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5 tw:gap-4">
+                <div class="tw:flex tw:items-center tw:gap-3">
+                    <input type="checkbox" id="RELOAD_ON_SAVE" name="RELOAD_ON_SAVE" class="tw:toggle tw:toggle-success tw:toggle-sm">
+                    <label for="RELOAD_ON_SAVE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        {{ form_config.RELOAD_ON_SAVE.label.text if form_config.RELOAD_ON_SAVE.label.text else "Reload on Save" }}
+                    </label>
                 </div>
-            </div>
-            <div class="col-sm-9">
-                <div><span class="badge rounded-pill bg-info text-dark">Note</span> A reload will restart the
-                    indi-allsky capture processes. This requires 1-3 minutes to complete.</span>
+                <div id="RELOAD_ON_SAVE-error" class="tw:text-error tw:text-xs" style="display: none;"></div>
+                
+                <div class="tw:alert tw:alert-info tw:bg-info/5 tw:border-info/10 tw:text-info tw:text-xs tw:py-2.5 tw:px-4 tw:rounded-lg tw:max-w-xl">
+                    <span><span class="tw:font-bold">Service Notice:</span> Enabling dynamic reloads will drop active capture execution maps to reload processes. Expect standard 1-3 minute execution latency.</span>
                 </div>
             </div>
 
-            <hr>
+            <div class="tw:grid tw:grid-columns-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:w-full">
+                <div class="md:tw:col-span-2">
+                    <button id="save-button" class="tw:btn tw:btn-primary tw:btn-block tw:h-11 tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider">
+                        Save Configuration
+                    </button>
+                </div>
 
-            <div class="form-group row">
-                <div class="col-sm-1">
-                    <button id="save-button" class="btn btn-primary">Save</button>
+                <div class="md:tw:col-span-1 md:tw:text-right">
+                    <label class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">
+                        Note:
+                    </label>
                 </div>
-                <div class="col-sm-1 text-end">
-                    {{ form_config.CONFIG_NOTE.label }}
-                </div>
-                <div class="col-sm-6">
-                    {{ form_config.CONFIG_NOTE(class='form-control bg-secondary') }}
-                    <div id="CONFIG_NOTE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+
+                <div class="md:tw:col-span-9 tw:form-control tw:w-full">
+                    {{ form_config.CONFIG_NOTE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='Enter configuration note description...') }}
+                    <div id="CONFIG_NOTE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                 </div>
             </div>
 
-            <div class="form-group row" style="height:100px;">
-                <div class="col-sm-2">
-                    <div id="success-message" class="alert alert-success" role="alert" style="display: none;"></div>
-                    <div id="failure-message" class="alert alert-danger" role="alert" style="display: none;"></div>
-                    <div id="failure-fields" class="invalid-feedback text-warning" style="display: none;"></div>
-                </div>
+            <div id="message-container" class="tw:w-full">
+                <div id="success-message" class="tw:alert tw:alert-success tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:text-success-content" style="display: none;"></div>
+                <div id="failure-message" class="tw:alert tw:alert-error tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:text-error-content" style="display: none;"></div>
+                <div id="failure-fields" class="tw:text-warning tw:text-xs tw:font-mono tw:mt-2" style="display: none;"></div>
             </div>
+
+        </div>
     </form>
 </div>
 
