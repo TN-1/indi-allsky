@@ -14,7 +14,7 @@ echo "Checking frontend dependencies..."
 
 if [ ! -d "node_modules/tailwindcss" ]; then
     echo "Installing frontend dependencies (this may take a moment)..."
-    npm install tailwindcss daisyui @tailwindcss/cli
+    npm install
 fi
 
 # Add a small buffer check: Wait until the tailwind package is actually present
