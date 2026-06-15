@@ -1,1047 +1,506 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_STARS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.DETECT_STARS(class='form-check-input') }}
-            <div id="DETECT_STARS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+<style>
+    .allsky-workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 1fr !important;
+            align-items: start;
+        }
+    }
+    .field-micro-label {
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-0.5;
+    }
+    .settings-row {
+        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0;
+    }
+    .settings-info {
+        @apply tw:flex-1;
+    }
+    .settings-control {
+        @apply tw:flex-none tw:w-full md:tw:w-72;
+    }
+    .config-card {
+        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden;
+    }
+    .config-card-header {
+        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center;
+    }
+    .config-card-body {
+        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0;
+    }
+</style>
+
+<div class="allsky-workspace-grid">
+    <!-- Main Column -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Detection & Masks -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Detection & ROI</h3>
+            </div>
+            <div class="config-card-body">
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Star & Meteor Detection</label>
+                        <p class="tw:text-xs tw:opacity-60">Enable identification and calibration overlays.</p>
+                    </div>
+                    <div class="settings-control tw:space-y-3">
+                        <div class="tw:flex tw:gap-4">
+                            <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-2 tw:p-0">
+                                <span class="tw:label-text tw:text-[10px] tw:opacity-60">Stars</span>
+                                {{ form_config.DETECT_STARS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                            </label>
+                            <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-2 tw:p-0">
+                                <span class="tw:label-text tw:text-[10px] tw:opacity-60">Meteors</span>
+                                {{ form_config.DETECT_METEORS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                            </label>
+                            <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-2 tw:p-0">
+                                <span class="tw:label-text tw:text-[10px] tw:opacity-60">Draw</span>
+                                {{ form_config.DETECT_DRAW(class='tw:toggle tw:toggle-xs tw:toggle-secondary') }}
+                            </label>
+                        </div>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Star Thold</span>
+                                {{ form_config.DETECT_STARS_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Meteor Thold</span>
+                                {{ form_config.DETECT_METEORS_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Region of Interest (ROI)</label>
+                        <p class="tw:text-xs tw:opacity-60">Fallbacks if no mask PNG is defined.</p>
+                    </div>
+                    <div class="settings-control tw:space-y-3">
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50 uppercase">FOV Divisor</span>
+                            {{ form_config.SQM_FOV_DIV(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-1">
+                            {{ form_config.SQM_ROI_X1(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='X1') }}
+                            {{ form_config.SQM_ROI_Y1(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Y1') }}
+                            {{ form_config.SQM_ROI_X2(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='X2') }}
+                            {{ form_config.SQM_ROI_Y2(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Y2') }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Mask PNG File</label>
+                        <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Detection-Masks" target="_blank" class="tw:link tw:link-primary tw:text-[10px]">Wiki Guide</a>
+                    </div>
+                    <div class="settings-control">
+                        {{ form_config.DETECT_MASK(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100 tw:font-mono tw:text-xs') }}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>SQM Region of Interest used for detection area unless Detection Mask is defined</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_STARS_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.DETECT_STARS_THOLD(class='form-control bg-secondary') }}
-        <div id="DETECT_STARS_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">0.5 - 0.6 is a good value to start</div>
-</div>
+        <!-- Keograms -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Keograms</h3>
+            </div>
+            <div class="config-card-body">
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Visual Extraction</label>
+                    </div>
+                    <div class="settings-control tw:space-y-3">
+                        <div class="tw:grid tw:grid-cols-3 tw:gap-1">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Angle</span>
+                                {{ form_config.KEOGRAM_ANGLE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">H-Scale</span>
+                                {{ form_config.KEOGRAM_H_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">V-Scale</span>
+                                {{ form_config.KEOGRAM_V_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                        </div>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Crop Top %</span>
+                                {{ form_config.KEOGRAM_CROP_TOP(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Crop Bot %</span>
+                                {{ form_config.KEOGRAM_CROP_BOTTOM(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_METEORS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.DETECT_METEORS(class='form-check-input') }}
-            <div id="DETECT_METEORS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">History & Labels</label>
+                    </div>
+                    <div class="settings-control tw:space-y-3">
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                            <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                                <span class="tw:label-text tw:text-[10px] tw:opacity-60">Night Label</span>
+                                {{ form_config.KEOGRAM_LABEL(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                            </label>
+                            <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                                <span class="tw:label-text tw:text-[10px] tw:opacity-60">Realtime Label</span>
+                                {{ form_config.REALTIME_KEOGRAM__LABEL(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                            </label>
+                        </div>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Realtime Max</span>
+                                {{ form_config.REALTIME_KEOGRAM__MAX_ENTRIES(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">RT Interval</span>
+                                {{ form_config.REALTIME_KEOGRAM__SAVE_INTERVAL(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>SQM Region of Interest used for detection area unless Detection Mask is defined</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_METEORS_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.DETECT_METEORS_THOLD(class='form-control bg-secondary') }}
-        <div id="DETECT_METEORS_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Default: 125 - Increase to 250 if too many false detections</div>
-</div>
+        <!-- Star Trails -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Star Trails</h3>
+            </div>
+            <div class="config-card-body">
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Exclusion Rules</label>
+                    </div>
+                    <div class="settings-control tw:space-y-3">
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[10px] tw:opacity-60">Use Camera Moon Settings</span>
+                            {{ form_config.STARTRAILS_MOONMODE_THOLD(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
+                        <div class="tw:grid tw:grid-cols-3 tw:gap-1">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Sun Alt</span>
+                                {{ form_config.STARTRAILS_SUN_ALT_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Moon Alt</span>
+                                {{ form_config.STARTRAILS_MOON_ALT_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:opacity-50">Moon Phase</span>
+                                {{ form_config.STARTRAILS_MOON_PHASE_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_MASK.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.DETECT_MASK(class='form-control bg-secondary') }}
-        <div id="DETECT_MASK-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Detection-Masks"
-                class="text-decoration-none link-info" target="_blank">Detection Mask Wiki</a></div>
-        <div>
-            <div>Image mask file for star, meteor, and SQM detection area. Must be a PNG</div>
-            <div><span class="badge rounded-pill bg-info text-dark">Note</span> Mask must use the same diminsions as the
-                camera bin 1 settings</div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DETECT_DRAW.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.DETECT_DRAW(class='form-check-input') }}
-            <div id="DETECT_DRAW-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Mark star and meteor line detections on image for calibration</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_CIRCLE_MASK__ENABLE(class='form-check-input') }}
-            <div id="IMAGE_CIRCLE_MASK__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__DIAMETER(class='form-control bg-secondary') }}
-        <div id="IMAGE_CIRCLE_MASK__DIAMETER-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Diameter in pixels</div>
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_X(class='form-control bg-dark text-secondary') }}
-        <div id="IMAGE_CIRCLE_MASK__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Not Used - Use <a href="#location-LENS_OFFSET_X" class="text-decoration-none link-info">Lens offsets on
-                Location Tab</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_Y(class='form-control bg-dark text-secondary') }}
-        <div id="IMAGE_CIRCLE_MASK__OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__BLUR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__BLUR(class='form-control bg-secondary') }}
-        <div id="IMAGE_CIRCLE_MASK__BLUR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OPACITY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OPACITY(class='form-control bg-secondary') }}
-        <div id="IMAGE_CIRCLE_MASK__OPACITY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_CIRCLE_MASK__OUTLINE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_CIRCLE_MASK__OUTLINE(class='form-check-input') }}
-            <div id="IMAGE_CIRCLE_MASK__OUTLINE-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Density & Quality</label>
+                    </div>
+                    <div class="settings-control tw:grid tw:grid-cols-2 tw:gap-3">
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">Max ADU</span>
+                            {{ form_config.STARTRAILS_MAX_ADU(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">Mask Thold</span>
+                            {{ form_config.STARTRAILS_MASK_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">Pixel Thold</span>
+                            {{ form_config.STARTRAILS_PIXEL_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">Min Stars</span>
+                            {{ form_config.STARTRAILS_MIN_STARS(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">Outline image circle. Opacity will be set to 0%.</div>
-</div>
 
-<hr>
+    <!-- Sidebar Column -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Image Stacking -->
+        <div class="config-card">
+            <div class="config-card-header tw:bg-primary tw:text-primary-content">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Image Stacking</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Count</span>
+                        {{ form_config.IMAGE_STACK_COUNT(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Method</span>
+                        {{ form_config.IMAGE_STACK_METHOD(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                </div>
+                
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Align Images</span>
+                    {{ form_config.IMAGE_STACK_ALIGN(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SQM_FOV_DIV.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SQM_FOV_DIV(class='form-select bg-secondary') }}
-        <div id="SQM_FOV_DIV-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Central region to use for SQM calculations (not used if ROI defined)</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> SQM FoV/RoI used for star count, meteor
-            detection, and stretching calculations</div>
-    </div>
-</div>
+                <div class="tw:collapse tw:collapse-arrow tw:bg-base-300 tw:rounded-lg">
+                    <input type="checkbox" /> 
+                    <div class="tw:collapse-title tw:text-[10px] tw:font-bold tw:uppercase tw:p-2 tw:min-h-0">Params & Preview</div>
+                    <div class="tw:collapse-content tw:space-y-3 tw:pt-2">
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Detect Sigma</span>
+                            {{ form_config.IMAGE_ALIGN_DETECTSIGMA(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Max Points</span>
+                            {{ form_config.IMAGE_ALIGN_POINTS(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Min Area</span>
+                            {{ form_config.IMAGE_ALIGN_SOURCEMINAREA(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[10px] tw:opacity-60">Moon Stacking</span>
+                            {{ form_config.IMAGE_STACK_MOONMODE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[10px] tw:opacity-60">Day Stacking</span>
+                            {{ form_config.IMAGE_STACK_DAY(class='tw:toggle tw:toggle-xs tw:toggle-error') }}
+                        </label>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2 col-form-label">
-        SQM/Star Region of Interest
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SQM_ROI_X1(class='form-control bg-secondary') }}
-        <div id="SQM_ROI_X1-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-
-    <div class="col-sm-2">
-        {{ form_config.SQM_ROI_Y1(class='form-control bg-secondary') }}
-        <div id="SQM_ROI_Y1-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>Upper-left (x1, y1)</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Not used if Detection Mask is defined</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note 2</span> Coordinates are used before geometry
-            changes (scaling, flipping, etc)</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2 col-form-label"></div>
-    <div class="col-sm-2">
-        {{ form_config.SQM_ROI_X2(class='form-control bg-secondary') }}
-        <div id="SQM_ROI_X2-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-
-    <div class="col-sm-2">
-        {{ form_config.SQM_ROI_Y2(class='form-control bg-secondary') }}
-        <div id="SQM_ROI_Y2-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Lower-right (x2, y2)</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_COUNT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_COUNT(class='form-select bg-secondary') }}
-        <div id="IMAGE_STACK_COUNT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Number of images to be stacked</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_METHOD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_METHOD(class='form-select bg-secondary') }}
-        <div id="IMAGE_STACK_METHOD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Method to use for image stacking</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Stacking disabled during daytime and moon
-            mode</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_ALIGN.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_STACK_ALIGN(class='form-check-input') }}
-            <div id="IMAGE_STACK_ALIGN-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Split Screen Preview</span>
+                    {{ form_config.IMAGE_STACK_SPLIT(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Align images before stacking.</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Registration is not always a perfect
-            process. All sky images have significant distortion and mis-allignments can be common.</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_DETECTSIGMA.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_DETECTSIGMA(class='form-control bg-secondary') }}
-        <div id="IMAGE_ALIGN_DETECTSIGMA-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Factor of background std-dev above which is considered a detection.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_POINTS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_POINTS(class='form-control bg-secondary') }}
-        <div id="IMAGE_ALIGN_POINTS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">The maximum number of control point-sources to find the transformation.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_SOURCEMINAREA.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_ALIGN_SOURCEMINAREA(class='form-control bg-secondary') }}
-        <div id="IMAGE_ALIGN_SOURCEMINAREA-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Minimum number of connected pixels to be considered a source.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_SPLIT.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_STACK_SPLIT(class='form-check-input') }}
-            <div id="IMAGE_STACK_SPLIT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <!-- Panorama (Fish2Pano) -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Panorama</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Panorama</span>
+                    {{ form_config.FISH2PANO__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Angle</span>
+                        {{ form_config.FISH2PANO__ROTATE_ANGLE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Modulus</span>
+                        {{ form_config.FISH2PANO__MODULUS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                </div>
+                <div class="tw:divider tw:my-0"></div>
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Circular Display</span>
+                    {{ form_config.CIRCULAR_DISPLAY__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-secondary') }}
+                </label>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Resolution</span>
+                    {{ form_config.CIRCULAR_DISPLAY__RESOLUTION(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">Stacking split screen. Left is original, right is stacked</div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_MOONMODE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_STACK_MOONMODE(class='form-check-input') }}
-            <div id="IMAGE_STACK_MOONMODE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_STACK_DAY.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_STACK_DAY(class='form-check-input') }}
-            <div id="IMAGE_STACK_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Do not enable</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_ANGLE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_ANGLE(class='form-control bg-secondary') }}
-        <div id="KEOGRAM_ANGLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Keogram" class="text-decoration-none link-info"
-                target="_blank">Keogram Wiki</a></div>
-        <div>Min: -180, Max: 180 - Image rotation for Keogram data</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_H_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_H_SCALE(class='form-control bg-secondary') }}
-        <div id="KEOGRAM_H_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Keogram horizontal scale factor</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_V_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_V_SCALE(class='form-control bg-secondary') }}
-        <div id="KEOGRAM_V_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Keogram vertical scale factor</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_CROP_TOP.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_CROP_TOP(class='form-control bg-secondary') }}
-        <div id="KEOGRAM_CROP_TOP-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Percent to trim from top of Keogram. Use this to crop text or trees from the keogram.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_CROP_BOTTOM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_CROP_BOTTOM(class='form-control bg-secondary') }}
-        <div id="KEOGRAM_CROP_BOTTOM-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Percent to trim from bottom of Keogram.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.KEOGRAM_LABEL.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.KEOGRAM_LABEL(class='form-check-input') }}
-            <div id="KEOGRAM_LABEL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Add keogram time labels</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.LONGTERM_KEOGRAM__ENABLE(class='form-check-input') }}
-            <div id="LONGTERM_KEOGRAM__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Gather long term keogram data</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OFFSET_X(class='form-control bg-secondary') }}
-        <div id="LONGTERM_KEOGRAM__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Allows you to offset pixels for keogram if they are obstructed</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OFFSET_Y(class='form-control bg-secondary') }}
-        <div id="LONGTERM_KEOGRAM__OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__MONTH_LABEL_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__MONTH_LABEL_TEMPLATE(class='form-control bg-secondary') }}
-        <div id="LONGTERM_KEOGRAM__MONTH_LABEL_TEMPLATE-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Example: {month:%B %Y}</div>
-        <div>%B is the locale specific name of the month - %b is the shortened version</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__PIL_FONT_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__PIL_FONT_SIZE(class='form-control bg-secondary') }}
-        <div id="LONGTERM_KEOGRAM__PIL_FONT_SIZE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OPENCV_FONT_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LONGTERM_KEOGRAM__OPENCV_FONT_SCALE(class='form-control bg-secondary') }}
-        <div id="LONGTERM_KEOGRAM__OPENCV_FONT_SCALE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.REALTIME_KEOGRAM__MAX_ENTRIES.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.REALTIME_KEOGRAM__MAX_ENTRIES(class='form-control bg-secondary') }}
-        <div id="REALTIME_KEOGRAM__MAX_ENTRIES-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>History of images/vertical pixels to retain in the realtime keogram</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.REALTIME_KEOGRAM__SAVE_INTERVAL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.REALTIME_KEOGRAM__SAVE_INTERVAL(class='form-control bg-secondary') }}
-        <div id="REALTIME_KEOGRAM__SAVE_INTERVAL-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Store realtime keogram every X image</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.REALTIME_KEOGRAM__LABEL.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.REALTIME_KEOGRAM__LABEL(class='form-check-input') }}
-            <div id="REALTIME_KEOGRAM__LABEL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Add keogram time labels</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_SUN_ALT_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_SUN_ALT_THOLD(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_SUN_ALT_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Startrails"
-                class="text-decoration-none link-info" target="_blank">Star Trails Wiki</a></div>
-        <div>Sun altitude threshold</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MOONMODE_THOLD.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.STARTRAILS_MOONMODE_THOLD(class='form-check-input') }}
-            <div id="STARTRAILS_MOONMODE_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">When enabled, use the camera moon mode thresholds to exclude images. When disabled, use the
-        custom thresholds below.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MOON_ALT_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MOON_ALT_THOLD(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_MOON_ALT_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Exclude images when moon altitude exceeds this value in degrees. Both altitude and phase must
-        be exceeded to exclude (AND logic). 91 disables the check (moon can never reach 91°). A reasonable starting
-        point is 30°.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MOON_PHASE_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MOON_PHASE_THOLD(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_MOON_PHASE_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Exclude images when moon phase exceeds this percentage. Both altitude and phase must be
-        exceeded to exclude (AND logic). 101 disables the check (moon phase can never exceed 100%). A reasonable
-        starting point is 50%.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MAX_ADU.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MAX_ADU(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_MAX_ADU-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Max average image brightness (8-bit) to include in star trails. This should be at least 10
-        ADUs less than your target ADU.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MASK_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MASK_THOLD(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_MASK_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_PIXEL_THOLD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_PIXEL_THOLD(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_PIXEL_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Exclude image for this percentage of pixels above the Mask Threshold ADU</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MIN_STARS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_MIN_STARS(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_MIN_STARS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Minimum detected stars to include image</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_USE_DB_DATA.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.STARTRAILS_USE_DB_DATA(class='form-check-input') }}
-            <div id="STARTRAILS_USE_DB_DATA-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Reuse existing detected ADU and Star data for each image. You may disable this if the
-        detection mask has changed since the ADU and Star information was detected.</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_TIMELAPSE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.STARTRAILS_TIMELAPSE(class='form-check-input') }}
-            <div id="STARTRAILS_TIMELAPSE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Generate star trails timelapse</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_TIMELAPSE_MINFRAMES.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS_TIMELAPSE_MINFRAMES(class='form-control bg-secondary') }}
-        <div id="STARTRAILS_TIMELAPSE_MINFRAMES-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">Minimum frames for star trails timelapse. 250 frames = 10s @ 25fps</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_ENABLE(class='form-check-input') }}
-            <div id="STARTRAILS__IMAGE_CIRCLE_MASK_ENABLE-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">This may be used to mask text outside the image circle</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_DIAMETER(class='form-control bg-secondary') }}
-        <div id="STARTRAILS__IMAGE_CIRCLE_MASK_DIAMETER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Diameter in pixels</div>
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_BLUR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_BLUR(class='form-control bg-secondary') }}
-        <div id="STARTRAILS__IMAGE_CIRCLE_MASK_BLUR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_OPACITY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_OPACITY(class='form-control bg-secondary') }}
-        <div id="STARTRAILS__IMAGE_CIRCLE_MASK_OPACITY-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FISH2PANO__ENABLE(class='form-check-input') }}
-            <div id="FISH2PANO__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__DIAMETER(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__DIAMETER-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Diameter in pixels</div>
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OFFSET_X(class='form-control bg-dark text-secondary') }}
-        <div id="FISH2PANO__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Not Used - Use <a href="#location-LENS_OFFSET_X" class="text-decoration-none link-info">Lens offsets on
-                Location Tab</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OFFSET_Y(class='form-control bg-dark text-secondary') }}
-        <div id="FISH2PANO__OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__ROTATE_ANGLE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__ROTATE_ANGLE(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__ROTATE_ANGLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Min: -180, Max: 180 - Image rotation for panorama</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> The starting point of the panorama is 90
-            degrees clockwise</div>
-        <div>-90 will make the bottom of the image the center of the panorama</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__FLIP_H.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FISH2PANO__FLIP_H(class='form-check-input') }}
-            <div id="FISH2PANO__FLIP_H-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__SCALE(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Increasing scale increases processing time</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__MODULUS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__MODULUS(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__MODULUS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Generate panorama every # images</div>
-        <div>The conversion process can be slow. Ensure your system is fast enough if you lower this number.</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__ENABLE_CARDINAL_DIRS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FISH2PANO__ENABLE_CARDINAL_DIRS(class='form-check-input') }}
-            <div id="FISH2PANO__ENABLE_CARDINAL_DIRS-error" class="invalid-feedback text-danger" style="display: none;">
+        <!-- System Hooks -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">External Hooks</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Pre-Capture</span>
+                    {{ form_config.CAPTURE_HOOK_PRE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:bg-base-100 tw:font-mono tw:text-[10px]') }}
+                </div>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Pre-Save</span>
+                    {{ form_config.IMAGE_SAVE_HOOK_PRE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:bg-base-100 tw:font-mono tw:text-[10px]') }}
+                </div>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Post-Save</span>
+                    {{ form_config.IMAGE_SAVE_HOOK_POST(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:bg-base-100 tw:font-mono tw:text-[10px]') }}
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:opacity-50">Cap Tout</span>
+                        {{ form_config.CAPTURE_HOOK_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:opacity-50">Save Tout</span>
+                        {{ form_config.IMAGE_SAVE_HOOK_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Disabling <a
-                href="#image-CARDINAL_DIRS__ENABLE" class="text-decoration-none link-info">Cardinal Directions</a>
-            (Image Tab) will also disable here</div>
-    </div>
 </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__DIRS_OFFSET_BOTTOM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__DIRS_OFFSET_BOTTOM(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__DIRS_OFFSET_BOTTOM-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
+<!-- Advanced Processing (Accordion) -->
+<div class="tw:mt-8 tw:flex tw:flex-col tw:gap-2">
+    <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-50 tw:ml-1 tw:mb-2">Advanced Processing Settings</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OPENCV_FONT_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__OPENCV_FONT_SCALE(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__OPENCV_FONT_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__PIL_FONT_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FISH2PANO__PIL_FONT_SIZE(class='form-control bg-secondary') }}
-        <div id="FISH2PANO__PIL_FONT_SIZE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CIRCULAR_DISPLAY__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CIRCULAR_DISPLAY__ENABLE(class='form-check-input') }}
-            <div id="CIRCULAR_DISPLAY__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+    <!-- Masks -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="proc-accordion" checked="checked" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">Circle & Vignette Masks</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-6 tw:p-4">
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Main Image Circle</h4>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Enabled</span>
+                        {{ form_config.IMAGE_CIRCLE_MASK__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Diameter (px)</span>
+                        {{ form_config.IMAGE_CIRCLE_MASK__DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                        {{ form_config.IMAGE_CIRCLE_MASK__BLUR(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Blur') }}
+                        {{ form_config.IMAGE_CIRCLE_MASK__OPACITY(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Opacity') }}
+                    </div>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Outline Only</span>
+                        {{ form_config.IMAGE_CIRCLE_MASK__OUTLINE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-1">
+                        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off X') }}
+                        {{ form_config.IMAGE_CIRCLE_MASK__OFFSET_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off Y') }}
+                    </div>
+                </div>
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Star Trail Mask</h4>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Enabled</span>
+                        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Diameter (px)</span>
+                        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_BLUR(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Blur') }}
+                        {{ form_config.STARTRAILS__IMAGE_CIRCLE_MASK_OPACITY(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Opacity') }}
+                    </div>
+                </div>
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Circular Display Mask</h4>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Diameter (px)</span>
+                        {{ form_config.CIRCULAR_DISPLAY__IMAGE_CIRCLE_DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Round-Displays"
-                class="text-decoration-none link-info" target="_blank">Round Display Wiki</a> - Generate an image for a
-            circular display - <a href="images/circular_display.jpg" class="text-decoration-none link-info"
-                target="_blank">Link</a> </div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CIRCULAR_DISPLAY__RESOLUTION.label(class='col-form-label') }}
+    <!-- Pano/Trails Logic -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="proc-accordion" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">Panorama & Trail Advanced Logic</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6 tw:p-4">
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Panorama Detail</h4>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                        {{ form_config.FISH2PANO__DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Diam') }}
+                        {{ form_config.FISH2PANO__SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Scale') }}
+                        {{ form_config.FISH2PANO__OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off X') }}
+                        {{ form_config.FISH2PANO__OFFSET_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off Y') }}
+                    </div>
+                    <div class="tw:flex tw:gap-4">
+                        <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-2 tw:p-0">
+                            <span class="tw:label-text tw:text-xs">Flip H</span>
+                            {{ form_config.FISH2PANO__FLIP_H(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
+                        <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-2 tw:p-0">
+                            <span class="tw:label-text tw:text-xs">Cardinal Dirs</span>
+                            {{ form_config.FISH2PANO__ENABLE_CARDINAL_DIRS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
+                    </div>
+                    <div class="tw:grid tw:grid-cols-3 tw:gap-2">
+                        {{ form_config.FISH2PANO__DIRS_OFFSET_BOTTOM(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Bottom Off') }}
+                        {{ form_config.FISH2PANO__OPENCV_FONT_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='CV Scale') }}
+                        {{ form_config.FISH2PANO__PIL_FONT_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='PIL Size') }}
+                    </div>
+                </div>
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Star Trail Post-Process</h4>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Generate Timelapse</span>
+                        {{ form_config.STARTRAILS_TIMELAPSE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Min Video Frames</span>
+                        {{ form_config.STARTRAILS_TIMELAPSE_MINFRAMES(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                    </div>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Reuse DB Calculations</span>
+                        {{ form_config.STARTRAILS_USE_DB_DATA(class='tw:toggle tw:toggle-xs tw:toggle-secondary') }}
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2">
-        {{ form_config.CIRCULAR_DISPLAY__RESOLUTION(class='form-select bg-secondary') }}
-        <div id="CIRCULAR_DISPLAY__RESOLUTION-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CIRCULAR_DISPLAY__IMAGE_CIRCLE_DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CIRCULAR_DISPLAY__IMAGE_CIRCLE_DIAMETER(class='form-control bg-secondary') }}
-        <div id="CIRCULAR_DISPLAY__IMAGE_CIRCLE_DIAMETER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Uses <a href="#location-LENS_OFFSET_X"
-                class="text-decoration-none link-info">image circle offsets on the Location tab</a></div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAPTURE_HOOK_PRE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.CAPTURE_HOOK_PRE(class='form-control bg-secondary') }}
-        <div id="CAPTURE_HOOK_PRE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>External script to run before capturing image</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Runs in CAPTURE worker process</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAPTURE_HOOK_TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAPTURE_HOOK_TIMEOUT(class='form-control bg-secondary') }}
-        <div id="CAPTURE_HOOK_TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-danger text-dark">Warning</span> The capture hook can introduce
-            additional delays between images if it takes too long to execute</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_SAVE_HOOK_PRE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.IMAGE_SAVE_HOOK_PRE(class='form-control bg-secondary') }}
-        <div id="IMAGE_SAVE_HOOK_PRE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>External script to run before saving image</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Runs in IMAGE worker process</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_SAVE_HOOK_POST.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.IMAGE_SAVE_HOOK_POST(class='form-control bg-secondary') }}
-        <div id="IMAGE_SAVE_HOOK_POST-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>External script to run after saving image</div>
-        <div>The image path is passed as the first parameter when executed</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_SAVE_HOOK_TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_SAVE_HOOK_TIMEOUT(class='form-control bg-secondary') }}
-        <div id="IMAGE_SAVE_HOOK_TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-danger text-dark">Warning</span> The image save hooks can slow down
-            image processing if they take too long to execute</div>
+    <!-- Long Term Detail -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="proc-accordion" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">Keogram & Longterm Details</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6 tw:p-4">
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-xs">Enable Longterm Keogram</span>
+                        {{ form_config.LONGTERM_KEOGRAM__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                        {{ form_config.LONGTERM_KEOGRAM__OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off X') }}
+                        {{ form_config.LONGTERM_KEOGRAM__OFFSET_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Off Y') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Month Label Template</span>
+                        {{ form_config.LONGTERM_KEOGRAM__MONTH_LABEL_TEMPLATE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                    </div>
+                </div>
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Keogram Typography</h4>
+                    <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">PIL Font Size</span>
+                            {{ form_config.LONGTERM_KEOGRAM__PIL_FONT_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <span class="tw:text-[9px] tw:opacity-50">CV Font Scale</span>
+                            {{ form_config.LONGTERM_KEOGRAM__OPENCV_FONT_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
