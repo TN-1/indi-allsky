@@ -1,292 +1,257 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.TIMELAPSE_ENABLE(class='form-check-input') }}
-            <div id="TIMELAPSE_ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable timelapse, keogram, and star trail creation</div>
-</div>
+<style>
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important;
+    }
+</style>
 
-<hr>
+<div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.DAYTIME_TIMELAPSE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.DAYTIME_TIMELAPSE(class='form-check-input') }}
-            <div id="DAYTIME_TIMELAPSE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable daytime timelapse generation</div>
-</div>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Orchestration Engines</h3>
+        
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.TIMELAPSE_ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="TIMELAPSE_ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Master Engine Processing
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Triggers timelapse, keogram, and star trail generation.</span>
+                </div>
+                <div id="TIMELAPSE_ENABLE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__PRE_PROCESSOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.TIMELAPSE__PRE_PROCESSOR(class='form-select bg-secondary') }}
-        <div id="TIMELAPSE__PRE_PROCESSOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Timelapses"
-                class="text-decoration-none link-info" target="_blank">Timelapse Wiki</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_FRAMERATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_FRAMERATE(class='form-control bg-secondary') }}
-        <div id="FFMPEG_FRAMERATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">ffmpeg framerate for timelapse videos</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_BITRATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_BITRATE(class='form-control bg-secondary') }}
-        <div id="FFMPEG_BITRATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Default: 5000k</div>
-        <div>High quality timelapses with dynamic content (eg auroras) should have a much higher rate</div>
-        <div>15000k-20000k for a 1920x1080 resolution.</div>
-        <div>30000k-40000k for 4K video</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_VFSCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_VFSCALE(class='form-select bg-secondary') }}
-        <div id="FFMPEG_VFSCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>
-            <div><span class="badge rounded-pill bg-danger text-dark">Warning</span> Higher resolution videos may cause
-                timelapses to fail on systems with less than 4GB RAM. Scale your resolution to reduce the memory
-                requirements.</div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_VFSCALE_STARTRAIL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_VFSCALE_STARTRAIL(class='form-select bg-secondary') }}
-        <div id="FFMPEG_VFSCALE_STARTRAIL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>
-            <div>Separate scale option for star trails timelapse. The main timelapse videos may be scaled with alternate
-                options, this allows separate scaling for the star trails.</div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_CODEC.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_CODEC(class='form-select bg-secondary') }}
-        <div id="FFMPEG_CODEC-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">ffmpeg output codec</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_EXTRA_OPTIONS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_EXTRA_OPTIONS(class='form-control bg-secondary') }}
-        <div id="FFMPEG_EXTRA_OPTIONS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>ffmpeg extra options (not validated).</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> "-level 3.1" can reduce artifacts and
-            increase iOS compatibility</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE_SKIP_FRAMES.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE_SKIP_FRAMES(class='form-select bg-secondary') }}
-        <div id="TIMELAPSE_SKIP_FRAMES-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Exclude frames at beginning of timelapse. Gain changes between night and day cause bad
-        exposures.</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__USE_NIGHT_CONFIG.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.TIMELAPSE__USE_NIGHT_CONFIG(class='form-check-input') }}
-            <div id="TIMELAPSE__USE_NIGHT_CONFIG-error" class="invalid-feedback text-danger" style="display: none;">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.DAYTIME_TIMELAPSE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="DAYTIME_TIMELAPSE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Daytime Render Array
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Enables independent daytime compilation tracks.</span>
+                </div>
+                <div id="DAYTIME_TIMELAPSE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__PRE_PROCESSOR_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.TIMELAPSE__PRE_PROCESSOR_DAY(class='form-select bg-secondary') }}
-        <div id="TIMELAPSE__PRE_PROCESSOR_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-    </div>
-</div>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <div class="tw:flex tw:justify-between tw:items-center tw:mb-1">
+            <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40">Night Video Layout</h3>
+            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Timelapses" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-1.5 tw:border-none" target="_blank">
+                <i class="tw:icon-[lucide--external-link] tw:w-3 tw:h-3"></i>
+                Timelapse Wiki
+            </a>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_FRAMERATE_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_FRAMERATE_DAY(class='form-control bg-secondary') }}
-        <div id="FFMPEG_FRAMERATE_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">ffmpeg framerate for timelapse videos</div>
-</div>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4">
+            <div class="tw:form-control tw:w-full md:tw:col-span-4">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Pre-Processor Engine</span>
+                </label>
+                {{ form_config.TIMELAPSE__PRE_PROCESSOR(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="TIMELAPSE__PRE_PROCESSOR-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_BITRATE_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_BITRATE_DAY(class='form-control bg-secondary') }}
-        <div id="FFMPEG_BITRATE_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Default: 5000k</div>
-        <div>High quality timelapses with dynamic content (eg auroras) should have a much higher rate</div>
-        <div>15000k-20000k for a 1920x1080 resolution.</div>
-        <div>30000k-40000k for 4K video</div>
-    </div>
-</div>
+            <div class="tw:form-control tw:w-full md:tw:col-span-4">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Output Framerate (FPS)</span>
+                </label>
+                {{ form_config.FFMPEG_FRAMERATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm') }}
+                <div id="FFMPEG_FRAMERATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_VFSCALE_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_VFSCALE_DAY(class='form-select bg-secondary') }}
-        <div id="FFMPEG_VFSCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div><span class="badge rounded-pill bg-danger text-dark">Warning</span> Higher resolution videos may cause
-            timelapses to fail on systems with less than 4GB RAM. Scale your resolution to reduce the memory
-            requirements.</div>
-    </div>
-</div>
+            <div class="tw:form-control tw:w-full md:tw:col-span-4">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Initial Exclude Frame Cap</span>
+                </label>
+                {{ form_config.TIMELAPSE_SKIP_FRAMES(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Drops initial transient gain flips at twilight.</span>
+                <div id="TIMELAPSE_SKIP_FRAMES-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FFMPEG_EXTRA_OPTIONS_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FFMPEG_EXTRA_OPTIONS_DAY(class='form-control bg-secondary') }}
-        <div id="FFMPEG_EXTRA_OPTIONS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>ffmpeg extra options (not validated).</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> "-level 3.1" can reduce artifacts and
-            increase iOS compatibility</div>
-    </div>
-</div>
+            <div class="tw:form-control tw:w-full md:tw:col-span-4">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Stream Target Bitrate</span>
+                </label>
+                {{ form_config.FFMPEG_BITRATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm', placeholder='5000k') }}
+                <div id="FFMPEG_BITRATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<hr>
+            <div class="tw:bg-black/20 tw:p-3 tw:rounded-lg tw:border tw:border-white/5 md:tw:col-span-8 tw:flex tw:flex-col tw:justify-center tw:gap-1">
+                <div class="tw:text-[10px] tw:text-base-content/50 tw:font-medium">Bitrate Scaling Guide Matrix:</div>
+                <div class="tw:flex tw:flex-wrap tw:gap-2 tw:mt-0.5">
+                    <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">Default: 5000k</span>
+                    <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">1080p Aurora Setup: 15000k - 20000k</span>
+                    <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">UHD 4K Array: 30000k - 40000k</span>
+                </div>
+            </div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__FFMPEG_REPORT.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.TIMELAPSE__FFMPEG_REPORT(class='form-check-input') }}
-            <div id="TIMELAPSE__FFMPEG_REPORT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:divider tw:my-1 tw:opacity-10"></div>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Video Output Transcoder Codec</span>
+                </label>
+                {{ form_config.FFMPEG_CODEC(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="FFMPEG_CODEC-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Main Output Frame Scale</span>
+                </label>
+                {{ form_config.FFMPEG_VFSCALE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="FFMPEG_VFSCALE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Star Trail Frame Scale Separator</span>
+                </label>
+                {{ form_config.FFMPEG_VFSCALE_STARTRAIL(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="FFMPEG_VFSCALE_STARTRAIL-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Custom Extension Arguments Array</span>
+            </label>
+            {{ form_config.FFMPEG_EXTRA_OPTIONS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm tw:font-mono', placeholder='-level 3.1') }}
+            <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Passes direct arguments to encoder process. <code class="tw:text-info">-level 3.1</code> can minimize decoding artifacts on low-tier iOS architectures.</span>
+            <div id="FFMPEG_EXTRA_OPTIONS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:flex tw:gap-3 tw:items-start tw:bg-error/10 tw:p-3 tw:rounded-lg tw:border tw:border-error/20 tw:mt-1">
+            <i class="tw:icon-[lucide--alert-triangle] tw:w-4 tw:h-4 tw:text-error tw:mt-0.5"></i>
+            <span class="tw:text-[10px] tw:text-error/80 tw:leading-relaxed">
+                <span class="tw:font-bold">Hardware Resource Limitation Threshold:</span> Uncapped native resolution compiles can cause process kill-faults on embedded architectures containing under 4GB RAM. Apply scalar transforms if memory leakage or thread dropping is logged.
+            </span>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div>Generate ffmpeg reports in $HOME (for debugging)</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Report files are not automatically
-            deleted</div>
-    </div>
-</div>
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <div class="tw:flex tw:items-center tw:gap-3">
+            {{ form_config.TIMELAPSE__USE_NIGHT_CONFIG(class='tw:toggle tw:toggle-accent tw:toggle-xs') }}
+            <div class="tw:flex tw:flex-col">
+                <label for="TIMELAPSE__USE_NIGHT_CONFIG" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                    Sync Day Configurations with Night Primitives
+                </label>
+            </div>
+            <div id="TIMELAPSE__USE_NIGHT_CONFIG-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__IMAGE_CIRCLE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__IMAGE_CIRCLE(class='form-control bg-secondary') }}
-        <div id="TIMELAPSE__IMAGE_CIRCLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Size of image circle for wrapping the keogram</div>
-        <div>Offsets for the image circle are on the <a href="#location-LENS_OFFSET_X"
-                class="text-decoration-none link-info">Location tab</a></div>
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
+        <div class="tw:divider tw:my-1 tw:opacity-10"></div>
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40">Daylight Video Layout</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__PRE_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__PRE_SCALE(class='form-control bg-secondary') }}
-        <div id="TIMELAPSE__PRE_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Percentage to pre-scale image. Only valid in timelapse processors that modify the image.</div>
-    </div>
-</div>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Day Pre-Processor Engine</span>
+                </label>
+                {{ form_config.TIMELAPSE__PRE_PROCESSOR_DAY(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="TIMELAPSE__PRE_PROCESSOR_DAY-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__KEOGRAM_RATIO.label(class='col-form-label') }}
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Day Output Framerate (FPS)</span>
+                </label>
+                {{ form_config.FFMPEG_FRAMERATE_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm') }}
+                <div id="FFMPEG_FRAMERATE_DAY-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Day Stream Bitrate</span>
+                </label>
+                {{ form_config.FFMPEG_BITRATE_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm', placeholder='5000k') }}
+                <div id="FFMPEG_BITRATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Day Target Resolution Scale</span>
+                </label>
+                {{ form_config.FFMPEG_VFSCALE_DAY(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="FFMPEG_VFSCALE_DAY-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Day Extension Arguments Array</span>
+                </label>
+                {{ form_config.FFMPEG_EXTRA_OPTIONS_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm tw:font-mono', placeholder='-level 3.1') }}
+                <div id="FFMPEG_EXTRA_OPTIONS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2">
-        {{ form_config.TIMELAPSE__KEOGRAM_RATIO(class='form-control bg-secondary') }}
-        <div id="TIMELAPSE__KEOGRAM_RATIO-error" class="invalid-feedback text-danger" style="display: none;"></div>
+
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Optical Frame Projection Mapping</h3>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1 tw:flex tw:justify-between tw:items-center">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Optical Circle Circumference (px)</span>
+                </label>
+                <div class="tw:join tw:w-full">
+                    {{ form_config.TIMELAPSE__IMAGE_CIRCLE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark tw:text-sm') }}
+                    <a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:join-item tw:btn-ghost tw:bg-black/40 tw:border-base-content/10" target="_blank">
+                        <i class="tw:icon-[lucide--maximize] tw:w-4 tw:h-4"></i>
+                    </a>
+                </div>
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Radial bounds size mapping rules for the keogram wrapper engine.</span>
+                <div id="TIMELAPSE__IMAGE_CIRCLE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Processor Matrix Pre-Scale (%)</span>
+                </label>
+                {{ form_config.TIMELAPSE__PRE_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm', placeholder='100') }}
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Pre-scale vector limit. Valid only on adaptive geometric modifiers.</span>
+                <div id="TIMELAPSE__PRE_SCALE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Keogram Proportional Ratio</span>
+                </label>
+                {{ form_config.TIMELAPSE__KEOGRAM_RATIO(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm', placeholder='0.05') }}
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Target reference boundary width factor. Safe defaults: <code class="tw:text-accent font-mono">0.05</code> - <code class="tw:text-accent font-mono">0.15</code>.</span>
+                <div id="TIMELAPSE__KEOGRAM_RATIO-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-8">
-        <div>The ratio of the size of the keogram as it relates to the image circle</div>
-        <div>0.05 - 0.15 is a good starting point</div>
+
+    <div class="tw:bg-base-200/50 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-3">
+        <div class="tw:flex tw:flex-col md:tw:flex-row md:tw:items-center tw:gap-4">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:flex-none">
+                {{ form_config.TIMELAPSE__FFMPEG_REPORT(class='tw:toggle tw:toggle-warning tw:toggle-sm') }}
+                <label for="TIMELAPSE__FFMPEG_REPORT" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    Enable System FFmpeg Telemetry Diagnostics
+                </label>
+            </div>
+            <div id="TIMELAPSE__FFMPEG_REPORT-error" class="tw:text-error tw:text-xs" style="display: none;"></div>
+            
+            <div class="tw:flex-1 md:tw:text-right">
+                <span class="tw:inline-flex tw:items-center tw:gap-1.5 tw:bg-warning/10 tw:border tw:border-warning/20 tw:px-3 tw:py-1.5 tw:rounded-lg tw:text-[10px] tw:text-warning/80 tw:font-medium">
+                    <i class="tw:icon-[lucide--alert-circle] tw:w-3.5 tw:h-3.5"></i>
+                    Debug logs pipe directly into $HOME and will build up disk footprint if left un-pruned.
+                </span>
+            </div>
+        </div>
     </div>
+
 </div>

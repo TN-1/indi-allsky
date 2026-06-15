@@ -1,209 +1,197 @@
-<div><span class="badge rounded-pill bg-info text-dark">Note</span> Youtube support requires installing the "optional"
-    python modules during setup</div>
+<div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__ENABLE(class='form-check-input') }}
-            <div id="YOUTUBE__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+    <div class="tw:flex tw:gap-3 tw:items-start tw:bg-info/10 tw:p-4 tw:rounded-xl tw:border tw:border-info/20">
+        <i class="tw:icon-[lucide--info] tw:w-4 tw:h-4 tw:text-info tw:mt-0.5"></i>
+        <div class="tw:flex-1 tw:text-xs tw:text-info/90 tw:leading-relaxed">
+            <span class="tw:font-bold tw:uppercase tw:tracking-wider tw:text-info tw:mr-1">Prerequisite Note:</span> 
+            YouTube integration requires the optional Python modules to be compiled and installed within your all-sky environment instance.
         </div>
     </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Youtube-Uploads"
-                class="text-decoration-none link-info" target="_blank">Youtube Setup Wiki</a></div>
-    </div>
-</div>
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">API Engine & Authentication</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__SECRETS_FILE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.YOUTUBE__SECRETS_FILE(class='form-control bg-secondary') }}
-        <div id="YOUTUBE__SECRETS_FILE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5"></div>
-</div>
-
-<hr>
-
-<div class="row">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-5">
-        <a href="{{ url_for('indi_allsky.youtube_authorize_view') }}"><span
-                class="badge bg-success text-dark">Authorize</span></a>
-    </div>
-    <div class="col-sm-5">Click to start Oauth2 authorization process</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__CREDS_STORED.label }}
-    </div>
-    <div class="col-sm-1">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__CREDS_STORED(class='form-check-input') }}
-            <div id="YOUTUBE__CREDS_STORED-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="md:tw:col-span-4 tw:flex tw:items-center tw:gap-3">
+                {{ form_config.YOUTUBE__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <label for="YOUTUBE__ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.YOUTUBE__ENABLE.label.text if form_config.YOUTUBE__ENABLE.label.text else "Enable YouTube Uploads" }}
+                </label>
+            </div>
+            <div id="YOUTUBE__ENABLE-error" class="tw:text-error tw:text-xs md:tw:col-span-4" style="display: none;"></div>
+            
+            <div class="md:tw:col-span-4 md:tw:text-right">
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Youtube-Uploads" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-2 tw:border-none" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3 tw:h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                    YouTube Setup Wiki
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <a href="{{ url_for('indi_allsky.youtube_oauth2refresh_view') }}"><span
-                class="badge bg-primary">Refresh</span></a>
-        <a href="{{ url_for('indi_allsky.youtube_oauth2revoke_view') }}"><span
-                class="badge bg-warning text-dark">Revoke</span></a>
-    </div>
-</div>
 
-<hr>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4">
+            <div class="tw:form-control tw:w-full md:tw:col-span-6">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Client Secrets File Path</span>
+                </label>
+                {{ form_config.YOUTUBE__SECRETS_FILE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:font-mono focus:tw:outline-none focus:tw:border-primary', placeholder='/home/allsky/.config/client_secrets.json') }}
+                <div id="YOUTUBE__SECRETS_FILE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__REDIRECT_URI.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.YOUTUBE__REDIRECT_URI(class='form-control text-secondary bg-dark') }}
-        <div id="YOUTUBE__REDIRECT_URI-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">The domain must be a real TLD (.com / .net / etc)</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__PRIVACY_STATUS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.YOUTUBE__PRIVACY_STATUS(class='form-select bg-secondary') }}
-        <div id="YOUTUBE__PRIVACY_STATUS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__TITLE_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.YOUTUBE__TITLE_TEMPLATE(class='form-control bg-secondary') }}
-        <div id="YOUTUBE__TITLE_TEMPLATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>Available variables:</div>
-        <div>
-            <pre>day_date, timeofday, asset_label</pre>
+            <div class="tw:form-control tw:w-full md:tw:col-span-6">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">OAuth Redirect URI</span>
+                </label>
+                {{ form_config.YOUTUBE__REDIRECT_URI(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:font-mono focus:tw:outline-none focus:tw:border-primary', placeholder='https://yourdomain.com/callback') }}
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Google OAuth restrictions demand a verified public top-level domain (.com, .net, etc.)</span>
+                <div id="YOUTUBE__REDIRECT_URI-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__DESCRIPTION_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.YOUTUBE__DESCRIPTION_TEMPLATE(class='form-control bg-secondary') }}
-        <div id="YOUTUBE__DESCRIPTION_TEMPLATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6"></div>
-</div>
+        <div class="tw:bg-black/20 tw:p-4 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col lg:tw:flex-row lg:tw:items-center tw:gap-4 tw:mt-2">
+            <div class="tw:flex tw:gap-4 tw:items-center tw:flex-1">
+                <div class="tw:form-control">
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.YOUTUBE__CREDS_STORED(class='tw:toggle tw:toggle-accent tw:toggle-xs') }}
+                        <label for="YOUTUBE__CREDS_STORED" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                            Tokens Configured
+                        </label>
+                    </div>
+                    <div id="YOUTUBE__CREDS_STORED-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:hidden sm:tw:block tw:h-8 tw:w-px tw:bg-base-content/10"></div>
+                <p class="tw:text-[11px] tw:text-base-content/50 tw:leading-relaxed">
+                    Authorize app infrastructure access to initialize video broadcast scheduling.
+                </p>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__CATEGORY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.YOUTUBE__CATEGORY(class='form-control bg-secondary') }}
-        <div id="YOUTUBE__CATEGORY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div><a href="https://developers.google.com/youtube/v3/docs/videoCategories/list"
-                class="text-decoration-none link-info" target="_blank">Categories API</a></div>
-        <div>22 = People & Blogs</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__TAGS_STR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.YOUTUBE__TAGS_STR(class='form-control bg-secondary') }}
-        <div id="YOUTUBE__TAGS_STR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Comma separated list</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__UPLOAD_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__UPLOAD_VIDEO(class='form-check-input') }}
-            <div id="YOUTUBE__UPLOAD_VIDEO-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__UPLOAD_MINI_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__UPLOAD_MINI_VIDEO(class='form-check-input') }}
-            <div id="YOUTUBE__UPLOAD_MINI_VIDEO-error" class="invalid-feedback text-danger" style="display: none;">
+            <div class="tw:flex tw:flex-wrap tw:gap-2">
+                <a href="{{ url_for('indi_allsky.youtube_authorize_view') }}" class="tw:btn tw:btn-sm tw:btn-success tw:text-black tw:gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="tw:w-3.5 tw:h-3.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                    Authorize Pipeline
+                </a>
+                <a href="{{ url_for('indi_allsky.youtube_oauth2refresh_view') }}" class="tw:btn tw:btn-sm tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-base-content tw:gap-1.5 tw:border-base-content/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Refresh
+                </a>
+                <a href="{{ url_for('indi_allsky.youtube_oauth2revoke_view') }}" class="tw:btn tw:btn-sm tw:btn-outline tw:btn-warning tw:gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                    </svg>
+                    Revoke
+                </a>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__UPLOAD_STARTRAIL_VIDEO.label }}
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Broadcast Metadata Layout</h3>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Default Privacy Status</span>
+                </label>
+                {{ form_config.YOUTUBE__PRIVACY_STATUS(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+                <div id="YOUTUBE__PRIVACY_STATUS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1 tw:flex tw:justify-between tw:items-center">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Video Category ID</span>
+                    <a href="https://developers.google.com/youtube/v3/docs/videoCategories/list" class="tw:text-[10px] tw:text-info tw:no-underline hover:tw:underline tw:font-semibold" target="_blank">Categories API Reference</a>
+                </label>
+                {{ form_config.YOUTUBE__CATEGORY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='22') }}
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Value <code class="tw:text-accent font-mono">22</code> is mapped to "People & Blogs".</span>
+                <div id="YOUTUBE__CATEGORY-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Title Template Blueprint</span>
+            </label>
+            {{ form_config.YOUTUBE__TITLE_TEMPLATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+            <div class="tw:text-[10px] tw:text-base-content/40 tw:mt-1.5 tw:flex tw:flex-wrap tw:items-center tw:gap-1.5 tw:font-medium">
+                <span>Available engine token variables:</span>
+                <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">day_date</span>
+                <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">timeofday</span>
+                <span class="tw:badge tw:badge-neutral tw:font-mono tw:text-[9px] tw:text-base-content/70">asset_label</span>
+            </div>
+            <div id="YOUTUBE__TITLE_TEMPLATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Description Content Template</span>
+            </label>
+            {{ form_config.YOUTUBE__DESCRIPTION_TEMPLATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+            <div id="YOUTUBE__DESCRIPTION_TEMPLATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Search Keyword Tags</span>
+            </label>
+            {{ form_config.YOUTUBE__TAGS_STR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='allsky, astronomy, timelapse') }}
+            <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Separate target keywords with simple comma delimiters.</span>
+            <div id="YOUTUBE__TAGS_STR-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
     </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__UPLOAD_STARTRAIL_VIDEO(class='form-check-input') }}
-            <div id="YOUTUBE__UPLOAD_STARTRAIL_VIDEO-error" class="invalid-feedback text-danger" style="display: none;">
+
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Automation Generation Pipelines</h3>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.YOUTUBE__UPLOAD_VIDEO(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="YOUTUBE__UPLOAD_VIDEO" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Upload Master Timelapse
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ships full-resolution nightly compilation video tracks.</span>
+                </div>
+                <div id="YOUTUBE__UPLOAD_VIDEO-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.YOUTUBE__UPLOAD_MINI_VIDEO(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="YOUTUBE__UPLOAD_MINI_VIDEO" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Upload Mini Summary Video
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ships shortened keyframe summary files.</span>
+                </div>
+                <div id="YOUTUBE__UPLOAD_MINI_VIDEO-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.YOUTUBE__UPLOAD_STARTRAIL_VIDEO(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="YOUTUBE__UPLOAD_STARTRAIL_VIDEO" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Upload Keogram / Startrails
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ships stacked star trail animation rendering sets.</span>
+                </div>
+                <div id="YOUTUBE__UPLOAD_STARTRAIL_VIDEO-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.YOUTUBE__UPLOAD_PANORAMA_VIDEO(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="YOUTUBE__UPLOAD_PANORAMA_VIDEO" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Upload Panorama Scans
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ships reprojected wide-angle stitched horizon loops.</span>
+                </div>
+                <div id="YOUTUBE__UPLOAD_PANORAMA_VIDEO-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.YOUTUBE__UPLOAD_PANORAMA_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.YOUTUBE__UPLOAD_PANORAMA_VIDEO(class='form-check-input') }}
-            <div id="YOUTUBE__UPLOAD_PANORAMA_VIDEO-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
 </div>
