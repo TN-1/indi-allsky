@@ -1,99 +1,105 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SATELLITE_TRACK__ENABLE(class='form-check-input') }}
-            <div id="SATELLITE_TRACK__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Satellite-Tracking"
-                class="text-decoration-none link-info" target="_blank">Satellite Tracking Wiki</a></div>
-    </div>
-</div>
+<div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Core Tracking Engine Settings</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__DAYTIME_TRACK.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SATELLITE_TRACK__DAYTIME_TRACK(class='form-check-input') }}
-            <div id="SATELLITE_TRACK__DAYTIME_TRACK-error" class="invalid-feedback text-danger" style="display: none;">
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="md:tw:col-span-4 tw:flex tw:items-center tw:gap-3">
+                {{ form_config.SATELLITE_TRACK__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <label for="SATELLITE_TRACK__ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SATELLITE_TRACK__ENABLE.label.text if form_config.SATELLITE_TRACK__ENABLE.label.text else "Enable Satellite Tracking" }}
+                </label>
+            </div>
+            <div id="SATELLITE_TRACK__ENABLE-error" class="tw:text-error tw:text-xs md:tw:col-span-3" style="display: none;"></div>
+            
+            <div class="md:tw:col-span-5 md:tw:text-right">
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Satellite-Tracking" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-2 tw:border-none" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3 tw:h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                    Satellite Tracking Wiki
+                </a>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__ALT_DEG_MIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__ALT_DEG_MIN(class='form-control bg-secondary') }}
-        <div id="SATELLITE_TRACK__ALT_DEG_MIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Minimum visual altitude of satellite in degrees</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__LABEL_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SATELLITE_TRACK__LABEL_ENABLE(class='form-check-input') }}
-            <div id="SATELLITE_TRACK__LABEL_ENABLE-error" class="invalid-feedback text-danger" style="display: none;">
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            {{ form_config.SATELLITE_TRACK__DAYTIME_TRACK(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            <div class="tw:flex tw:flex-col">
+                <label for="SATELLITE_TRACK__DAYTIME_TRACK" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SATELLITE_TRACK__DAYTIME_TRACK.label.text if form_config.SATELLITE_TRACK__DAYTIME_TRACK.label.text else "Track During Daytime" }}
+                </label>
+                <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Allows pass calculations and coordinate telemetry parsing while the sun is above the local horizon limits.</span>
             </div>
+            <div id="SATELLITE_TRACK__DAYTIME_TRACK-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full tw:mt-1">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Minimum Visual Altitude Threshold</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.SATELLITE_TRACK__ALT_DEG_MIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:join-item focus:tw:outline-none focus:tw:border-primary') }}
+                        <span class="tw:bg-base-300 tw:border tw:border-base-content/10 tw:px-3 tw:flex tw:items-center tw:text-xs tw:font-mono tw:text-base-content/60 tw:join-item">°</span>
+                    </div>
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Minimum passing altitude cutoff limit in degrees required before rendering overhead ephemeris indicators.</span>
+                </div>
+            </div>
+            <div id="SATELLITE_TRACK__ALT_DEG_MIN-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8"></div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__LABEL_LIMIT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__LABEL_LIMIT(class='form-control bg-secondary') }}
-        <div id="SATELLITE_TRACK__LABEL_LIMIT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Limit number of satellite to label on image</div>
-</div>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Graphic Canvas Annotations</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__IMAGE_LABEL_TEMPLATE_PREFIX.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.SATELLITE_TRACK__IMAGE_LABEL_TEMPLATE_PREFIX(class='form-control bg-secondary', rows='10') }}
-        <div id="SATELLITE_TRACK__IMAGE_LABEL_TEMPLATE_PREFIX-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-4">
-        <div></div>
-    </div>
-</div>
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            {{ form_config.SATELLITE_TRACK__LABEL_ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            <label for="SATELLITE_TRACK__LABEL_ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                {{ form_config.SATELLITE_TRACK__LABEL_ENABLE.label.text if form_config.SATELLITE_TRACK__LABEL_ENABLE.label.text else "Enable Satellite Text Label Overlays" }}
+            </label>
+            <div id="SATELLITE_TRACK__LABEL_ENABLE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SATELLITE_TRACK__SAT_LABEL_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.SATELLITE_TRACK__SAT_LABEL_TEMPLATE(class='form-control bg-secondary') }}
-        <div id="SATELLITE_TRACK__SAT_LABEL_TEMPLATE-error" class="invalid-feedback text-danger" style="display: none;">
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Satellite Render Label Limit Count</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    {{ form_config.SATELLITE_TRACK__LABEL_LIMIT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Caps the maximum number of simultaneous bright satellite targets labeled over the image vector layer.</span>
+                </div>
+            </div>
+            <div id="SATELLITE_TRACK__LABEL_LIMIT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Satellite Specific Label Template</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-6 tw:w-full">
+                    {{ form_config.SATELLITE_TRACK__SAT_LABEL_TEMPLATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='e.g., {name} ({alt}°)') }}
+                </div>
+                <div class="md:tw:col-span-6">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Formatting arguments applied to the inline overlay coordinates tag.</span>
+                </div>
+            </div>
+            <div id="SATELLITE_TRACK__SAT_LABEL_TEMPLATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Image Label Template Prefix Block</span>
+            </label>
+            {{ form_config.SATELLITE_TRACK__IMAGE_LABEL_TEMPLATE_PREFIX(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary tw:font-mono', rows='6', placeholder='Enter global image data metadata tracking prefixes...') }}
+            <div id="SATELLITE_TRACK__IMAGE_LABEL_TEMPLATE_PREFIX-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-6"></div>
+
 </div>

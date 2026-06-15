@@ -1,450 +1,361 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.GPS_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.GPS_ENABLE(class='form-check-input') }}
-            <div id="GPS_ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+<style>
+    .allsky-location-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-location-grid {
+            grid-template-columns: 2fr 1.2fr !important;
+            align-items: start;
+        }
+    }
+    /* Enforce absolute dark baseline properties across input types */
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important; /* Maps back to DaisyUI primary accent variable */
+    }
+</style>
+
+<div class="allsky-location-grid">
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--map] tw:w-4 tw:h-4"></i>
+                Location & Privacy
+            </h3>
+            
+            <div class="tw:flex tw:flex-col tw:gap-6">
+                <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
+                    <div class="tw:flex tw:gap-4">
+                        <div class="tw:flex-none">
+                            {{ form_config.GPS_ENABLE(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <label for="GPS_ENABLE" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                                {{ form_config.GPS_ENABLE.label.text }}
+                            </label>
+                            <div class="tw:text-[10px] tw:mt-1 tw:opacity-70 tw:leading-relaxed">
+                                Use GPS hardware via <a href="https://github.com/aaronwmorris/indi-allsky/wiki/GPSd-NTP-Time-Sync" class="tw:link tw:link-info tw:no-underline hover:tw:underline" target="_blank">GPSd</a>.
+                            </div>
+                            <div id="GPS_ENABLE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <div class="tw:flex tw:gap-4">
+                        <div class="tw:flex-none">
+                            {{ form_config.PRIVACY_MODE(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <label for="PRIVACY_MODE" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                                {{ form_config.PRIVACY_MODE.label.text }}
+                            </label>
+                            <div class="tw:text-[10px] tw:mt-1 tw:opacity-70 tw:leading-relaxed">Reduce coordinate precision in public UI.</div>
+                            <div id="PRIVACY_MODE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tw:flex tw:gap-4">
+                    <div class="tw:flex-none">
+                        {{ form_config.IMAGE_EXIF_PRIVACY(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
+                    </div>
+                    <div class="tw:flex-1">
+                        <label for="IMAGE_EXIF_PRIVACY" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                            {{ form_config.IMAGE_EXIF_PRIVACY.label.text }}
+                        </label>
+                        <div class="tw:text-[10px] tw:mt-1 tw:opacity-70 tw:leading-relaxed">
+                            Scrub owner/GPS from JPEG tags. Camera info remains.
+                        </div>
+                        <div id="IMAGE_EXIF_PRIVACY-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tw:divider tw:my-1 tw:opacity-10"></div>
+
+                <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LOCATION_NAME.label.text }}
+                        </label>
+                        {{ form_config.LOCATION_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='Site Name') }}
+                        <div id="LOCATION_NAME-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.OWNER.label.text }}
+                        </label>
+                        {{ form_config.OWNER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='Copyright Holder') }}
+                        <div id="OWNER-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LOCATION_LATITUDE.label.text }}
+                        </label>
+                        {{ form_config.LOCATION_LATITUDE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LOCATION_LATITUDE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LOCATION_LONGITUDE.label.text }}
+                        </label>
+                        {{ form_config.LOCATION_LONGITUDE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LOCATION_LONGITUDE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LOCATION_ELEVATION.label.text }}
+                        </label>
+                        <div class="tw:join tw:w-full">
+                            {{ form_config.LOCATION_ELEVATION(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            <span class="tw:btn tw:btn-sm tw:h-11 tw:join-item tw:no-animation tw:cursor-default tw:bg-black/40 tw:border-base-content/10 tw:text-xs tw:font-mono tw:text-base-content/60">m</span>
+                        </div>
+                        <div id="LOCATION_ELEVATION-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tw:bg-black/20 tw:p-4 tw:rounded-xl tw:flex tw:flex-col md:tw:flex-row tw:items-center tw:gap-4 tw:border tw:border-white/5">
+                    <button type="button" class="tw:btn tw:btn-primary tw:btn-outline tw:btn-sm tw:h-11 tw:px-6" onclick="setLocationFromBrowser();">
+                        <i class="tw:icon-[lucide--map-pin] tw:w-4 tw:h-4"></i>
+                        Fetch Browser Location
+                    </button>
+                    <div class="tw:flex-1">
+                        <div class="tw:text-[10px] tw:opacity-60">
+                            Browser permission required. Coordinates filled after approval.
+                        </div>
+                        <div id="BROWSER_LOCATION_STATUS" class="tw:text-[10px] tw:font-mono tw:text-info"></div>
+                    </div>
+                </div>
+
+                {% if longitude_validation_message %}
+                <div class="tw:text-[10px] tw:opacity-60 tw:italic">
+                    {{ longitude_validation_message | safe }}
+                </div>
+                {% endif %}
+
+                <div class="tw:flex tw:gap-3 tw:items-start tw:bg-info/10 tw:p-3 tw:rounded-lg tw:border tw:border-info/20">
+                    <i class="tw:icon-[lucide--info] tw:w-4 tw:h-4 tw:text-info tw:mt-0.5"></i>
+                    <span class="tw:text-[10px] tw:text-info/80">Reload required to update camera metadata and status area after changes.</span>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Enable using GPS location services. Requires GPS hardware and <a
-                href="https://github.com/aaronwmorris/indi-allsky/wiki/GPSd-NTP-Time-Sync"
-                class="text-decoration-none link-info" target="_blank">GPSd installation</a></div>
-    </div>
-</div>
 
-<hr>
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--scan-eye] tw:w-4 tw:h-4"></i>
+                    Optical Hardware
+                </h3>
+                <a href="{{ url_for('indi_allsky.camera_lens_view') }}" class="tw:badge tw:badge-error tw:badge-outline tw:gap-1 tw:py-3 tw:px-3 tw:text-[10px] tw:no-underline">
+                    <i class="tw:icon-[lucide--camera] tw:w-3 tw:h-3"></i>
+                    Camera Info
+                </a>
+            </div>
+            
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
+                <div class="tw:form-control tw:col-span-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.LENS_NAME.label.text }}
+                    </label>
+                    {{ form_config.LENS_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="LENS_NAME-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+                
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.LENS_FOCAL_LENGTH.label.text }} (mm)
+                    </label>
+                    {{ form_config.LENS_FOCAL_LENGTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="LENS_FOCAL_LENGTH-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.LENS_FOCAL_RATIO.label.text }} (f/)
+                    </label>
+                    {{ form_config.LENS_FOCAL_RATIO(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="LENS_FOCAL_RATIO-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.PRIVACY_MODE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.PRIVACY_MODE(class='form-check-input') }}
-            <div id="PRIVACY_MODE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Reduces precision of Latitude and Longitude information when it is exposed</div>
-    </div>
-</div>
+                <div class="tw:form-control tw:col-span-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.LENS_IMAGE_CIRCLE.label.text }} (px)
+                    </label>
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.LENS_IMAGE_CIRCLE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                        <a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:join-item tw:btn-ghost tw:bg-black/40 tw:border-base-content/10" target="_blank">
+                            <i class="tw:icon-[lucide--maximize] tw:w-4 tw:h-4"></i>
+                        </a>
+                    </div>
+                    <div class="tw:text-[10px] tw:mt-1 tw:opacity-40">Set larger than diagonal if edge is not visible.</div>
+                    <div id="LENS_IMAGE_CIRCLE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
 
-<hr>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:col-span-full">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            Offset X
+                        </label>
+                        {{ form_config.LENS_OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LENS_OFFSET_X-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            Offset Y
+                        </label>
+                        {{ form_config.LENS_OFFSET_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LENS_OFFSET_Y-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_EXIF_PRIVACY.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_EXIF_PRIVACY(class='form-check-input') }}
-            <div id="IMAGE_EXIF_PRIVACY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Exclude private identifying information from image EXIF tags including owner and GPS details</div>
-        <div>Camera information is still included. Only valid for JPEG images</div>
-    </div>
-</div>
-
-<hr>
-
-<div><span class="badge rounded-pill bg-info text-dark">Note</span> Changes to LATITUDE and LONGITUDE will not be
-    immediately reflected in the status area. A reload is necessary to update the camera metadata.</div>
-<div>&nbsp;</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.LOCATION_NAME(class='form-control bg-secondary') }}
-        <div id="LOCATION_NAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">Free form input</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_LATITUDE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_LATITUDE(class='form-control bg-secondary') }}
-        <div id="LOCATION_LATITUDE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Min: -90, Max: 90 [Positive = Northern Hemisphere / Negative = Southern Hemisphere]</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_LONGITUDE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_LONGITUDE(class='form-control bg-secondary') }}
-        <div id="LOCATION_LONGITUDE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>{{ longitude_validation_message | safe }}</div>
-        <div>Min: -180, Max: 180 [Positive = Eastern Hemisphere / Negative = Western Hemisphere]</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        <label class="col-form-label">Browser Location</label>
-    </div>
-    <div class="col-sm-2">
-        <button type="button" class="btn btn-sm btn-outline-info" onclick="setLocationFromBrowser();">
-            Use browser location
-        </button>
-    </div>
-    <div class="col-sm-8">
-        <div class="form-text text-secondary">
-            Your browser will ask for permission. Coordinates are only filled into the form after you approve.
-        </div>
-        <div id="BROWSER_LOCATION_STATUS" class="form-text text-secondary"></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_ELEVATION.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LOCATION_ELEVATION(class='form-control bg-secondary') }}
-        <div id="LOCATION_ELEVATION-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Meters</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.OWNER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.OWNER(class='form-control bg-secondary') }}
-        <div id="OWNER-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">
-        <div>Owner information for copyright tags</div>
-        <div>Restricted to simplified characters</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.LENS_NAME(class='form-control bg-secondary') }}
-        <div id="LENS_NAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">
-        <a href="{{ url_for('indi_allsky.camera_lens_view') }}" class="text-decoration-none link-info">
-            <span class="badge pill bg-danger">Camera Info</span>
-        </a>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_FOCAL_LENGTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_FOCAL_LENGTH(class='form-control bg-secondary') }}
-        <div id="LENS_FOCAL_LENGTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_FOCAL_RATIO.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_FOCAL_RATIO(class='form-control bg-secondary') }}
-        <div id="LENS_FOCAL_RATIO-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_IMAGE_CIRCLE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_IMAGE_CIRCLE(class='form-control bg-secondary') }}
-        <div id="LENS_IMAGE_CIRCLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Image circle in pixels. If you cannot see the edge of the image circle, just ensure this number is larger
-            than the diagonal.</div>
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_OFFSET_X(class='form-control bg-secondary') }}
-        <div id="LENS_OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Lens/Sensor offset from center</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_OFFSET_Y(class='form-control bg-secondary') }}
-        <div id="LENS_OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_ALTITUDE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_ALTITUDE(class='form-control bg-secondary') }}
-        <div id="LENS_ALTITUDE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LENS_AZIMUTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LENS_AZIMUTH(class='form-control bg-secondary') }}
-        <div id="LENS_AZIMUTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> This affects Cardinal directions and
-            VirtualSky</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_SUN_ALT_DEG.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_SUN_ALT_DEG(class='form-control bg-secondary') }}
-        <div id="NIGHT_SUN_ALT_DEG-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Sun altitude for start of night</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_MOONMODE_ALT_DEG.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_MOONMODE_ALT_DEG(class='form-control bg-secondary') }}
-        <div id="NIGHT_MOONMODE_ALT_DEG-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Moon altitude to enable Moon Mode (91 will disable)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_MOONMODE_PHASE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.NIGHT_MOONMODE_PHASE(class='form-control bg-secondary') }}
-        <div id="NIGHT_MOONMODE_PHASE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Moon illumnation percentage to enable Moon Mode</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__LATITUDE_OFFSET.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__LATITUDE_OFFSET(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__LATITUDE_OFFSET-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/VirtualSky"
-                class="text-decoration-none link-info" target="_blank">VirtualSky Wiki</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__LONGITUDE_OFFSET.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__LONGITUDE_OFFSET(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__LONGITUDE_OFFSET-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Changes to VirtualSky settings will become
-            available after a Reload</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__IMAGE_CIRCLE_DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__IMAGE_CIRCLE_DIAMETER(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__IMAGE_CIRCLE_DIAMETER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__OFFSET_X(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__OFFSET_Y(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__MAGNITUDE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__MAGNITUDE(class='form-control bg-secondary') }}
-        <div id="VIRTUALSKY__MAGNITUDE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Default: 6.0</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__CONSTELLATIONS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__CONSTELLATIONS(class='form-check-input') }}
-            <div id="VIRTUALSKY__CONSTELLATIONS-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:col-span-full">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LENS_ALTITUDE.label.text }}
+                        </label>
+                        {{ form_config.LENS_ALTITUDE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LENS_ALTITUDE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                            {{ form_config.LENS_AZIMUTH.label.text }}
+                        </label>
+                        {{ form_config.LENS_AZIMUTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div class="tw:text-[10px] tw:mt-1 tw:opacity-40">Affects Cardinal directions & VirtualSky</div>
+                        <div id="LENS_AZIMUTH-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__CONSTELLATIONLABELS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__CONSTELLATIONLABELS(class='form-check-input') }}
-            <div id="VIRTUALSKY__CONSTELLATIONLABELS-error" class="invalid-feedback text-danger" style="display: none;">
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:mb-1 tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--moon] tw:w-4 tw:h-4"></i>
+                Night Control
+            </h3>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.NIGHT_SUN_ALT_DEG.label.text }} (°)
+                    </label>
+                    {{ form_config.NIGHT_SUN_ALT_DEG(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div class="tw:text-[10px] tw:mt-1 tw:opacity-40">Sun altitude for start of night</div>
+                    <div id="NIGHT_SUN_ALT_DEG-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.NIGHT_MOONMODE_ALT_DEG.label.text }} (°)
+                    </label>
+                    {{ form_config.NIGHT_MOONMODE_ALT_DEG(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div class="tw:text-[10px] tw:mt-1 tw:opacity-40">Moon altitude to enable Moon Mode (91 to disable)</div>
+                    <div id="NIGHT_MOONMODE_ALT_DEG-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">
+                        {{ form_config.NIGHT_MOONMODE_PHASE.label.text }} (%)
+                    </label>
+                    {{ form_config.NIGHT_MOONMODE_PHASE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div class="tw:text-[10px] tw:mt-1 tw:opacity-40">Moon illumination % to enable Moon Mode</div>
+                    <div id="NIGHT_MOONMODE_PHASE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__SHOWSTARS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__SHOWSTARS(class='form-check-input') }}
-            <div id="VIRTUALSKY__SHOWSTARS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between tw:mb-1">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--layers] tw:w-4 tw:h-4"></i>
+                    VirtualSky
+                </h3>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/VirtualSky" class="tw:link tw:link-info tw:text-[10px] tw:no-underline hover:tw:underline" target="_blank">Wiki</a>
+            </div>
+            
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Lat Offset</label>
+                        {{ form_config.VIRTUALSKY__LATITUDE_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="VIRTUALSKY__LATITUDE_OFFSET-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Long Offset</label>
+                        {{ form_config.VIRTUALSKY__LONGITUDE_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="VIRTUALSKY__LONGITUDE_OFFSET-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+                
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Circle Diameter</label>
+                    {{ form_config.VIRTUALSKY__IMAGE_CIRCLE_DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="VIRTUALSKY__IMAGE_CIRCLE_DIAMETER-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__SHOWSTARLABELS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__SHOWSTARLABELS(class='form-check-input') }}
-            <div id="VIRTUALSKY__SHOWSTARLABELS-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Offset X</label>
+                        {{ form_config.VIRTUALSKY__OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="VIRTUALSKY__OFFSET_X-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:w-full">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Offset Y</label>
+                        {{ form_config.VIRTUALSKY__OFFSET_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="VIRTUALSKY__OFFSET_Y-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="tw:form-control tw:w-full">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Star Magnitude</label>
+                    {{ form_config.VIRTUALSKY__MAGNITUDE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="VIRTUALSKY__MAGNITUDE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+
+                <div class="tw:divider tw:my-1 tw:opacity-10"></div>
+
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;">
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__CONSTELLATIONS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__CONSTELLATIONS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">Constellations</label>
+                        <div id="VIRTUALSKY__CONSTELLATIONS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__CONSTELLATIONLABELS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__CONSTELLATIONLABELS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">C. Labels</label>
+                        <div id="VIRTUALSKY__CONSTELLATIONLABELS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__SHOWSTARS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__SHOWSTARS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">Stars</label>
+                        <div id="VIRTUALSKY__SHOWSTARS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__SHOWSTARLABELS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__SHOWSTARLABELS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">S. Labels</label>
+                        <div id="VIRTUALSKY__SHOWSTARLABELS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__SHOWPLANETS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__SHOWPLANETS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">Planets</label>
+                        <div id="VIRTUALSKY__SHOWPLANETS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:flex tw:items-center tw:gap-3">
+                        {{ form_config.VIRTUALSKY__SHOWPLANETLABELS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <label for="VIRTUALSKY__SHOWPLANETLABELS" class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-70 tw:cursor-pointer">P. Labels</label>
+                        <div id="VIRTUALSKY__SHOWPLANETLABELS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__SHOWPLANETS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__SHOWPLANETS(class='form-check-input') }}
-            <div id="VIRTUALSKY__SHOWPLANETS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Disabling planets will also disable planet labels</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.VIRTUALSKY__SHOWPLANETLABELS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.VIRTUALSKY__SHOWPLANETLABELS(class='form-check-input') }}
-            <div id="VIRTUALSKY__SHOWPLANETLABELS-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
     </div>
 </div>

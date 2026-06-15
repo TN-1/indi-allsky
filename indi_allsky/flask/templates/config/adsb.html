@@ -1,127 +1,142 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.ADSB__ENABLE(class='form-check-input') }}
-            <div id="ADSB__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+<div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
+
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Receiver Connection Configuration</h3>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="md:tw:col-span-3 tw:flex tw:items-center tw:gap-3">
+                {{ form_config.ADSB__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <label for="ADSB__ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.ADSB__ENABLE.label.text if form_config.ADSB__ENABLE.label.text else "Enable ADS-B Tracking" }}
+                </label>
+            </div>
+            <div id="ADSB__ENABLE-error" class="tw:text-error tw:text-xs md:tw:col-span-4" style="display: none;"></div>
+            
+            <div class="md:tw:col-span-5 md:tw:text-right">
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/ADS%E2%80%90B-Aircraft-Tracking" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-2 tw:border-none" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3 tw:h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                    ADS-B Tracking Wiki
+                </a>
+            </div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Dump1090 aircraft.json URL</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-8 tw:w-full">
+                    {{ form_config.ADSB__DUMP1090_URL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='http://127.0.0.1:8515/dump1090/data/aircraft.json') }}
+                </div>
+                <div class="md:tw:col-span-4">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Target JSON feed endpoint url reference data.</span>
+                </div>
+            </div>
+            <div id="ADSB__DUMP1090_URL-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">HTTP Username</span>
+                </label>
+                {{ form_config.ADSB__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='Optional username...') }}
+                <div id="ADSB__USERNAME-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">HTTP Password</span>
+                </label>
+                {{ form_config.ADSB__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', type='password', placeholder='Optional password...') }}
+                <div id="ADSB__PASSWORD-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5 tw:mt-1">
+            {{ form_config.ADSB__CERT_BYPASS(class='tw:toggle tw:toggle-warning tw:toggle-sm') }}
+            <div class="tw:flex tw:flex-col">
+                <label for="ADSB__CERT_BYPASS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.ADSB__CERT_BYPASS.label.text if form_config.ADSB__CERT_BYPASS.label.text else "Bypass Certificate Validation" }}
+                </label>
+                <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Skips secure authentication handshakes if using self-signed internal receiver targets.</span>
+            </div>
+            <div id="ADSB__CERT_BYPASS-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/ADS%E2%80%90B-Aircraft-Tracking"
-                class="text-decoration-none link-info" target="_blank">ADS-B Aircraft Tracking Wiki</a></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__DUMP1090_URL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.ADSB__DUMP1090_URL(class='form-control bg-secondary') }}
-        <div id="ADSB__DUMP1090_URL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-4">
-        <div>aircraft.json URL</div>
-    </div>
-</div>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Filtering Parameters</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__USERNAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.ADSB__USERNAME(class='form-control bg-secondary') }}
-        <div id="ADSB__USERNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">HTTP Username</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__PASSWORD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.ADSB__PASSWORD(class='form-control bg-secondary') }}
-        <div id="ADSB__PASSWORD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">HTTP Password</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__CERT_BYPASS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.ADSB__CERT_BYPASS(class='form-check-input') }}
-            <div id="ADSB__CERT_BYPASS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Minimum Visual Altitude Threshold</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.ADSB__ALT_DEG_MIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:join-item focus:tw:outline-none focus:tw:border-primary') }}
+                        <span class="tw:bg-base-300 tw:border tw:border-base-content/10 tw:px-3 tw:flex tw:items-center tw:text-xs tw:font-mono tw:text-base-content/60 tw:join-item">°</span>
+                    </div>
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Minimum altitude cutoff limit in degrees relative to local geographic horizon profiles.</span>
+                </div>
+            </div>
+            <div id="ADSB__ALT_DEG_MIN-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8">Bypass certificate validation</div>
-</div>
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Graphic Vector Annotations</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__ALT_DEG_MIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ADSB__ALT_DEG_MIN(class='form-control bg-secondary') }}
-        <div id="ADSB__ALT_DEG_MIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Minimum visual altitude of aircraft in degrees</div>
-</div>
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            {{ form_config.ADSB__LABEL_ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            <label for="ADSB__LABEL_ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                {{ form_config.ADSB__LABEL_ENABLE.label.text if form_config.ADSB__LABEL_ENABLE.label.text else "Enable Image Text Label Overlays" }}
+            </label>
+            <div id="ADSB__LABEL_ENABLE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+        </div>
 
-<hr>
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Aircraft Render Label Limit Count</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    {{ form_config.ADSB__LABEL_LIMIT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Caps maximum synchronous dynamic target markers drawn onto active image assets.</span>
+                </div>
+            </div>
+            <div id="ADSB__LABEL_LIMIT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__LABEL_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.ADSB__LABEL_ENABLE(class='form-check-input') }}
-            <div id="ADSB__LABEL_ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Aircraft Specific Label Template</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-6 tw:w-full">
+                    {{ form_config.ADSB__AIRCRAFT_LABEL_TEMPLATE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='e.g., {flight} ({alt})') }}
+                </div>
+                <div class="md:tw:col-span-6">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Formatting parameters applied to label descriptors.</span>
+                </div>
+            </div>
+            <div id="ADSB__AIRCRAFT_LABEL_TEMPLATE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label class=tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Image Label Template Prefix block</span>
+            </label>
+            {{ form_config.ADSB__IMAGE_LABEL_TEMPLATE_PREFIX(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary tw:font-mono', rows='6', placeholder='Enter global image data metadata template parameters prefix...') }}
+            <div id="ADSB__IMAGE_LABEL_TEMPLATE_PREFIX-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8"></div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__LABEL_LIMIT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ADSB__LABEL_LIMIT(class='form-control bg-secondary') }}
-        <div id="ADSB__LABEL_LIMIT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Limit number of aircraft to label on image</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__IMAGE_LABEL_TEMPLATE_PREFIX.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.ADSB__IMAGE_LABEL_TEMPLATE_PREFIX(class='form-control bg-secondary', rows='10') }}
-        <div id="ADSB__IMAGE_LABEL_TEMPLATE_PREFIX-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ADSB__AIRCRAFT_LABEL_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.ADSB__AIRCRAFT_LABEL_TEMPLATE(class='form-control bg-secondary') }}
-        <div id="ADSB__AIRCRAFT_LABEL_TEMPLATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6"></div>
 </div>

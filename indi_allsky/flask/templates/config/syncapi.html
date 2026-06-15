@@ -1,148 +1,165 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SYNCAPI__ENABLE(class='form-check-input') }}
-            <div id="SYNCAPI__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+<div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
+
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Remote Target Credentials</h3>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="md:tw:col-span-4 tw:flex tw:items-center tw:gap-3">
+                {{ form_config.SYNCAPI__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <label for="SYNCAPI__ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SYNCAPI__ENABLE.label.text if form_config.SYNCAPI__ENABLE.label.text else "Enable SyncAPI" }}
+                </label>
+            </div>
+            <div id="SYNCAPI__ENABLE-error" class="tw:text-error tw:text-xs md:tw:col-span-3" style="display: none;"></div>
+            
+            <div class="md:tw:col-span-5 md:tw:text-right">
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/SyncAPI-Setup" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-2 tw:border-none" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3 tw:h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                    SyncAPI Setup Wiki
+                </a>
+            </div>
+        </div>
+
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Remote Instance Base URL</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-8 tw:w-full">
+                    {{ form_config.SYNCAPI__BASEURL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='https://remote-allsky.local/api') }}
+                </div>
+                <div class="md:tw:col-span-4">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Target destination instance routing url.</span>
+                </div>
+            </div>
+            <div id="SYNCAPI__BASEURL-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
+
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">SyncAPI Username</span>
+                </label>
+                {{ form_config.SYNCAPI__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='Username token...') }}
+                <div id="SYNCAPI__USERNAME-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">SyncAPI Secret Key / Password</span>
+                </label>
+                {{ form_config.SYNCAPI__APIKEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', type='password', placeholder='Enter secure cluster API key token...') }}
+                <div id="SYNCAPI__APIKEY-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5 tw:mt-1">
+            {{ form_config.SYNCAPI__CERT_BYPASS(class='tw:toggle tw:toggle-warning tw:toggle-sm') }}
+            <div class="tw:flex tw:flex-col">
+                <label for="SYNCAPI__CERT_BYPASS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SYNCAPI__CERT_BYPASS.label.text if form_config.SYNCAPI__CERT_BYPASS.label.text else "Bypass Validation Checks" }}
+                </label>
+                <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ignores verification alerts for self-signed certificates.</span>
+            </div>
+            <div id="SYNCAPI__CERT_BYPASS-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8"><a href="https://github.com/aaronwmorris/indi-allsky/wiki/SyncAPI-Setup"
-            class="text-decoration-none link-info" target="_blank">SyncAPI Setup Wiki</a></div>
-</div>
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Asset Delivery Intervals</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__BASEURL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.SYNCAPI__BASEURL(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__BASEURL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-4">Base URL for remote indi-allsky instance</div>
-</div>
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Standard Frame Upload Cadence</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    {{ form_config.SYNCAPI__UPLOAD_IMAGE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Image step threshold cadence: <span class="tw:font-semibold tw:text-base-content/70">0</span> = disable sync, <span class="tw:font-semibold tw:text-base-content/70">1</span> = process every frame, <span class="tw:font-semibold tw:text-base-content/70">2</span> = alternate frames.</span>
+                </div>
+            </div>
+            <div id="SYNCAPI__UPLOAD_IMAGE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__USERNAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.SYNCAPI__USERNAME(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__USERNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6"></div>
-</div>
+        <div class="tw:form-control tw:w-full">
+            <label class="tw:label tw:pb-1">
+                <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Panorama Image Upload Cadence</span>
+            </label>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center">
+                <div class="md:tw:col-span-3 tw:w-full">
+                    {{ form_config.SYNCAPI__UPLOAD_PANORAMA(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
+                </div>
+                <div class="md:tw:col-span-9">
+                    <span class="tw:text-xs tw:text-base-content/50 tw:font-medium">Panorama asset upload mapping matrix constraints step rules (0 to disable, 1 for all).</span>
+                </div>
+            </div>
+            <div id="SYNCAPI__UPLOAD_PANORAMA-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__APIKEY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.SYNCAPI__APIKEY(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__APIKEY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-4"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__CERT_BYPASS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SYNCAPI__CERT_BYPASS(class='form-check-input') }}
-            <div id="SYNCAPI__CERT_BYPASS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5 tw:mt-1">
+            {{ form_config.SYNCAPI__UPLOAD_VIDEO(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            <div class="tw:flex tw:flex-col">
+                <label for="SYNCAPI__UPLOAD_VIDEO" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SYNCAPI__UPLOAD_VIDEO.label.text if form_config.SYNCAPI__UPLOAD_VIDEO.label.text else "Synchronize Raw Video Containers" }}
+                </label>
+                <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Appends capture container maps. Note: Keograms, star-trails, and standard compilation timelapses are forced inside core sync states natively.</span>
+            </div>
+            <div id="SYNCAPI__UPLOAD_VIDEO-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
         </div>
     </div>
-    <div class="col-sm-8">Bypass certificate validation</div>
-</div>
 
-<hr>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Network Timeouts & S3 Orchestration</h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__UPLOAD_IMAGE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__UPLOAD_IMAGE(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__UPLOAD_IMAGE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Enable image sync (0 = disable, 1 = every image, 2 = every 2nd image, etc)</div>
-</div>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Connection Handshake Timeout</span>
+                </label>
+                <div class="tw:join tw:w-full">
+                    {{ form_config.SYNCAPI__CONNECT_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:join-item focus:tw:outline-none focus:tw:border-primary') }}
+                    <span class="tw:bg-base-300 tw:border tw:border-base-content/10 tw:px-3 tw:flex tw:items-center tw:text-xs tw:font-mono tw:text-base-content/60 tw:join-item">s</span>
+                </div>
+                <div id="SYNCAPI__CONNECT_TIMEOUT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__UPLOAD_PANORAMA.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__UPLOAD_PANORAMA(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__UPLOAD_PANORAMA-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Enable image sync (0 = disable, 1 = every image, 2 = every 2nd image, etc)</div>
-</div>
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Global Transfer Timeout Limit</span>
+                </label>
+                <div class="tw:join tw:w-full">
+                    {{ form_config.SYNCAPI__TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:join-item focus:tw:outline-none focus:tw:border-primary') }}
+                    <span class="tw:bg-base-300 tw:border tw:border-base-content/10 tw:px-3 tw:flex tw:items-center tw:text-xs tw:font-mono tw:text-base-content/60 tw:join-item">s</span>
+                </div>
+                <span class="tw:text-[11px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Total payload windows should encapsulate overhead allocations accommodating dense morning time-lapse renders.</span>
+                <div id="SYNCAPI__TIMEOUT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__UPLOAD_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SYNCAPI__UPLOAD_VIDEO(class='form-check-input') }}
-            <div id="SYNCAPI__UPLOAD_VIDEO-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4 tw:mt-1">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.SYNCAPI__POST_S3(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+                <label for="SYNCAPI__POST_S3" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    {{ form_config.SYNCAPI__POST_S3.label.text if form_config.SYNCAPI__POST_S3.label.text else "Sync Post S3 Delivery" }}
+                </label>
+                <div id="SYNCAPI__POST_S3-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
+
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+                {{ form_config.SYNCAPI__EMPTY_FILE(class='tw:toggle tw:toggle-warning tw:toggle-sm') }}
+                <div class="tw:flex tw:flex-col">
+                    <label for="SYNCAPI__EMPTY_FILE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        {{ form_config.SYNCAPI__EMPTY_FILE.label.text if form_config.SYNCAPI__EMPTY_FILE.label.text else "Isolate SyncAPI (S3 Only)" }}
+                    </label>
+                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Strips outbound local payload frames if only uploading to S3 infrastructure.</span>
+                </div>
+                <div id="SYNCAPI__EMPTY_FILE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-8">Timelapses, star trails, and keograms are always synced</div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__CONNECT_TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__CONNECT_TIMEOUT(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__CONNECT_TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__TIMEOUT(class='form-control bg-secondary') }}
-        <div id="SYNCAPI__TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">This timeout is for the whole transfer. Ensure it is large enough to transfer videos</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__POST_S3.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SYNCAPI__POST_S3(class='form-check-input') }}
-            <div id="SYNCAPI__POST_S3-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Sync after S3 upload</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.SYNCAPI__EMPTY_FILE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.SYNCAPI__EMPTY_FILE(class='form-check-input') }}
-            <div id="SYNCAPI__EMPTY_FILE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable this if you only want to upload to S3 and not via SyncAPI</div>
 </div>
