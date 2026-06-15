@@ -1,1249 +1,450 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_INTERFACE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.CAMERA_INTERFACE(class='form-select bg-secondary') }}
-        <div id="CAMERA_INTERFACE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <a href="{{ url_for('indi_allsky.camera_lens_view') }}" class="text-decoration-none link-info">
-            <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Camera-Interfaces"
-                    class="text-decoration-none link-info" target="_blank">Camera Interface Wiki</a></div>
-            <div><span class="badge rounded-pill bg-info text-dark">Note</span> The indi camera driver may be changed on
-                the System page</div>
-        </a>
-    </div>
-</div>
+<style>
+    .allsky-workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 1fr !important;
+            align-items: start;
+        }
+    }
+    .field-micro-label {
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-0.5;
+    }
+    .settings-row {
+        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0;
+    }
+    .settings-info {
+        @apply tw:flex-1;
+    }
+    .settings-control {
+        @apply tw:flex-none tw:w-full md:tw:w-72;
+    }
+    .config-card {
+        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden;
+    }
+    .config-card-header {
+        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center;
+    }
+    .config-card-body {
+        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0;
+    }
+</style>
 
-<hr>
+<div class="allsky-workspace-grid">
+    <!-- Main Settings Column -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Camera Connection -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Connection & Server</h3>
+            </div>
+            <div class="config-card-body">
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">{{ form_config.CAMERA_INTERFACE.label.text }}</label>
+                        <div class="tw:flex tw:gap-2 tw:mt-1">
+                            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Camera-Interfaces" target="_blank" class="tw:link tw:link-primary tw:text-[10px]">Interface Wiki</a>
+                        </div>
+                    </div>
+                    <div class="settings-control">
+                        {{ form_config.CAMERA_INTERFACE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        <div id="CAMERA_INTERFACE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.INDI_SERVER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.INDI_SERVER(class='form-control bg-secondary') }}
-        <div id="INDI_SERVER-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">INDI server hostname (default: localhost)</div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.INDI_PORT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.INDI_PORT(class='form-control bg-secondary') }}
-        <div id="INDI_PORT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">INDI port (default: 7624)</div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.INDI_CAMERA_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.INDI_CAMERA_NAME(class='form-control bg-secondary') }}
-        <div id="INDI_CAMERA_NAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">
-        <div>Leave blank to select first detected camera</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Do not use this field unless you know
-            what you are doing</div>
-    </div>
-</div>
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">INDI Server</label>
+                        <p class="tw:text-xs tw:opacity-60">Host and port for the INDI server (default: localhost:7624).</p>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            {{ form_config.INDI_SERVER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='localhost') }}
+                        </div>
+                        <div class="tw:w-24">
+                            {{ form_config.INDI_PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='7624') }}
+                        </div>
+                    </div>
+                </div>
 
-<hr>
-
-<div><span class="badge rounded-pill bg-info text-dark">Info</span> A full service restart (not reload) is recommended
-    when changing exposure controls</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MAX.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MAX(class='form-control bg-secondary') }}
-        <div id="CCD_EXPOSURE_MAX-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Maximum Exposure permitted: <b>{{ "%0.1f" | format(camera_maxExposure | float) }}s</b></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_DEF.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_DEF(class='form-control bg-secondary') }}
-        <div id="CCD_EXPOSURE_DEF-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>0 = auto</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MIN(class='form-control bg-secondary') }}
-        <div id="CCD_EXPOSURE_MIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Minimum Exposure permitted: <b>{{ "%0.6f" | format(camera_minExposure | float) }}s</b></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MIN_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_MIN_DAY(class='form-control bg-secondary') }}
-        <div id="CCD_EXPOSURE_MIN_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">0 = auto</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.EXPOSURE_PERIOD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.EXPOSURE_PERIOD(class='form-control bg-secondary') }}
-        <div id="EXPOSURE_PERIOD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Seconds between start of each frame (Night)</div>
-        <div>Setting this below the maximum exposure will cause each new frame to begin immediately after the last ends
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">{{ form_config.INDI_CAMERA_NAME.label.text }}</label>
+                        <div class="tw:badge tw:badge-warning tw:badge-outline tw:text-[9px] tw:font-bold tw:mt-1">ADVANCED USERS ONLY</div>
+                    </div>
+                    <div class="settings-control">
+                        {{ form_config.INDI_CAMERA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='Auto-detect') }}
+                        <div id="INDI_CAMERA_NAME-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>It is not recommended to set this below 5.0</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.EXPOSURE_PERIOD_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.EXPOSURE_PERIOD_DAY(class='form-control bg-secondary') }}
-        <div id="EXPOSURE_PERIOD_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Seconds between start of each frame (Day)</div>
-        <div>It is not recommended to set this below 5.0</div>
-    </div>
-</div>
+        <!-- Exposure Control -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Exposure Control</h3>
+                <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px]">FULL RESTART RECOMMENDED</span>
+            </div>
+            <div class="config-card-body">
+                <!-- Night Exposure -->
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Night Exposure</label>
+                        <p class="tw:text-xs tw:opacity-60">Max/Default exposure for night operations.</p>
+                        <div class="tw:text-[10px] tw:opacity-50 tw:mt-1">Hard Max: <b>{{ "%0.1f" | format(camera_maxExposure | float) }}s</b></div>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Max (s)</span>
+                            {{ form_config.CCD_EXPOSURE_MAX(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Def (0=auto)</span>
+                            {{ form_config.CCD_EXPOSURE_DEF(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_EXPOSURE_TIMEOUT(class='form-control bg-secondary') }}
-        <div id="CCD_EXPOSURE_TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Maximum seconds to wait for an exposure to finish before aborting</div>
-    </div>
-</div>
+                <!-- Day Exposure -->
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Day Exposure</label>
+                        <p class="tw:text-xs tw:opacity-60">Minimum exposure limits for daytime.</p>
+                        <div class="tw:text-[10px] tw:opacity-50 tw:mt-1">Hard Min: <b>{{ "%0.6f" | format(camera_minExposure | float) }}s</b></div>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Min (s)</span>
+                            {{ form_config.CCD_EXPOSURE_MIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Day Min (s)</span>
+                            {{ form_config.CCD_EXPOSURE_MIN_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Frame Period -->
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Frame Period</label>
+                        <p class="tw:text-xs tw:opacity-60">Seconds between start of each frame.</p>
+                        <div class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px] tw:font-bold tw:mt-1">MIN 5.0S RECOMMENDED</div>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Night (s)</span>
+                            {{ form_config.EXPOSURE_PERIOD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Day (s)</span>
+                            {{ form_config.EXPOSURE_PERIOD_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
 
-<hr>
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">{{ form_config.CCD_EXPOSURE_TIMEOUT.label.text }}</label>
+                        <p class="tw:text-xs tw:opacity-60">Max wait for exposure finish before aborting.</p>
+                    </div>
+                    <div class="settings-control">
+                        {{ form_config.CCD_EXPOSURE_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div><span class="badge rounded-pill bg-info text-dark">Note</span> A full service restart (not reload) is recommended
-    when changing gain controls</div>
-<div><span class="badge rounded-pill bg-info text-dark">Note </span> Many cameras will switch from analog to digital
-    gain once the gain exceeds a certain value. For example, with ZWO cameras, you usually do not want to exceed gain
-    300</div>
+        <!-- Gain & Binning -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Gain & Binning</h3>
+            </div>
+            <div class="config-card-body">
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Night Settings</label>
+                        <div class="tw:text-[10px] tw:opacity-50 tw:mt-1">Max Gain: <b>{{ "%0.2f"|format(camera_maxGain | float) }}</b></div>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            {{ form_config.CCD_CONFIG__NIGHT__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            {{ form_config.CCD_CONFIG__NIGHT__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
 
-<hr>
+                <div class="settings-row">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Moon Mode Settings</label>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            {{ form_config.CCD_CONFIG__MOONMODE__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            {{ form_config.CCD_CONFIG__MOONMODE__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__NIGHT__GAIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__NIGHT__GAIN(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__NIGHT__GAIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Maximum Gain permitted: <b>{{ "%0.2f"|format(camera_maxGain | float) }}</b></div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__NIGHT__BINNING.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__NIGHT__BINNING(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__NIGHT__BINNING-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Min: <b>{{ camera_minBinning }}</b> - Max: <b>{{ camera_maxBinning }}</b></div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__MOONMODE__GAIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__MOONMODE__GAIN(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__MOONMODE__GAIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__MOONMODE__BINNING.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__MOONMODE__BINNING(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__MOONMODE__BINNING-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__DAY__GAIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__DAY__GAIN(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__DAY__GAIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Minimum Gain permitted: <b>{{ "%0.2f"|format(camera_minGain | float) }}</b></div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__DAY__BINNING.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__DAY__BINNING(class='form-control bg-secondary') }}
-        <div id="CCD_CONFIG__DAY__BINNING-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__EXPOSURE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__EXPOSURE(class='form-control bg-secondary') }}
-        <div id="CAMERA_SQM__EXPOSURE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Camera SQM settings are below</div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__GAIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__GAIN(class='form-control bg-secondary') }}
-        <div id="CAMERA_SQM__GAIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Unity gain is recommended for SQM
-            measurements</div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__BINNING.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__BINNING(class='form-control bg-secondary') }}
-        <div id="CAMERA_SQM__BINNING-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-    </div>
-</div>
-
-<hr>
-
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__AUTO_GAIN_ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CCD_CONFIG__AUTO_GAIN_ENABLE(class='form-check-input') }}
-            <div id="CCD_CONFIG__AUTO_GAIN_ENABLE-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="settings-row tw:border-0">
+                    <div class="settings-info">
+                        <label class="field-micro-label">Daytime Settings</label>
+                        <div class="tw:text-[10px] tw:opacity-50 tw:mt-1">Min Gain: <b>{{ "%0.2f"|format(camera_minGain | float) }}</b></div>
+                    </div>
+                    <div class="settings-control tw:flex tw:gap-2">
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            {{ form_config.CCD_CONFIG__DAY__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                        <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            {{ form_config.CCD_CONFIG__DAY__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div>Exposure Priority Gain Mode dynamically adjusts the gain to maximize exposure times</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Maximum gain will be night gain, minimum
-            will be daytime gain (Moon mode is ignored)</div>
-    </div>
 
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__AUTO_GAIN_LEVELS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_CONFIG__AUTO_GAIN_LEVELS(class='form-select bg-secondary') }}
-        <div id="CCD_CONFIG__AUTO_GAIN_LEVELS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Gain will be divided into even levels between min and max</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Setting this value too low will cause
-            exposure/gain flapping</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CAMERA_SQM__ENABLE(class='form-check-input') }}
-            <div id="CAMERA_SQM__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+    <!-- Sidebar Column -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Cooling Control -->
+        <div class="config-card">
+            <div class="config-card-header tw:bg-info tw:text-info-content">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Cooling Control</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <div class="tw:space-y-3">
+                    <div class="tw:flex tw:flex-col tw:gap-1">
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[11px] tw:font-medium">Night Cooling</span>
+                            {{ form_config.CCD_COOLING(class='tw:toggle tw:toggle-xs tw:toggle-info') }}
+                        </label>
+                        <div class="tw:flex tw:items-center tw:gap-2 tw:mt-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Target °C</span>
+                            {{ form_config.CCD_TEMP(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                    
+                    <div class="tw:flex tw:flex-col tw:gap-1">
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[11px] tw:font-medium">Day Cooling</span>
+                            {{ form_config.CCD_COOLING_DAY(class='tw:toggle tw:toggle-xs tw:toggle-info') }}
+                        </label>
+                        <div class="tw:flex tw:items-center tw:gap-2 tw:mt-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Target °C</span>
+                            {{ form_config.CCD_TEMP_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:w-full tw:bg-base-100') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Take periodic images at a fixed exposure/gain for brightness/SQM measurements</div>
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/SQM-Sky-Brightness-Measurement"
-                class="text-decoration-none link-info" target="_blank">SQM Wiki</a></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__ENABLE_DAY.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CAMERA_SQM__ENABLE_DAY(class='form-check-input') }}
-            <div id="CAMERA_SQM__ENABLE_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <!-- Auto Gain -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Auto Gain</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Enable Auto Gain</span>
+                    {{ form_config.CCD_CONFIG__AUTO_GAIN_ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Gain Levels</span>
+                    {{ form_config.CCD_CONFIG__AUTO_GAIN_LEVELS(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                </div>
+                <p class="tw:text-[10px] tw:opacity-60">Dynamically adjusts gain to maximize exposure time.</p>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>DO NOT USE - Only for testing functionality</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__EXPOSURE_PERIOD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__EXPOSURE_PERIOD(class='form-control bg-secondary') }}
-        <div id="CAMERA_SQM__EXPOSURE_PERIOD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>
+        <!-- SQM Measurement -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Camera SQM</h3>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/SQM-Sky-Brightness-Measurement" target="_blank">
+                    <i class="tw:icon-[lucide--help-circle] tw:w-4 tw:h-4 tw:opacity-50"></i>
+                </a>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
+                <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Enable SQM Images</span>
+                    {{ form_config.CAMERA_SQM__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Exp (s)</span>
+                        {{ form_config.CAMERA_SQM__EXPOSURE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="field-micro-label">Gain</span>
+                        {{ form_config.CAMERA_SQM__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                </div>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Magnitude Offset</span>
+                    {{ form_config.CAMERA_SQM__MAGNITUDE_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                </div>
+                <div class="tw:bg-base-300 tw:rounded tw:p-2 tw:text-[10px] tw:font-mono">
+                    Raw Mag: {{ camera_sqm_raw_mag_str }}<br>
+                    Calc SQM: {{ camera_sqm_calc_sqm_str }}
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__MAGNITUDE_OFFSET.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CAMERA_SQM__MAGNITUDE_OFFSET(class='form-control bg-secondary') }}
-        <div id="CAMERA_SQM__MAGNITUDE_OFFSET-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>
-            <div>Last Raw Magnitude measurement: <b>{{ camera_sqm_raw_mag_str }}</b></div>
-            <div>Expected SQM: <b>{{ camera_sqm_calc_sqm_str }}</b></div>
-        </div>
-    </div>
-</div>
-
-<hr>
-
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_MAX.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_MAX(class='form-control bg-secondary') }}
-        <div id="IMAGE_QUEUE_MAX-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Delay is added when maximum queue depth is hit</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_MIN.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_MIN(class='form-control bg-secondary') }}
-        <div id="IMAGE_QUEUE_MIN-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Delay is removed when minimum queue depth is hit</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_BACKOFF.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_QUEUE_BACKOFF(class='form-control bg-secondary') }}
-        <div id="IMAGE_QUEUE_BACKOFF-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Exposure delay added when maximum queue depth is hit</div>
-        <div>Algorithm: (QUEUE_SIZE / QUEUE_MAX) * EXPOSURE_PERIOD * BACKOFF</div>
-        <div>
-            <pre>Example: (4 (queue_size) / 3 (queue_max)) * 15 (period) * 0.5 (backoff) = 10.0s additional delay between exposures</pre>
-        </div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_BIT_DEPTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_BIT_DEPTH(class='form-select bg-secondary') }}
-        <div id="CCD_BIT_DEPTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div class="col-sm-8">Bit depth of data returned by the camera</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Switching your camera to JPEG/8-bit mode can
-            affect this setting</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> This should only be used if your
-            camera does not pre-scale the image data to the full 16-bit space</div>
-    </div>
-</div>
-
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FOCUS_MODE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FOCUS_MODE(class='form-check-input') }}
-            <div id="FOCUS_MODE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Focus mode removes any pause between exposures so they are taken as quickly as possible</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FOCUS_DELAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FOCUS_DELAY(class='form-control bg-secondary') }}
-        <div id="FOCUS_DELAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Seconds between each frame during focusing. This value should be slightly higher than the download time of
-            images for your camera.</div>
-        <div>RasPi HQ camera is about 3.5 seconds, therefore 4.0 should be sufficient.</div>
-        <div>Astronomy cameras may be able to go as low as 1.0 or 2.0</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_COOLING.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CCD_COOLING(class='form-check-input') }}
-            <div id="CCD_COOLING-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Activate CCD Cooling at night (requires hardware support)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_TEMP.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_TEMP(class='form-control bg-secondary') }}
-        <div id="CCD_TEMP-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Night Temperature target</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_COOLING_DAY.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CCD_COOLING_DAY(class='form-check-input') }}
-            <div id="CCD_COOLING_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Activate CCD Cooling during the day (requires hardware support)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_TEMP_DAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CCD_TEMP_DAY(class='form-control bg-secondary') }}
-        <div id="CCD_TEMP_DAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Day Temperature target</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEMP_DISPLAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEMP_DISPLAY(class='form-select bg-secondary') }}
-        <div id="TEMP_DISPLAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Temperature units for display</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Adjusts sensor units.</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.PRESSURE_DISPLAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.PRESSURE_DISPLAY(class='form-select bg-secondary') }}
-        <div id="PRESSURE_DISPLAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Pressure units for display</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.WINDSPEED_DISPLAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.WINDSPEED_DISPLAY(class='form-select bg-secondary') }}
-        <div id="WINDSPEED_DISPLAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Wind Speed units for display</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CCD_TEMP_SCRIPT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.CCD_TEMP_SCRIPT(class='form-control bg-secondary') }}
-        <div id="CCD_TEMP_SCRIPT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>External script used for CCD temperature. Used when a camera does not support temperature measurements.
-        </div>
-    </div>
-</div>
-
-<hr>
-
-<div class="accordion accordion-flush" id="accordionCameraSettings">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed bg-secondary text-dark" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseLibcamera" aria-expanded="false" aria-controls="collapseLibcamera">
-                libcamera Settings
-            </button>
-        </h2>
-        <div id="collapseLibcamera" class="accordion-collapse collapse" data-bs-parent="#accordionCameraSettings">
-            <div class="accordion-body bg-dark bg-opacity-50">
-
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__CAMERA_ID.label(class='col-form-label') }}
+        <!-- Unit Display -->
+        <div class="config-card">
+            <div class="config-card-header">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Units & Scripts</h3>
+            </div>
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-3">
+                <div class="tw:grid tw:grid-cols-3 tw:gap-1">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Temp</span>
+                        {{ form_config.TEMP_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__CAMERA_ID(class='form-select bg-secondary') }}
-                        <div id="LIBCAMERA__CAMERA_ID-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Pres</span>
+                        {{ form_config.PRESSURE_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
-                    <div class="col-sm-8">
-                        <div>Select the correct CSI port on your system</div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Wind</span>
+                        {{ form_config.WINDSPEED_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE(class='form-select bg-secondary') }}
-                        <div id="LIBCAMERA__IMAGE_FILE_TYPE-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>File type for libcamera acquistion. This has no effect when using indi.</div>
-                        <div>Auto White Balance is disabled in DNG mode</div>
-                    </div>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Temp Script</span>
+                    {{ form_config.CCD_TEMP_SCRIPT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:text-[10px]') }}
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB_ENABLE.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__AWB_ENABLE(class='form-check-input') }}
-                            <div id="LIBCAMERA__AWB_ENABLE-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>Enable libcamera AWB</div>
-                        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> This can cause long
-                            gaps between exposures at night</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB(class='form-select bg-secondary') }}
-                        <div id="LIBCAMERA__AWB-error" class="invalid-feedback text-danger" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__CCM_DISABLE.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__CCM_DISABLE(class='form-check-input') }}
-                            <div id="LIBCAMERA__CCM_DISABLE-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>CCM may only be disabled when AWB is disabled [Default: Enabled]</div>
-                        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Disabling CCM requires
-                            rpicam-apps 1.9.0 (released Sept 2025)</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMMEDIATE.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__IMMEDIATE(class='form-check-input') }}
-                            <div id="LIBCAMERA__IMMEDIATE-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>Enable --immediate flag [Default: Enabled]</div>
-                        <div><span class="badge rounded-pill bg-info text-dark">Note</span> The --immediate flag may
-                            interfere with auto-focus functions</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-5">
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS(class='form-control bg-secondary') }}
-                        <div id="LIBCAMERA__EXTRA_OPTIONS-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div>Extra options for libcamera-still.</div>
-                        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/libcamera-enablement#customizations"
-                                class="text-decoration-none link-info" target="_blank">libcamera customizations Wiki</a>
-                        </div>
-                        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Options are not
-                            validated</div>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE_DAY.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE_DAY(class='form-select bg-secondary') }}
-                        <div id="LIBCAMERA__IMAGE_FILE_TYPE_DAY-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB_ENABLE_DAY.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__AWB_ENABLE_DAY(class='form-check-input') }}
-                            <div id="LIBCAMERA__AWB_ENABLE_DAY-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB_DAY.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__AWB_DAY(class='form-select bg-secondary') }}
-                        <div id="LIBCAMERA__AWB_DAY-error" class="invalid-feedback text-danger" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__CCM_DISABLE_DAY.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__CCM_DISABLE_DAY(class='form-check-input') }}
-                            <div id="LIBCAMERA__CCM_DISABLE_DAY-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>CCM may only be disabled when AWB is disabled</div>
-                        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Disabling CCM requires
-                            rpicam-apps 1.9.0 (released Sept 2025)</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__IMMEDIATE_DAY.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.LIBCAMERA__IMMEDIATE_DAY(class='form-check-input') }}
-                            <div id="LIBCAMERA__IMMEDIATE_DAY-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>Enable --immediate flag [Default: Enabled]</div>
-                        <div><span class="badge rounded-pill bg-info text-dark">Note</span> The --immediate flag may
-                            interfere with auto-focus functions</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS_DAY.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-5">
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS_DAY(class='form-control bg-secondary') }}
-                        <div id="LIBCAMERA__EXTRA_OPTIONS_DAY-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-5">
-                    </div>
-                </div>
-
-                <div id="libcamera-mqtt-fields">
-                    <hr>
-
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Camera-Interfaces#mqtt---libcamera"
-                                    class="text-decoration-none link-info" target="_blank">MQTT libcamera Wiki</a></div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_HOST.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_HOST(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_HOST-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT hostname</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_TRANSPORT.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_TRANSPORT(class='form-select bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_TRANSPORT-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT Transport</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_PROTOCOL.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_PROTOCOL(class='form-select bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_PROTOCOL-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT Protocol</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_PORT.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_PORT(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_PORT-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT port - 8883 = TLS, 1883 = standard</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_USERNAME.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_USERNAME(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_USERNAME-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT Username</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_PASSWORD.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_PASSWORD(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_PASSWORD-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT Password</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_QOS.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_QOS(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_QOS-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6">MQTT QoS - 0 (default), 1, or 2</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_TLS.label }}
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-switch">
-                                {{ form_config.LIBCAMERA__MQTT_TLS(class='form-check-input') }}
-                                <div id="LIBCAMERA__MQTT_TLS-error" class="invalid-feedback text-danger"
-                                    style="display: none;"></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">Use TLS/SSL for MQTT connections</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_CERT_BYPASS.label }}
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="form-switch">
-                                {{ form_config.LIBCAMERA__MQTT_CERT_BYPASS(class='form-check-input') }}
-                                <div id="LIBCAMERA__MQTT_CERT_BYPASS-error" class="invalid-feedback text-danger"
-                                    style="display: none;"></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">Bypass certificate validation</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_EXPOSURE_TOPIC.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_EXPOSURE_TOPIC(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_EXPOSURE_TOPIC-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6"></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_IMAGE_TOPIC.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_IMAGE_TOPIC(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_IMAGE_TOPIC-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6"></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            {{ form_config.LIBCAMERA__MQTT_METADATA_TOPIC.label(class='col-form-label') }}
-                        </div>
-                        <div class="col-sm-4">
-                            {{ form_config.LIBCAMERA__MQTT_METADATA_TOPIC(class='form-control bg-secondary') }}
-                            <div id="LIBCAMERA__MQTT_METADATA_TOPIC-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                        <div class="col-sm-6"></div>
-                    </div>
-                </div><!-- end libcamera-mqtt-fields -->
-
             </div>
         </div>
     </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed bg-secondary text-dark" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapsePycurl" aria-expanded="false" aria-controls="collapsePycurl">
-                PyCurl Camera Settings
-            </button>
-        </h2>
-        <div id="collapsePycurl" class="accordion-collapse collapse" data-bs-parent="#accordionCameraSettings">
-            <div class="accordion-body bg-dark bg-opacity-50">
+</div>
 
+<!-- Interface Specific Settings (DaisyUI Accordion) -->
+<div class="tw:mt-8 tw:flex tw:flex-col tw:gap-2">
+    <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-50 tw:ml-1 tw:mb-2">Interface Specific Settings</h3>
 
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.PYCURL_CAMERA__URL.label(class='col-form-label') }}
+    <!-- libcamera -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="camera-accordion" checked="checked" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">libcamera Settings</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6 tw:p-4">
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <div class="tw:form-control">
+                        {{ form_config.LIBCAMERA__CAMERA_ID.label(class='field-micro-label') }}
+                        {{ form_config.LIBCAMERA__CAMERA_ID(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
                     </div>
-                    <div class="col-sm-6">
-                        {{ form_config.PYCURL_CAMERA__URL(class='form-control bg-secondary') }}
-                        <div id="PYCURL_CAMERA__URL-error" class="invalid-feedback text-danger" style="display: none;">
+                    <div class="tw:form-control">
+                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE.label(class='field-micro-label') }}
+                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                        <span class="tw:label-text tw:text-[11px]">{{ form_config.LIBCAMERA__AWB_ENABLE.label.text }}</span>
+                        {{ form_config.LIBCAMERA__AWB_ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                </div>
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <div class="tw:form-control">
+                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS.label(class='field-micro-label') }}
+                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    </div>
+                    <div class="tw:bg-base-300 tw:p-3 tw:rounded-lg">
+                        <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:mb-2">MQTT libcamera</h4>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
+                            {{ form_config.LIBCAMERA__MQTT_HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Host') }}
+                            {{ form_config.LIBCAMERA__MQTT_PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Port') }}
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div>Image capture URL</div>
-                    </div>
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.PYCURL_CAMERA__IMAGE_FILE_TYPE.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.PYCURL_CAMERA__IMAGE_FILE_TYPE(class='form-select bg-secondary') }}
-                        <div id="PYCURL_CAMERA__IMAGE_FILE_TYPE-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.PYCURL_CAMERA__USERNAME.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-4">
-                        {{ form_config.PYCURL_CAMERA__USERNAME(class='form-control bg-secondary') }}
-                        <div id="PYCURL_CAMERA__USERNAME-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-6">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.PYCURL_CAMERA__PASSWORD.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-4">
-                        {{ form_config.PYCURL_CAMERA__PASSWORD(class='form-control bg-secondary') }}
-                        <div id="PYCURL_CAMERA__PASSWORD-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-6">
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed bg-secondary text-dark" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseTestCamera" aria-expanded="false" aria-controls="collapseTestCamera">
-                Test Camera Settings
-            </button>
-        </h2>
-        <div id="collapseTestCamera" class="accordion-collapse collapse" data-bs-parent="#accordionCameraSettings">
-            <div class="accordion-body bg-dark bg-opacity-50">
 
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__WIDTH.label(class='col-form-label') }}
+    <!-- INDI -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="camera-accordion" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">INDI Camera Settings</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:flex tw:flex-col tw:gap-4 tw:p-4">
+                <div class="tw:form-control">
+                    {{ form_config.INDI_CONFIG_DEFAULTS.label(class='field-micro-label') }}
+                    {{ form_config.INDI_CONFIG_DEFAULTS(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:font-mono tw:text-xs', rows='6') }}
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX.label(class='field-micro-label') }}
+                        {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
                     </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__WIDTH(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__WIDTH-error" class="invalid-feedback text-danger" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
+                    <div class="tw:flex tw:flex-col tw:gap-2 tw:justify-center">
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[11px]">Even Exposures</span>
+                            {{ form_config.ACCUM_CAMERA__EVEN_EXPOSURES(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
+                        <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
+                            <span class="tw:label-text tw:text-[11px]">Clamp 16-bit</span>
+                            {{ form_config.ACCUM_CAMERA__CLAMP_16BIT(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        </label>
                     </div>
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__HEIGHT.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__HEIGHT(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__HEIGHT-error" class="invalid-feedback text-danger" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_DIAMETER.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_DIAMETER(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__IMAGE_CIRCLE_DIAMETER-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_OFFSET_X.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_OFFSET_X(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__IMAGE_CIRCLE_OFFSET_X-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>Simulate an offset image circle</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_OFFSET_Y.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__IMAGE_CIRCLE_OFFSET_Y(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__IMAGE_CIRCLE_OFFSET_Y-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_COUNT.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_COUNT(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__ROTATING_STAR_COUNT-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        Rotating Star Test Camera
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_FACTOR.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_FACTOR(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__ROTATING_STAR_FACTOR-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        1.0 = 0.25 degrees/minute [sidereal rate]
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__BUBBLE_COUNT.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.TEST_CAMERA__BUBBLE_COUNT(class='form-control bg-secondary') }}
-                        <div id="TEST_CAMERA__BUBBLE_COUNT-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        Bubble Test Camera
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed bg-secondary text-dark" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseIndi" aria-expanded="false" aria-controls="collapseIndi">
-                INDI Camera Settings
-            </button>
-        </h2>
-        <div id="collapseIndi" class="accordion-collapse collapse" data-bs-parent="#accordionCameraSettings">
-            <div class="accordion-body bg-dark bg-opacity-50">
 
+    <!-- PyCurl -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="camera-accordion" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">PyCurl Camera Settings</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:flex tw:flex-col tw:gap-4 tw:p-4">
+                <div class="tw:form-control">
+                    {{ form_config.PYCURL_CAMERA__URL.label(class='field-micro-label') }}
+                    {{ form_config.PYCURL_CAMERA__URL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    {{ form_config.PYCURL_CAMERA__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Username') }}
+                    {{ form_config.PYCURL_CAMERA__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Password', type='password') }}
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.INDI_CONFIG_DEFAULTS.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form_config.INDI_CONFIG_DEFAULTS(class='form-control bg-secondary', rows='10') }}
-                        <div id="INDI_CONFIG_DEFAULTS-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/INDI-custom-config"
-                                class="text-decoration-none link-info" target="_blank">INDI Config Wiki</a></div>
+    <!-- Test Camera -->
+    <div class="tw:collapse tw:collapse-arrow tw:bg-base-200 tw:border tw:border-base-300">
+        <input type="radio" name="camera-accordion" /> 
+        <div class="tw:collapse-title tw:text-sm tw:font-bold">Test Camera Settings</div>
+        <div class="tw:collapse-content tw:bg-base-300/30">
+            <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:p-4">
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Width x Height</span>
+                    <div class="tw:flex tw:gap-2">
+                        {{ form_config.TEST_CAMERA__WIDTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        {{ form_config.TEST_CAMERA__HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                     </div>
                 </div>
-
-                <hr>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.INDI_CONFIG_DAY.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form_config.INDI_CONFIG_DAY(class='form-control bg-secondary', rows='4') }}
-                        <div id="INDI_CONFIG_DAY-error" class="invalid-feedback text-danger" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div>Day specific configuration.</div>
-                        <div><span class="badge rounded-pill bg-info text-dark">Note</span> If no config is defined, the
-                            night config is used.</div>
+                <div class="tw:form-control">
+                    <span class="field-micro-label">Star Count / Factor</span>
+                    <div class="tw:flex tw:gap-2">
+                        {{ form_config.TEST_CAMERA__ROTATING_STAR_COUNT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        {{ form_config.TEST_CAMERA__ROTATING_STAR_FACTOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                     </div>
                 </div>
-
-                <hr>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX.label(class='col-form-label') }}
-                    </div>
-                    <div class="col-sm-2">
-                        {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX(class='form-control bg-secondary') }}
-                        <div id="ACCUM_CAMERA__SUB_EXPOSURE_MAX-error" class="invalid-feedback text-danger"
-                            style="display: none;"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div>Maximum sub-exposure for the accumulator camera.</div>
-                        <div>The total exposure time will be divided by this value and the resulting sub-exposures will
-                            be summed into a unsigned 32-bit result</div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.ACCUM_CAMERA__EVEN_EXPOSURES.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.ACCUM_CAMERA__EVEN_EXPOSURES(class='form-check-input') }}
-                            <div id="ACCUM_CAMERA__EVEN_EXPOSURES-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">Ensure each sub-exposure is the same interval</div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        {{ form_config.ACCUM_CAMERA__CLAMP_16BIT.label }}
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-switch">
-                            {{ form_config.ACCUM_CAMERA__CLAMP_16BIT(class='form-check-input') }}
-                            <div id="ACCUM_CAMERA__CLAMP_16BIT-error" class="invalid-feedback text-danger"
-                                style="display: none;"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">Clamp FITS to 16-bits. FITS and Dark images will be clamped to uint16 (50%
-                        smaller than uint32)</div>
-                </div>
-
-
             </div>
         </div>
     </div>

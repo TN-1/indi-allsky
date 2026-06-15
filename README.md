@@ -23,8 +23,8 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [ ] cameras.html
 - [ ] chart.html
 - [x] config.html
-  - [ ] admin.html
-  - [ ] camera.html
+  - [x] admin.html
+  - [x] camera.html
   - [ ] filetransfer.html
   - [ ] location.html
   - [ ] overlays.html
@@ -97,3 +97,6 @@ Otherwise, install as normal. **Not ready for use in an actual deployment**
 - Allow users to choose from the built in DaisyUI themes for default Light and Dark themes
 - Change temp theme selector to L/D toggle
 - Allow users to insert custom theme CSS
+
+## FYI's
+- Icons can be used like so: `<i class="tw:icon-[lucide--download] tw:w-4 tw:h-4 tw:text-primary"></i>` https://icon-sets.iconify.design/lucide/
