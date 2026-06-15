@@ -11,90 +11,124 @@ var camera_id = {{ camera_id }};
 {% endblock %}
 
 {% block content %}
-<div class="container h-100">
+<style>
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important;
+    }
+    /* Custom styling for the native file input button state to match theme */
+    .allsky-file-input::file-selector-button {
+        background-color: #2a323c !important;
+        color: #a6adbb !important;
+        border: none !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.05em !important;
+        padding: 0 1rem !important;
+        height: 100% !important;
+        margin-right: 1rem !important;
+        cursor: pointer !important;
+        transition: background-color 0.15s ease-in-out !important;
+    }
+    .allsky-file-input::file-selector-button:hover {
+        background-color: #414558 !important;
+    }
+</style>
 
-<form id="form_config_restore" onSubmit="return false;" autocomplete="off">
-{{ form_config_restore.csrf_token }}
+<div class="tw:w-full tw:flex tw:flex-col tw:gap-6">
 
-    <hr>
-
-    <div><span class="badge rounded-pill bg-danger text-dark">Warning</span> Restoring a configuration will completely overwrite your existing configuration.  Older configurations will still remain available unless you flush previous configurations.<div>
-
-    <hr>
-
-    <div class="form-group row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-2">
-            <div><a href="{{ url_for('indi_allsky.config_list_view') }}"><span class="badge bg-success">Config History</span></a></div>
+    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <div class="tw:flex tw:justify-between tw:items-center">
+            <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40">Configuration Restore Utility</h3>
+            <a href="{{ url_for('indi_allsky.config_list_view') }}" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-success tw:gap-1.5 tw:border-none">
+                <i class="tw:icon-[lucide--history] tw:w-3 tw:h-3"></i>
+                Config History Registry
+            </a>
         </div>
-    </div>
 
-    <hr>
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            {{ form_config_restore.CONFIG_UPLOAD.label(class='col-form-label') }}
-        </div>
-        <div class="col-sm-6">
-            {{ form_config_restore.CONFIG_UPLOAD(class='form-control bg-secondary') }}
-            <div id="CONFIG_UPLOAD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-        <div class="col-sm-4">
-            <div></div>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            {{ form_config_restore.FLUSH_CONFIGS.label }}
-        </div>
-        <div class="col-sm-1">
-            <div class="form-switch">
-                {{ form_config_restore.FLUSH_CONFIGS(class='form-check-input') }}
-                <div id="FLUSH_CONFIGS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:flex tw:gap-3 tw:items-start tw:bg-error/10 tw:p-4 tw:rounded-lg tw:border tw:border-error/20">
+            <i class="tw:icon-[lucide--alert-triangle] tw:w-5 tw:h-5 tw:text-error tw:flex-shrink-0"></i>
+            <div class="tw:text-xs tw:text-error/90 tw:leading-relaxed">
+                <span class="tw:font-bold tw:uppercase tw:tracking-wide">Critical Overwrite Warning:</span> 
+                Executing a backup restoration will completely overwrite all running structural configurations immediately. Legacy configurations remain accessible in the timeline history unless explicit flush directives are passed below.
             </div>
         </div>
-        <div class="col-sm-8">
-            <div>Remove all previous configs</div>
-        </div>
     </div>
 
-    <hr>
+    <form id="form_config_restore" onSubmit="return false;" autocomplete="off" class="tw:flex tw:flex-col tw:gap-6">
+        {{ form_config_restore.csrf_token }}
 
-    <div class="form-group row">
-        <div class="col-sm-2">
-            {{ form_config_restore.RESET_KEYS.label }}
-        </div>
-        <div class="col-sm-1">
-            <div class="form-switch">
-                {{ form_config_restore.RESET_KEYS(class='form-check-input') }}
-                <div id="RESET_KEYS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+        <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+            <div class="tw:form-control tw:w-full">
+                <label class="tw:label tw:pb-1">
+                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">
+                        {{ form_config_restore.CONFIG_UPLOAD.label.text }}
+                    </span>
+                </label>
+                {{ form_config_restore.CONFIG_UPLOAD(class='tw:file-input tw:file-input-bordered tw:file-input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm allsky-file-input') }}
+                <div id="CONFIG_UPLOAD-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
+            </div>
+
+            <div class="tw:divider tw:my-1 tw:opacity-5"></div>
+
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+                
+                <div class="tw:flex tw:items-start tw:gap-3 tw:bg-base-300/30 tw:p-4 tw:rounded-lg tw:border tw:border-base-content/5">
+                    {{ form_config_restore.FLUSH_CONFIGS(class='tw:toggle tw:toggle-error tw:toggle-sm tw:mt-0.5') }}
+                    <div class="tw:flex tw:flex-col">
+                        <label for="FLUSH_CONFIGS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                            {{ form_config_restore.FLUSH_CONFIGS.label.text }}
+                        </label>
+                        <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Purges and flushes all previous database archival logs permanently.</span>
+                    </div>
+                    <div id="FLUSH_CONFIGS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+
+                <div class="tw:flex tw:items-start tw:gap-3 tw:bg-base-300/30 tw:p-4 tw:rounded-lg tw:border tw:border-base-content/5">
+                    {{ form_config_restore.RESET_KEYS(class='tw:toggle tw:toggle-warning tw:toggle-sm tw:mt-0.5') }}
+                    <div class="tw:flex tw:flex-col">
+                        <label for="RESET_KEYS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                            {{ form_config_restore.RESET_KEYS.label.text }}
+                        </label>
+                        <span class="tw:text-[11px] tw:text-warning/70 tw:font-semibold tw:mt-1 tw:inline-flex tw:items-center tw:gap-1">
+                            <i class="tw:icon-[lucide--shield-alert] tw:w-3.5 tw:h-3.5"></i>
+                            Forces cryptographic regeneration. Current Flask cookie sessions drop immediately, requiring re-authentication.
+                        </span>
+                    </div>
+                    <div id="RESET_KEYS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                </div>
+
             </div>
         </div>
-        <div class="col-sm-8">
-            <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> This will delete and recreate new security keys for flask</div>
-            <div>Your session will become invalidated and you will be forced to re-login</div>
+
+        <div class="tw:flex tw:items-center tw:gap-4 tw:bg-base-200/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5">
+            <button id="restore-button" class="tw:btn tw:btn-primary tw:btn-sm tw:px-6 tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:gap-2">
+                <i class="tw:icon-[lucide--file-symlink] tw:w-4 tw:h-4"></i>
+                Execute Restoration
+            </button>
         </div>
+    </form>
+
+    <div class="tw:flex tw:flex-col tw:gap-2 tw:min-h-[60px]">
+        <div id="success-message" class="tw:alert tw:alert-success tw:text-xs tw:font-medium tw:rounded-lg" style="display: none;">
+            <i class="tw:icon-[lucide--check-circle] tw:w-4 tw:h-4"></i>
+            <span></span>
+        </div>
+        
+        <div id="failure-message" class="tw:alert tw:alert-error tw:text-xs tw:font-medium tw:rounded-lg" style="display: none;">
+            <i class="tw:icon-[lucide--x-circle] tw:w-4 tw:h-4"></i>
+            <span></span>
+        </div>
+
+        <div id="failure-fields" class="tw:p-3 tw:bg-warning/10 tw:border tw:border-warning/20 tw:rounded-lg tw:text-xs tw:text-warning tw:font-mono" style="display: none;"></div>
     </div>
 
-    <hr>
-
-    <div class="form-group row">
-        <div class="col-sm-1">
-            <button id="restore-button" class="btn btn-primary">Restore</button>
-        </div>
-    </div>
-
-    <div class="form-group row" style="height:100px;">
-        <div class="col-sm-2">
-            <div id="success-message" class="alert alert-success" role="alert" style="display: none;"></div>
-            <div id="failure-message" class="alert alert-danger" role="alert" style="display: none;"></div>
-            <div id="failure-fields" class="invalid-feedback text-warning" style="display: none;"></div>
-        </div>
-    </div>
-</form>
 </div>
 
 <script>

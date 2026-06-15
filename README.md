@@ -6,6 +6,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 1: Move the bulk of each template from Bootstrap to Tailwind.
 2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS
 3: Go through each template removing hacks used to bypass Bootstrap overrides
+3.5: Finalise new overall design language
 4: Review each template for themeing consistency
 5: Final fixes based on known issues and items identified in 4.
 6: Enhancements include custom theme CSS, Default theme selection, etc
@@ -20,27 +21,27 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] base.html
 - [x] camera_simulator.html
 - [x] cameraLens.html
-- [ ] cameras.html
-- [ ] chart.html
+- [x] cameras.html
+- [x] chart.html
 - [x] config.html
   - [x] admin.html
   - [x] camera.html
-  - [ ] filetransfer.html
+  - [x] filetransfer.html
   - [x] location.html
-  - [ ] overlays.html
+  - [x] overlays.html
   - [x] s3.html
   - [x] sensors.html
   - [x] timelapse.html
   - [x] adsb.html
-  - [ ] devices.html
+  - [x] devices.html
   - [x] image.html
   - [x] mqtt.html
   - [x] processing.html
   - [x] sat_track.html
   - [x] syncapi.html
   - [x] youtube.html
-- [ ] config_list.html
-- [ ] config_restore.html
+- [x] config_list.html
+- [x] config_restore.html
 - [x] darks.html
 - [x] drive_manager.html
 - [x] filespaceusage.html
@@ -61,7 +62,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] loop_img.html
 - [x] manual_gpio.html
 - [x] mask.html
-- [ ] mini_generate.html
+- [x] mini_generate.html
 - [x] minivideoviewer.html
 - [x] network.html
 - [ ] notifications.html

@@ -1,960 +1,602 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_LABEL_SYSTEM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_LABEL_SYSTEM(class='form-select bg-secondary') }}
-        <div id="IMAGE_LABEL_SYSTEM-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Image Label System</div>
-</div>
+<style>
+    .allsky-overlays-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-overlays-grid {
+            grid-template-columns: 1.8fr 1.2fr !important;
+            align-items: start;
+        }
+    }
+    /* Enforce absolute dark baseline properties across input types */
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important;
+    }
+    .font-group {
+        @apply tw:p-4 tw:bg-black/10 tw:rounded-lg tw:border tw:border-white/5;
+    }
+</style>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_LABEL_TEMPLATE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.IMAGE_LABEL_TEMPLATE(class='form-control bg-secondary', rows='12') }}
-        <div id="IMAGE_LABEL_TEMPLATE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div><a href="https://docs.python.org/3/library/string.html#formatspec" class="text-decoration-none link-info"
-                target="_blank">Python format syntax</a></div>
-        <div><a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes"
-                class="text-decoration-none link-info" target="_blank">Python datetime format codes</a></div>
-        <div>Available variables:</div>
-        <div>
-            <pre>timestamp, ts, day_date, exposure, rational_exp, gain_f, temp, temp_unit,<br>sidereal_time, sqm, stars, detections, stack_method, stack_count, stretch<br>location, owner, latitude, longitude, kpindex, ovation_max,<br>sun_alt, moon_alt, moon_phase, sun_moon_sep, moon_up, sun_moon_sep,<br>mercury_alt, mercury_up, venus_alt, venus_up, venus_phase,<br>mars_alt, mars_up, jupiter_alt, jupiter_up, saturn_alt, saturn_up,<br>iss_alt, iss_up, iss_next_h, iss_next_alt, hst_alt, hst_up, hst_next_h,<br>hst_next_alt, tiangong_alt, tiangong_up, tiangong_next_h, tiangong_next_alt,<br>rain_status</pre>
+<div class="allsky-overlays-grid">
+    <!-- Left Column: Labeling & Fonts -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Section: Image Labeling -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--type] tw:w-4 tw:h-4"></i>
+                    Image Labeling
+                </h3>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Image-Labels" target="_blank" class="tw:badge tw:badge-info tw:badge-outline tw:gap-1 tw:py-3 tw:px-3 tw:text-[10px] tw:no-underline">
+                    <i class="tw:icon-[lucide--book-open] tw:w-3 tw:h-3"></i>
+                    Wiki
+                </a>
+            </div>
+
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Label System</label>
+                    {{ form_config.IMAGE_LABEL_SYSTEM(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                    <div id="IMAGE_LABEL_SYSTEM-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Label Template</label>
+                    {{ form_config.IMAGE_LABEL_TEMPLATE(class='tw:textarea tw:textarea-bordered tw:bg-black/20 tw:font-mono tw:text-[10px] tw:leading-relaxed', rows='10') }}
+                    <div class="tw:bg-black/30 tw:p-3 tw:rounded-lg tw:border tw:border-white/5 tw:mt-2">
+                        <div class="tw:flex tw:gap-3 tw:mb-2">
+                            <a href="https://docs.python.org/3/library/string.html#formatspec" target="_blank" class="tw:link tw:link-primary tw:text-[9px]">Python Format Syntax</a>
+                            <a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes" target="_blank" class="tw:link tw:link-primary tw:text-[9px]">DateTime Codes</a>
+                        </div>
+                        <p class="tw:text-[9px] tw:opacity-40 tw:font-mono tw:break-words">
+                            timestamp, ts, day_date, exposure, gain_f, temp, temp_unit, sidereal_time, sqm, stars, detections, location, owner, moon_phase, sun_alt, rain_status...
+                        </p>
+                    </div>
+                    <div id="IMAGE_LABEL_TEMPLATE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Extra Text File</label>
+                    {{ form_config.IMAGE_EXTRA_TEXT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='/path/to/text.txt') }}
+                    <div id="IMAGE_EXTRA_TEXT-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                </div>
+            </div>
         </div>
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Image-Labels"
-                class="text-decoration-none link-info" target="_blank">Image Labels Wiki</a></div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_EXTRA_TEXT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.IMAGE_EXTRA_TEXT(class='form-control bg-secondary') }}
-        <div id="IMAGE_EXTRA_TEXT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>File containing extra text for image</div>
-    </div>
-</div>
+        <!-- Section: Typography & Positioning -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--font] tw:w-4 tw:h-4"></i>
+                Typography & Positioning
+            </h3>
 
-<hr>
+            <div class="tw:flex tw:flex-col tw:gap-6">
+                <!-- Pillow Fonts -->
+                <div class="font-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Pillow (TrueType/OpenType)</h4>
+                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+                        <div class="tw:form-control tw:col-span-2">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Standard Font</label>
+                            {{ form_config.TEXT_PROPERTIES__PIL_FONT_FILE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                            <div id="TEXT_PROPERTIES__PIL_FONT_FILE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Size (px)</label>
+                            {{ form_config.TEXT_PROPERTIES__PIL_FONT_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <div id="TEXT_PROPERTIES__PIL_FONT_SIZE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="tw:form-control tw:col-span-full">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Custom Font Path</label>
+                            {{ form_config.TEXT_PROPERTIES__PIL_FONT_CUSTOM(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='/path/to/font.ttf') }}
+                            <div id="TEXT_PROPERTIES__PIL_FONT_CUSTOM-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_FILE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_FILE(class='form-select bg-secondary') }}
-        <div id="TEXT_PROPERTIES__PIL_FONT_FILE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-6">Pillow supports TrueType and OpenType fonts</div>
-</div>
+                <!-- OpenCV Fonts -->
+                <div class="font-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">OpenCV (Legacy)</h4>
+                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-3 tw:gap-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Face</label>
+                            {{ form_config.TEXT_PROPERTIES__FONT_FACE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                            <div id="TEXT_PROPERTIES__FONT_FACE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Scale</label>
+                            {{ form_config.TEXT_PROPERTIES__FONT_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <div id="TEXT_PROPERTIES__FONT_SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Thickness</label>
+                            {{ form_config.TEXT_PROPERTIES__FONT_THICKNESS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <div id="TEXT_PROPERTIES__FONT_THICKNESS-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_SIZE(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__PIL_FONT_SIZE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">This field has no effect when font sizes are specified in the template itself</div>
-</div>
+                <!-- Global Appearance -->
+                <div class="tw:grid tw:grid-cols-2 md:tw:grid-cols-4 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Row Height</label>
+                        {{ form_config.TEXT_PROPERTIES__FONT_HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="TEXT_PROPERTIES__FONT_HEIGHT-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">X Start</label>
+                        {{ form_config.TEXT_PROPERTIES__FONT_X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="TEXT_PROPERTIES__FONT_X-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Y Start</label>
+                        {{ form_config.TEXT_PROPERTIES__FONT_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="TEXT_PROPERTIES__FONT_Y-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Color (RGB)</label>
+                        {{ form_config.TEXT_PROPERTIES__FONT_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='255,255,255') }}
+                        <div id="TEXT_PROPERTIES__FONT_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_CUSTOM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.TEXT_PROPERTIES__PIL_FONT_CUSTOM(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__PIL_FONT_CUSTOM-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Custom TrueType font</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_FACE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.TEXT_PROPERTIES__FONT_FACE(class='form-select bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_FACE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Font face for image metadata</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_SCALE(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Font size</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_THICKNESS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_THICKNESS(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_THICKNESS-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">Font thickness</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_HEIGHT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_HEIGHT(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_HEIGHT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Font height for row spacing</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_X(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">X coordinate to start writing metadata - Maybe overriden in template</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_Y(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Y coordinate to start writing metadata</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_COLOR(class='form-control bg-secondary') }}
-        <div id="TEXT_PROPERTIES__FONT_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Font color in R,G,B - May be overriden in template</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.TEXT_PROPERTIES__FONT_OUTLINE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.TEXT_PROPERTIES__FONT_OUTLINE(class='form-check-input') }}
-            <div id="TEXT_PROPERTIES__FONT_OUTLINE-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="tw:flex tw:items-center tw:gap-4">
+                    {{ form_config.TEXT_PROPERTIES__FONT_OUTLINE(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
+                    <label for="TEXT_PROPERTIES__FONT_OUTLINE" class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:cursor-pointer">
+                        {{ form_config.TEXT_PROPERTIES__FONT_OUTLINE.label.text }}
+                    </label>
+                    <div id="TEXT_PROPERTIES__FONT_OUTLINE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">Add black outline to text</div>
-</div>
 
-<hr>
+    <!-- Right Column: Overlays, Dirs & Orbs -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Section: Moon Overlay -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--moon] tw:w-4 tw:h-4"></i>
+                    Moon Overlay
+                </h3>
+                {{ form_config.MOON_OVERLAY__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            </div>
+            <div id="MOON_OVERLAY__ENABLE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.MOON_OVERLAY__ENABLE(class='form-check-input') }}
-            <div id="MOON_OVERLAY__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">X Offset</label>
+                        {{ form_config.MOON_OVERLAY__X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="MOON_OVERLAY__X-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Y Offset</label>
+                        {{ form_config.MOON_OVERLAY__Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="MOON_OVERLAY__Y-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__X(class='form-control bg-secondary') }}
-        <div id="MOON_OVERLAY__X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Negative is offset from the right side of image (Not validated with image size)</div>
-    </div>
-</div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Scale</label>
+                        {{ form_config.MOON_OVERLAY__SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="MOON_OVERLAY__SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Dark Side Scale</label>
+                        {{ form_config.MOON_OVERLAY__DARK_SIDE_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="MOON_OVERLAY__DARK_SIDE_SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__Y(class='form-control bg-secondary') }}
-        <div id="MOON_OVERLAY__Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Negative is offset from the bottom of image</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__FLIP_V.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.MOON_OVERLAY__FLIP_V(class='form-check-input') }}
-            <div id="MOON_OVERLAY__FLIP_V-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Flipping Vertically and Horizontal should show view from Southern Hemisphere</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__FLIP_H.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.MOON_OVERLAY__FLIP_H(class='form-check-input') }}
-            <div id="MOON_OVERLAY__FLIP_H-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__SCALE(class='form-control bg-secondary') }}
-        <div id="MOON_OVERLAY__SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Original Moon image is 400x400</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__DARK_SIDE_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.MOON_OVERLAY__DARK_SIDE_SCALE(class='form-control bg-secondary') }}
-        <div id="MOON_OVERLAY__DARK_SIDE_SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Default: 0.4 - 0.0 would make the shaded area completely black</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.LIGHTGRAPH_OVERLAY__ENABLE(class='form-check-input') }}
-            <div id="LIGHTGRAPH_OVERLAY__ENABLE-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="tw:flex tw:items-center tw:justify-between">
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.MOON_OVERLAY__FLIP_V(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Flip Vertical</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.MOON_OVERLAY__FLIP_H(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Flip Horizontal</span>
+                    </label>
+                </div>
+                <div class="tw:flex tw:gap-4">
+                    <div id="MOON_OVERLAY__FLIP_V-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                    <div id="MOON_OVERLAY__FLIP_H-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_HEIGHT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_HEIGHT(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__GRAPH_HEIGHT-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
+        <!-- Section: Lightgraph Overlay -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--bar-chart-2] tw:w-4 tw:h-4"></i>
+                    Lightgraph
+                </h3>
+                {{ form_config.LIGHTGRAPH_OVERLAY__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            </div>
+            <div id="LIGHTGRAPH_OVERLAY__ENABLE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_BORDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_BORDER(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__GRAPH_BORDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:grid tw:grid-cols-3 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Height</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__GRAPH_HEIGHT-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Border</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__GRAPH_BORDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__GRAPH_BORDER-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Marker</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__NOW_MARKER_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__NOW_MARKER_SIZE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NOW_MARKER_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NOW_MARKER_SIZE(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__NOW_MARKER_SIZE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
+                <div class="tw:grid tw:grid-cols-3 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Y Pos</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__Y-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">X Offs</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__OFFSET_X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__OFFSET_X-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Scale</span>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__Y(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Negative is offset from the bottom of image</div>
-    </div>
-</div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Opacity</label>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__OPACITY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__OPACITY-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Font Color</label>
+                        {{ form_config.LIGHTGRAPH_OVERLAY__FONT_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="LIGHTGRAPH_OVERLAY__FONT_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OFFSET_X(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Offset from center</div>
-    </div>
-</div>
+                <div class="tw:flex tw:items-center tw:justify-between">
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.LIGHTGRAPH_OVERLAY__LABEL(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Show Label</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_LINES(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Hour Lines</span>
+                    </label>
+                </div>
+                <div class="tw:flex tw:gap-4">
+                    <div id="LIGHTGRAPH_OVERLAY__LABEL-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                    <div id="LIGHTGRAPH_OVERLAY__HOUR_LINES-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__SCALE(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__SCALE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Default size: 1446 x 86 (including borders)</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__DAY_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__DAY_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__DAY_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Color in R,G,B</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__DUSK_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__DUSK_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__DUSK_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NIGHT_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NIGHT_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__NIGHT_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__MOONMODE_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__MOONMODE_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__MOONMODE_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__HOUR_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__BORDER_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__BORDER_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__BORDER_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NOW_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__NOW_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__NOW_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__FONT_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__FONT_COLOR(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__FONT_COLOR-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OPACITY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OPACITY(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__OPACITY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__PIL_FONT_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__PIL_FONT_SIZE(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__PIL_FONT_SIZE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OPENCV_FONT_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__OPENCV_FONT_SCALE(class='form-control bg-secondary') }}
-        <div id="LIGHTGRAPH_OVERLAY__OPENCV_FONT_SCALE-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__LABEL.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.LIGHTGRAPH_OVERLAY__LABEL(class='form-check-input') }}
-            <div id="LIGHTGRAPH_OVERLAY__LABEL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_LINES.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_LINES(class='form-check-input') }}
-            <div id="LIGHTGRAPH_OVERLAY__HOUR_LINES-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="collapse tw:bg-black/10 tw:border tw:border-white/5">
+                    <input type="checkbox" /> 
+                    <div class="collapse-title tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-60 tw:min-h-0 tw:py-2">
+                        Advanced Colors & Sizing
+                    </div>
+                    <div class="collapse-content tw:flex tw:flex-col tw:gap-4">
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-x-4 tw:gap-y-3">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Day Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__DAY_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__DAY_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Dusk Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__DUSK_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__DUSK_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Night Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__NIGHT_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__NIGHT_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Moon Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__MOONMODE_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__MOONMODE_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Hour Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__HOUR_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__HOUR_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Border Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__BORDER_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__BORDER_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Now Color</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__NOW_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__NOW_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">PIL Size</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__PIL_FONT_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__PIL_FONT_SIZE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">CV Scale</span>
+                                {{ form_config.LIGHTGRAPH_OVERLAY__OPENCV_FONT_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                                <div id="LIGHTGRAPH_OVERLAY__OPENCV_FONT_SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
 
-<hr>
+        <!-- Section: Remote Image Overlay -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--image] tw:w-4 tw:h-4"></i>
+                    Remote Image
+                </h3>
+                {{ form_config.IMAGE_OVERLAY__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            </div>
+            <div id="IMAGE_OVERLAY__ENABLE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.IMAGE_OVERLAY__ENABLE(class='form-check-input') }}
-            <div id="IMAGE_OVERLAY__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Use a remote image as an overlay (weather maps, etc)</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__LOAD_INTERVAL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__LOAD_INTERVAL(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__LOAD_INTERVAL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_URL.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.IMAGE_OVERLAY__A_URL(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_URL-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_IMAGE_FILE_TYPE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_IMAGE_FILE_TYPE(class='form-select bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_IMAGE_FILE_TYPE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_USERNAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_USERNAME(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_USERNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_PASSWORD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_PASSWORD(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_PASSWORD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_WIDTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_WIDTH(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_WIDTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Image will be resized to this specification</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_HEIGHT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_HEIGHT(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_HEIGHT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_X(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Negative is offset from the right side of image</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.IMAGE_OVERLAY__A_Y(class='form-control bg-secondary') }}
-        <div id="IMAGE_OVERLAY__A_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Negative is offset from the bottom of image</div>
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__ENABLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CARDINAL_DIRS__ENABLE(class='form-check-input') }}
-            <div id="CARDINAL_DIRS__ENABLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Cardinal directions are based on the <a
-                href="#location-LENS_AZIMUTH" class="text-decoration-none link-info">Azimuth for the Lens/Camera</a> in
-            the Location Tab</div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__SWAP_NS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CARDINAL_DIRS__SWAP_NS(class='form-check-input') }}
-            <div id="CARDINAL_DIRS__SWAP_NS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__SWAP_EW.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CARDINAL_DIRS__SWAP_EW(class='form-check-input') }}
-            <div id="CARDINAL_DIRS__SWAP_EW-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__FONT_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__FONT_COLOR(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__FONT_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Font color in R,G,B</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__CHAR_NORTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-1">
-        {{ form_config.CARDINAL_DIRS__CHAR_NORTH(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__CHAR_NORTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-9">Blank to not show direction</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__CHAR_EAST.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-1">
-        {{ form_config.CARDINAL_DIRS__CHAR_EAST(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__CHAR_EAST-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-9"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__CHAR_WEST.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-1">
-        {{ form_config.CARDINAL_DIRS__CHAR_WEST(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__CHAR_WEST-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-9"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__CHAR_SOUTH.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-1">
-        {{ form_config.CARDINAL_DIRS__CHAR_SOUTH(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__CHAR_SOUTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-9"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__DIAMETER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__DIAMETER(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__DIAMETER-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div><a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" class="text-decoration-none link-info"
-                target="_blank">Image Circle Helper</a></div>
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_X.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_X(class='form-control bg-dark text-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_X-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Not Used - Use <a href="#location-LENS_OFFSET_X" class="text-decoration-none link-info">Lens
-            offsets on Location Tab</a></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_Y.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_Y(class='form-control bg-dark text-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_Y-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_TOP.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_TOP(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_TOP-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_LEFT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_LEFT(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_LEFT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_RIGHT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_RIGHT(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_RIGHT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_BOTTOM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OFFSET_BOTTOM(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__OFFSET_BOTTOM-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OPENCV_FONT_SCALE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OPENCV_FONT_SCALE(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__OPENCV_FONT_SCALE-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__PIL_FONT_SIZE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__PIL_FONT_SIZE(class='form-control bg-secondary') }}
-        <div id="CARDINAL_DIRS__PIL_FONT_SIZE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.CARDINAL_DIRS__OUTLINE_CIRCLE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.CARDINAL_DIRS__OUTLINE_CIRCLE(class='form-check-input') }}
-            <div id="CARDINAL_DIRS__OUTLINE_CIRCLE-error" class="invalid-feedback text-danger" style="display: none;">
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">URL</label>
+                    {{ form_config.IMAGE_OVERLAY__A_URL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div id="IMAGE_OVERLAY__A_URL-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Interval (s)</label>
+                        {{ form_config.IMAGE_OVERLAY__LOAD_INTERVAL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="IMAGE_OVERLAY__LOAD_INTERVAL-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">File Type</label>
+                        {{ form_config.IMAGE_OVERLAY__A_IMAGE_FILE_TYPE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                        <div id="IMAGE_OVERLAY__A_IMAGE_FILE_TYPE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Username</label>
+                        {{ form_config.IMAGE_OVERLAY__A_USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="IMAGE_OVERLAY__A_USERNAME-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Password</label>
+                        {{ form_config.IMAGE_OVERLAY__A_PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', type='password') }}
+                        <div id="IMAGE_OVERLAY__A_PASSWORD-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">W / H (px)</label>
+                        <div class="tw:join tw:w-full">
+                            {{ form_config.IMAGE_OVERLAY__A_WIDTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            {{ form_config.IMAGE_OVERLAY__A_HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                        </div>
+                        <div class="tw:flex tw:gap-4">
+                            <div id="IMAGE_OVERLAY__A_WIDTH-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            <div id="IMAGE_OVERLAY__A_HEIGHT-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">X / Y Offs</label>
+                        <div class="tw:join tw:w-full">
+                            {{ form_config.IMAGE_OVERLAY__A_X(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            {{ form_config.IMAGE_OVERLAY__A_Y(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                        </div>
+                        <div class="tw:flex tw:gap-4">
+                            <div id="IMAGE_OVERLAY__A_X-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                            <div id="IMAGE_OVERLAY__A_Y-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Enable for debugging</div>
-    </div>
-</div>
 
-<hr>
+        <!-- Section: Cardinal Directions -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--compass] tw:w-4 tw:h-4"></i>
+                    Cardinal Directions
+                </h3>
+                {{ form_config.CARDINAL_DIRS__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            </div>
+            <div id="CARDINAL_DIRS__ENABLE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__MODE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.ORB_PROPERTIES__MODE(class='form-select bg-secondary') }}
-        <div id="ORB_PROPERTIES__MODE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/Orbs" class="text-decoration-none link-info"
-                target="_blank">Orb Wiki</a></div>
-    </div>
-</div>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.CARDINAL_DIRS__SWAP_NS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Swap N/S</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                        {{ form_config.CARDINAL_DIRS__SWAP_EW(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Swap E/W</span>
+                    </label>
+                </div>
+                <div class="tw:flex tw:gap-4">
+                    <div id="CARDINAL_DIRS__SWAP_NS-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                    <div id="CARDINAL_DIRS__SWAP_EW-error" class="tw:text-error tw:text-[9px]" style="display: none;"></div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__RADIUS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__RADIUS(class='form-control bg-secondary') }}
-        <div id="ORB_PROPERTIES__RADIUS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Radius of Sun and Moon orbs on edge of image</div>
-</div>
+                <div class="tw:grid tw:grid-cols-4 tw:gap-2">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 text-center">N</span>
+                        {{ form_config.CARDINAL_DIRS__CHAR_NORTH(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:text-center') }}
+                        <div id="CARDINAL_DIRS__CHAR_NORTH-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 text-center">E</span>
+                        {{ form_config.CARDINAL_DIRS__CHAR_EAST(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:text-center') }}
+                        <div id="CARDINAL_DIRS__CHAR_EAST-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 text-center">W</span>
+                        {{ form_config.CARDINAL_DIRS__CHAR_WEST(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:text-center') }}
+                        <div id="CARDINAL_DIRS__CHAR_WEST-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 text-center">S</span>
+                        {{ form_config.CARDINAL_DIRS__CHAR_SOUTH(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:text-center') }}
+                        <div id="CARDINAL_DIRS__CHAR_SOUTH-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__AZ_OFFSET.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__AZ_OFFSET(class='form-control bg-secondary') }}
-        <div id="ORB_PROPERTIES__AZ_OFFSET-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Diameter (px)</label>
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.CARDINAL_DIRS__DIAMETER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                        <a href="{{ url_for('indi_allsky.image_circle_helper_view') }}" target="_blank" class="tw:btn tw:btn-sm tw:h-11 tw:join-item tw:btn-ghost tw:bg-black/40 tw:border-base-content/10">
+                            <i class="tw:icon-[lucide--maximize] tw:w-4 tw:h-4"></i>
+                        </a>
+                    </div>
+                    <div id="CARDINAL_DIRS__DIAMETER-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__RETROGRADE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.ORB_PROPERTIES__RETROGRADE(class='form-check-input') }}
-            <div id="ORB_PROPERTIES__RETROGRADE-error" class="invalid-feedback text-danger" style="display: none;">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-x-4 tw:gap-y-3">
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Color (RGB)</span>
+                        {{ form_config.CARDINAL_DIRS__FONT_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__FONT_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">PIL Size</span>
+                        {{ form_config.CARDINAL_DIRS__PIL_FONT_SIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__PIL_FONT_SIZE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">CV Scale</span>
+                        {{ form_config.CARDINAL_DIRS__OPENCV_FONT_SCALE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__OPENCV_FONT_SCALE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Offset Top</span>
+                        {{ form_config.CARDINAL_DIRS__OFFSET_TOP(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__OFFSET_TOP-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Offset Left</span>
+                        {{ form_config.CARDINAL_DIRS__OFFSET_LEFT(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__OFFSET_LEFT-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Offset Right</span>
+                        {{ form_config.CARDINAL_DIRS__OFFSET_RIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__OFFSET_RIGHT-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Offset Bottom</span>
+                        {{ form_config.CARDINAL_DIRS__OFFSET_BOTTOM(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark') }}
+                        <div id="CARDINAL_DIRS__OFFSET_BOTTOM-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control tw:justify-center">
+                        <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer tw:mt-2">
+                            {{ form_config.CARDINAL_DIRS__OUTLINE_CIRCLE(class='tw:toggle tw:toggle-xs tw:toggle-warning') }}
+                            <span class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40">Debug Circle</span>
+                        </label>
+                        <div id="CARDINAL_DIRS__OUTLINE_CIRCLE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Hidden/Deprecated fields maintained for logic -->
+                <div class="tw:hidden">
+                    {{ form_config.CARDINAL_DIRS__OFFSET_X() }}
+                    {{ form_config.CARDINAL_DIRS__OFFSET_Y() }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> Reversing the direction also flips the orbs
-            position horizontally</div>
-    </div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__SUN_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__SUN_COLOR(class='form-control bg-secondary') }}
-        <div id="ORB_PROPERTIES__SUN_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Color of Sun Orb</div>
-</div>
+        <!-- Section: Solar/Lunar Orbs -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--orbit] tw:w-4 tw:h-4"></i>
+                    Solar & Lunar Orbs
+                </h3>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Orbs" target="_blank" class="tw:badge tw:badge-info tw:badge-outline tw:gap-1 tw:py-3 tw:px-3 tw:text-[10px] tw:no-underline">
+                    Wiki
+                </a>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__MOON_COLOR.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.ORB_PROPERTIES__MOON_COLOR(class='form-control bg-secondary') }}
-        <div id="ORB_PROPERTIES__MOON_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Color of Moon Orb</div>
-</div>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Mode</label>
+                    {{ form_config.ORB_PROPERTIES__MODE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                    <div id="ORB_PROPERTIES__MODE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Radius (px)</label>
+                        {{ form_config.ORB_PROPERTIES__RADIUS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="ORB_PROPERTIES__RADIUS-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Az. Offset</label>
+                        {{ form_config.ORB_PROPERTIES__AZ_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="ORB_PROPERTIES__AZ_OFFSET-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Sun Color</label>
+                        {{ form_config.ORB_PROPERTIES__SUN_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="ORB_PROPERTIES__SUN_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Moon Color</label>
+                        {{ form_config.ORB_PROPERTIES__MOON_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="ORB_PROPERTIES__MOON_COLOR-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                    </div>
+                </div>
+                <label class="tw:flex tw:items-center tw:gap-2 tw:cursor-pointer">
+                    {{ form_config.ORB_PROPERTIES__RETROGRADE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Retrograde (Reverse)</span>
+                </label>
+                <div id="ORB_PROPERTIES__RETROGRADE-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+            </div>
+        </div>
 
-<hr>
+        <!-- Section: Logo Overlay -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-5">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--stamp] tw:w-4 tw:h-4"></i>
+                Logo Overlay
+            </h3>
+            <div class="tw:form-control">
+                <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Logo Path</label>
+                {{ form_config.LOGO_OVERLAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='/path/to/logo.png') }}
+                <div id="LOGO_OVERLAY-error" class="tw:text-error tw:text-[9px] tw:mt-1" style="display: none;"></div>
+                <span class="tw:text-[9px] tw:mt-2 tw:opacity-40">Must have an alpha channel for transparency.</span>
+            </div>
+        </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.LOGO_OVERLAY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.LOGO_OVERLAY(class='form-control bg-secondary') }}
-        <div id="LOGO_OVERLAY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-        <div>Logo overlay image. Must have an alpha channel.</div>
     </div>
 </div>

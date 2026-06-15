@@ -14,48 +14,100 @@ var camera_id = {{ camera_id }};
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="tw:w-full tw:flex tw:flex-col tw:gap-4">
 
-<div class="row" style="display:block;">
-  <div class="col-sm-12">
-<table id="config-table" class="table table-striped compact" data-bs-theme="dark">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Create</th>
-      <th>User</th>
-      <th>Level</th>
-      <th>Encrypted<br>Passwords</th>
-      <th>Link</th>
-      <th>Note</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for config in config_list %}
-    <tr>
-      <td>{{ config.id}}</td>
-      <td>{{ config.createDate.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-      <td>{{ config.username }}</td>
-      <td>{{ config.level }}</td>
-      <td>{{ config.encrypted }}</td>
-      <td>
-        <a href="{{ url_for('indi_allsky.config_download_view', id=config.id) }}" class="text-decoration-none link-info"><span class="badge bg-primary">Download</span></a>
-        <a href="{{ url_for('indi_allsky.config_download_view', id=config.id, redact=1) }}" class="text-decoration-none link-info"><span class="badge bg-warning text-dark">Redacted</span></a>
-      </td>
-      <td>{{ config.note }}</td>
-    </tr>
-    {% endfor %}
-      </tbody>
-    </table>
-      <hr>
-        <div><a href="{{ url_for('indi_allsky.config_restore_view') }}"><span class="badge bg-danger text-dark">Config Restore</span></a></div>
-      <hr>
+    <div class="tw:bg-base-200/50 tw:rounded-xl tw:border tw:border-base-content/5 tw:overflow-hidden">
+        <div class="tw:overflow-x-auto">
+            <table id="config-table" class="tw:table tw:table-sm tw:table-pin-rows tw:w-full">
+                <thead>
+                    <tr class="tw:border-b tw:border-base-content/10 tw:bg-base-300/60 tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/50">
+                        <th class="tw:py-3.5 tw:px-4">ID</th>
+                        <th class="tw:py-3.5">Creation Timestamp</th>
+                        <th class="py-3.5">Operator (User)</th>
+                        <th class="tw:py-3.5">Access Level</th>
+                        <th class="tw:py-3.5">Crypto Passwords State</th>
+                        <th class="tw:py-3.5 tw:text-center">Payload Extractions</th>
+                        <th class="tw:py-3.5 tw:px-4">Context Note</th>
+                    </tr>
+                </thead>
+                <tbody class="tw:text-xs tw:divide-y tw:divide-base-content/5">
+                    {% for config in config_list %}
+                    <tr class="tw:hover:bg-base-300/30 tw:transition-colors tw:duration-150">
+                        <td class="tw:py-3 tw:px-4 tw:font-mono tw:font-bold tw:text-primary">{{ config.id }}</td>
+                        
+                        <td class="tw:py-3 tw:font-mono tw:text-base-content/70">
+                            {{ config.createDate.strftime('%Y-%m-%d %H:%M:%S') }}
+                        </td>
+                        
+                        <td class="tw:py-3 tw:font-semibold tw:text-base-content/80">{{ config.username }}</td>
+                        
+                        <td class="tw:py-3">
+                            <span class="tw:badge tw:badge-neutral tw:bg-base-300 tw:border-none tw:text-[10px] tw:font-mono tw:font-bold tw:tracking-wide">
+                                {{ config.level }}
+                            </span>
+                        </td>
+                        
+                        <td class="tw:py-3">
+                            {% if config.encrypted %}
+                            <span class="tw:inline-flex tw:items-center tw:gap-1 tw:text-success tw:font-medium">
+                                <i class="tw:icon-[lucide--lock] tw:w-3.5 tw:h-3.5"></i> Encrypted
+                            </span>
+                            {% else %}
+                            <span class="tw:inline-flex tw:items-center tw:gap-1 tw:text-base-content/40">
+                                <i class="tw:icon-[lucide--lock-open] tw:w-3.5 tw:h-3.5"></i> Plaintext
+                            </span>
+                            {% endif %}
+                        </td>
+                        
+                        <td class="tw:py-3 tw:text-center">
+                            <div class="tw:inline-flex tw:items-center tw:gap-2">
+                                <a href="{{ url_for('indi_allsky.config_download_view', id=config.id) }}" 
+                                   class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:border-none tw:gap-1 tw:text-info">
+                                    <i class="tw:icon-[lucide--download] tw:w-3 tw:h-3"></i>
+                                    Download
+                                </a>
+                                <a href="{{ url_for('indi_allsky.config_download_view', id=config.id, redact=1) }}" 
+                                   class="tw:btn tw:btn-xs tw:btn-warning tw:btn-outline hover:tw:bg-warning/20 tw:gap-1">
+                                    <i class="tw:icon-[lucide--eye-off] tw:w-3 tw:h-3"></i>
+                                    Redacted
+                                </a>
+                            </div>
+                        </td>
+                        
+                        <td class="tw:py-3 tw:px-4 tw:max-w-xs tw:truncate tw:text-base-content/60 tw:italic" title="{{ config.note }}">
+                            {{ config.note if config.note else '--' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not config_list %}
+                    <tr>
+                        <td colspan="7" class="tw:text-center tw:py-8 tw:text-base-content/30 tw:italic">
+                            No stored architecture configs located in database array loops.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div style="height:20px;"></div>
-    <div style="font-size:12px;">Note: Configs from deleted users will not be displayed, but they are still in the database</div>
-  </div>
 
-</div>
+    <div class="tw:flex tw:flex-col sm:tw:flex-row tw:justify-between tw:items-center tw:gap-4 tw:bg-base-200/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5">
+        
+        <div>
+            <a href="{{ url_for('indi_allsky.config_restore_view') }}" 
+               class="tw:btn tw:btn-error tw:btn-sm tw:px-4 tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:gap-2">
+                <i class="tw:icon-[lucide--rotate-ccw] tw:w-4 tw:h-4"></i>
+                Config Rollback Restore
+            </a>
+        </div>
+
+        <div class="tw:flex tw:items-center tw:gap-2 tw:text-[11px] tw:text-base-content/40 tw:font-medium">
+            <i class="tw:icon-[lucide--database-zap] tw:w-3.5 tw:h-3.5 tw:text-base-content/30"></i>
+            <span>Database Constraint Rules: Configuration states matching purged user nodes remain preserved in the DB matrix but are filtered out from the current layout.</span>
+        </div>
+        
+    </div>
+
 </div>
 
 <script>

@@ -1,817 +1,397 @@
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.UPLOAD_WORKERS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.UPLOAD_WORKERS(class='form-control bg-secondary') }}
-        <div id="UPLOAD_WORKERS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">
-        <div>Number of upload threads to operate</div>
-    </div>
-</div>
+<style>
+    .allsky-filetransfer-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-filetransfer-grid {
+            grid-template-columns: 1.2fr 2fr !important;
+            align-items: start;
+        }
+    }
+    /* Enforce absolute dark baseline properties across input types */
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important; /* Maps back to DaisyUI primary accent variable */
+    }
+    .path-group {
+        @apply tw:p-4 tw:bg-black/10 tw:rounded-lg tw:border tw:border-white/5;
+    }
+</style>
 
-<hr>
+<div class="allsky-filetransfer-grid">
+    <!-- Left Column: Connection, Auth & Performance -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Connection & Auth -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <div class="tw:flex tw:items-center tw:justify-between">
+                <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                    <i class="tw:icon-[lucide--server] tw:w-4 tw:h-4"></i>
+                    Connection & Auth
+                </h3>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/File-transfers" target="_blank" class="tw:badge tw:badge-info tw:badge-outline tw:gap-1 tw:py-3 tw:px-3 tw:text-[10px] tw:no-underline">
+                    <i class="tw:icon-[lucide--book-open] tw:w-3 tw:h-3"></i>
+                    Wiki
+                </a>
+            </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__CLASSNAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__CLASSNAME(class='form-select bg-secondary') }}
-        <div id="FILETRANSFER__CLASSNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div>File transfer protocol</div>
-        <div><a href="https://github.com/aaronwmorris/indi-allsky/wiki/File-transfers"
-                class="text-decoration-none link-info" target="_blank">File Transfer Wiki</a></div>
-    </div>
-</div>
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Protocol</label>
+                    {{ form_config.FILETRANSFER__CLASSNAME(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__HOST.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__HOST(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__HOST-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Hostname for file transfer</div>
-</div>
+                <div class="tw:grid tw:grid-cols-4 tw:gap-4">
+                    <div class="tw:form-control tw:col-span-3">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Host</label>
+                        {{ form_config.FILETRANSFER__HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Port</label>
+                        {{ form_config.FILETRANSFER__PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='0') }}
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__PORT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__PORT(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__PORT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">File transfer port (0 for protocol default)</div>
-</div>
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Username</label>
+                        {{ form_config.FILETRANSFER__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Password</label>
+                        {{ form_config.FILETRANSFER__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', type='password') }}
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__USERNAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.FILETRANSFER__USERNAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__USERNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">Username for file transfer</div>
-</div>
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Private Key (SSH)</label>
+                    {{ form_config.FILETRANSFER__PRIVATE_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__PASSWORD.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-3">
-        {{ form_config.FILETRANSFER__PASSWORD(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__PASSWORD-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-7">Password for file transfer</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__PRIVATE_KEY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__PRIVATE_KEY(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__PRIVATE_KEY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Private key for file transfer (SSH)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__PUBLIC_KEY.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__PUBLIC_KEY(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__PUBLIC_KEY-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Public key for file transfer (SSH)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__CONNECT_TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__CONNECT_TIMEOUT(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__CONNECT_TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8"></div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__TIMEOUT.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__TIMEOUT(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__TIMEOUT-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">This timeout is for the whole transfer. Ensure it is large enough to transfer videos</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__CERT_BYPASS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__CERT_BYPASS(class='form-check-input') }}
-            <div id="FILETRANSFER__CERT_BYPASS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Public Key (SSH)</label>
+                    {{ form_config.FILETRANSFER__PUBLIC_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-8">Bypass certificate validation</div>
-</div>
 
-<hr>
+        <!-- Performance & Network -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--zap] tw:w-4 tw:h-4"></i>
+                Performance & Network
+            </h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__ATOMIC_TRANSFERS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__ATOMIC_TRANSFERS(class='form-check-input') }}
-            <div id="FILETRANSFER__ATOMIC_TRANSFERS-error" class="invalid-feedback text-danger" style="display: none;">
+            <div class="tw:flex tw:flex-col tw:gap-5">
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Upload Workers</label>
+                    {{ form_config.UPLOAD_WORKERS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <div class="tw:text-[9px] tw:mt-1 tw:opacity-40">Number of parallel upload threads.</div>
+                </div>
+
+                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Connect Timeout</label>
+                        {{ form_config.FILETRANSFER__CONNECT_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Transfer Timeout</label>
+                        {{ form_config.FILETRANSFER__TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                </div>
+
+                <div class="tw:space-y-3">
+                    <div class="tw:flex tw:items-center tw:justify-between">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Bypass Cert Check</span>
+                        {{ form_config.FILETRANSFER__CERT_BYPASS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </div>
+                    <div class="tw:flex tw:items-center tw:justify-between">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Atomic Transfers</span>
+                        {{ form_config.FILETRANSFER__ATOMIC_TRANSFERS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </div>
+                    <div class="tw:flex tw:items-center tw:justify-between">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Force IPv4 (PycURL)</span>
+                        {{ form_config.FILETRANSFER__FORCE_IPV4(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </div>
+                    <div class="tw:flex tw:items-center tw:justify-between">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Force IPv6</span>
+                        {{ form_config.FILETRANSFER__FORCE_IPV6(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </div>
+                </div>
+
+                <div class="tw:form-control">
+                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">libcurl Options</label>
+                    {{ form_config.FILETRANSFER__LIBCURL_OPTIONS(class='tw:textarea tw:textarea-bordered tw:bg-black/20 tw:font-mono tw:text-[10px]', rows='4') }}
+                    <div class="tw:badge tw:badge-warning tw:badge-outline tw:text-[9px] tw:mt-2">NOT FULLY VALIDATED</div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div>Transfer files to a temporary name before renaming to the final name</div>
-    </div>
-</div>
 
-<hr>
+    <!-- Right Column: Remote Paths & Upload Policy -->
+    <div class="tw:flex tw:flex-col tw:gap-6">
+        
+        <!-- Remote Paths -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--folder-tree] tw:w-4 tw:h-4"></i>
+                Remote Path Configuration
+            </h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__FORCE_IPV4.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__FORCE_IPV4(class='form-check-input') }}
-            <div id="FILETRANSFER__FORCE_IPV4-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div>Force IPv4 (PycURL Only)</div>
-        <div><span class="badge rounded-pill bg-info text-dark">Note</span> This can be helpful if you receive
-            connection timeout errors</div>
-    </div>
-</div>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
+                <!-- Group: Images -->
+                <div class="path-group tw:col-span-full">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Standard Images & Folders</h4>
+                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Latest Images Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_LATEST_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">End of Night Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Images Name</label>
+                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Images Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        </div>
+                    </div>
+                    <div class="tw:text-[9px] tw:mt-3 tw:opacity-50 tw:italic">Vars: timestamp, ts, ext, camera_uuid, day_date, timeofday</div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__FORCE_IPV6.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__FORCE_IPV6(class='form-check-input') }}
-            <div id="FILETRANSFER__FORCE_IPV6-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Force IPv6</div>
-</div>
+                <!-- Group: Specialized Data -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">RAW & FITS</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">RAW Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_RAW_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_RAW_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">FITS Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_FITS_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_FITS_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__LIBCURL_OPTIONS.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-6">
-        {{ form_config.FILETRANSFER__LIBCURL_OPTIONS(class='form-control bg-secondary', rows='6') }}
-        <div id="FILETRANSFER__LIBCURL_OPTIONS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-4">
-        <div>libcurl options for use with PycURL classes</div>
-        <div><span class="badge rounded-pill bg-warning text-dark">Warning</span> Options are not fully validated</div>
-    </div>
-</div>
+                <!-- Group: Metadata & Backup -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Metadata & System</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Metadata Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_METADATA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_METADATA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">DB Backup Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_DB_BACKUP_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        </div>
+                    </div>
+                </div>
 
-<hr>
+                <!-- Group: Video -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Timelapse Videos</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Full Video Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Mini Video Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_IMAGE_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_IMAGE_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_IMAGE_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-        <div>Remote image name. "{0}" is replaced with the configured image type extension.</div>
-        <div>Available variables:
-            <pre>timestamp, ts, ext, camera_uuid, camera_id, timeofday, tod</pre>
-        </div>
-        <div><a href="https://docs.python.org/3/library/string.html#formatspec" class="text-decoration-none link-info"
-                target="_blank">Python format syntax</a></div>
-        <div><a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes"
-                class="text-decoration-none link-info" target="_blank">Python datetime format codes</a></div>
-    </div>
-</div>
+                <!-- Group: Analytics -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Keograms & Trails</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Keogram Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Startrail Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_IMAGE_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_IMAGE_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_IMAGE_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-        <div>Remote folder to store images</div>
-        <div>Available variables:
-            <pre>timestamp, ts, day_date, camera_uuid, camera_id, timeofday, tod</pre>
-        </div>
-    </div>
-</div>
+                <!-- Group: Analytics Video -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Trail & Pano Videos</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Startrail Video Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Video Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_PANORAMA_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_PANORAMA_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_METADATA_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_METADATA_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_METADATA_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Remote metadata file name.</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_METADATA_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_METADATA_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_METADATA_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store metadata</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_RAW_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_RAW_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_RAW_NAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_RAW_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_RAW_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_RAW_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Remote folder to store RAW images</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_FITS_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_FITS_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_FITS_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_FITS_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_FITS_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_FITS_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Remote folder to store FITS images</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_VIDEO_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_VIDEO_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_VIDEO_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_VIDEO_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_VIDEO_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_VIDEO_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Remote folder to store timelapse videos</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_MINI_VIDEO_NAME-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store mini timelapse videos</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_KEOGRAM_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_KEOGRAM_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">Remote folder to store keograms</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_STARTRAIL_NAME-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_STARTRAIL_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store star trails</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store star trail videos</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store panorama videos</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">
-    </div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-5">
-        {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-5">Remote folder to store realtime keograms</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Remote folder to store Allsky EndOfNight data</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_LATEST_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__REMOTE_LATEST_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_LATEST_FOLDER-error" class="invalid-feedback text-danger" style="display: none;">
-        </div>
-    </div>
-    <div class="col-sm-6">Remote folder to store latest image and timelapse files</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_IMAGE.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_IMAGE(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__UPLOAD_IMAGE-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Enable image uploads (0 = disable, 1 = every image, 2 = every 2nd image, etc)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__UPLOAD_PANORAMA-error" class="invalid-feedback text-danger" style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Enable image uploads (0 = disable, 1 = every image, 2 = every 2nd image, etc)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_METADATA.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_METADATA(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_METADATA-error" class="invalid-feedback text-danger" style="display: none;">
+                <!-- Group: Pano & Realtime -->
+                <div class="path-group">
+                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Pano & Realtime</h4>
+                    <div class="tw:space-y-4">
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                        <div class="tw:form-control">
+                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Realtime Keo Name / Folder</label>
+                            <div class="tw:join tw:w-full">
+                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">Enable metadata uploads (requires image uploads to be enabled)</div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_RAW.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_RAW(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_RAW-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable RAW uploads</div>
-</div>
+        <!-- Upload Policy Toggles -->
+        <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-white/5 tw:flex tw:flex-col tw:gap-6">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--upload-cloud] tw:w-4 tw:h-4"></i>
+                Upload Policy & Frequency
+            </h3>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_FITS.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_FITS(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_FITS-error" class="invalid-feedback text-danger" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable FITS uploads</div>
-</div>
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-12 tw:gap-y-6">
+                <!-- Frequency Inputs -->
+                <div class="tw:flex tw:flex-col tw:gap-4">
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Image Upload (Freq)</label>
+                        {{ form_config.FILETRANSFER__UPLOAD_IMAGE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <span class="tw:text-[9px] tw:mt-1 tw:opacity-40">0=Off, 1=Every, 2=Every 2nd...</span>
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Upload (Freq)</label>
+                        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Realtime Keo (Freq)</label>
+                        {{ form_config.FILETRANSFER__UPLOAD_REALTIME_KEOGRAM(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    </div>
+                </div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_VIDEO(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_VIDEO-error" class="invalid-feedback text-danger" style="display: none;">
+                <!-- Toggle Grid -->
+                <div class="tw:space-y-2">
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Metadata</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_METADATA(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload RAW</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_RAW(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload FITS</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_FITS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Video</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Mini Video</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_MINI_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Keogram</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_KEOGRAM(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Startrail</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Trail Video</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Pano Video</span>
+                        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                    </label>
+                </div>
+            </div>
+
+            <div class="tw:divider tw:my-1 tw:opacity-10"></div>
+
+            <!-- "Latest" Toggles -->
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-12 tw:gap-y-2">
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Image</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_IMAGE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Panorama</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_PANORAMA(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest RAW</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_RAW(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Video/Keo/Trail</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">End of Night</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_ENDOFNIGHT(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">DB Backup</span>
+                    {{ form_config.FILETRANSFER__UPLOAD_DB_BACKUP(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                </label>
             </div>
         </div>
-    </div>
-    <div class="col-sm-8">Enable timelapse video uploads</div>
-</div>
 
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_MINI_VIDEO.label }}
     </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_MINI_VIDEO(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_MINI_VIDEO-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable mini timelapse video uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_KEOGRAM.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_KEOGRAM(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_KEOGRAM-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable keogram uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_STARTRAIL-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable star trail uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL_VIDEO(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_STARTRAIL_VIDEO-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable star trail video uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_PANORAMA_VIDEO(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_PANORAMA_VIDEO-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable panorama video uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_REALTIME_KEOGRAM.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_REALTIME_KEOGRAM(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__UPLOAD_REALTIME_KEOGRAM-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-8">Enable realtime keogram uploads (0 = disable, 1 = every image, 2 = every 2nd image, etc)</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_ENDOFNIGHT.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_ENDOFNIGHT(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_ENDOFNIGHT-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky EndOfNight uploads</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_LATEST_IMAGE.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_LATEST_IMAGE(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_LATEST_IMAGE-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky Latest Image uploads - Timelapse images</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_LATEST_PANORAMA.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_LATEST_PANORAMA(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_LATEST_PANORAMA-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky Latest Image uploads - Panoramas</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_LATEST_RAW.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_LATEST_RAW(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_LATEST_RAW-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky Latest Image uploads - RAW Images</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_LATEST_VIDEO.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_LATEST_VIDEO(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_LATEST_VIDEO-error" class="invalid-feedback text-danger"
-                style="display: none;"></div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky Latest Timelapse uploads: Timelapse Videos, Keograms, Startrails, Panorama
-        Timelapses</div>
-</div>
-
-<hr>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__REMOTE_DB_BACKUP_FOLDER.label(class='col-form-label') }}
-    </div>
-    <div class="col-sm-4">
-        {{ form_config.FILETRANSFER__REMOTE_DB_BACKUP_FOLDER(class='form-control bg-secondary') }}
-        <div id="FILETRANSFER__REMOTE_DB_BACKUP_FOLDER-error" class="invalid-feedback text-danger"
-            style="display: none;"></div>
-    </div>
-    <div class="col-sm-6">Remote folder to store database backups</div>
-</div>
-
-<div class="form-group row">
-    <div class="col-sm-2">
-        {{ form_config.FILETRANSFER__UPLOAD_DB_BACKUP.label }}
-    </div>
-    <div class="col-sm-2">
-        <div class="form-switch">
-            {{ form_config.FILETRANSFER__UPLOAD_DB_BACKUP(class='form-check-input') }}
-            <div id="FILETRANSFER__UPLOAD_DB_BACKUP-error" class="invalid-feedback text-danger" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">Enable Allsky database backups</div>
 </div>
