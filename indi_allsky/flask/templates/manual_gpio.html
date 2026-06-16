@@ -4,16 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-.btn {
-	width: 150px;
-	height: 50px;
-}
-
-#pin-loader {
-  display: none;
-}
-</style>
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 var gpio_class = "{{ gpio_class}}";
@@ -59,14 +49,14 @@ var pin_states = {{ pin_states | tojson }};
                     <span class="tw:text-xs tw:font-bold tw:uppercase">Confirm Manual Override</span>
                 </label>
                 
-                <div id="pin-loader" class="tw:loading tw:loading-spinner tw:loading-sm tw:text-info tw:hidden"></div>
+                <span id="pin-loader" class="tw:loading tw:loading-spinner tw:loading-sm tw:text-info" style="display: none;"></span>
             </div>
         </div>
     </div>
 
     <div class="tw:w-full">
-        <div id="success-message" class="tw:alert tw:alert-success tw:hidden tw:text-xs"></div>
-        <div id="failure-message" class="tw:alert tw:alert-error tw:hidden tw:text-xs"></div>
+        <div id="success-message" class="tw:alert tw:alert-success tw:text-xs" style="display: none;"></div>
+        <div id="failure-message" class="tw:alert tw:alert-error tw:text-xs" style="display: none;"></div>
     </div>
 
 </div>
@@ -87,8 +77,8 @@ $('#pin-3-button').on('click', function() {
 });
 
 function togglePin(pin_id, new_pin_state, pin_button) {
-    $('#success-message').css({'display' : 'none'});
-    $('#failure-message').css({'display' : 'none'});
+    $('#success-message').hide();
+    $('#failure-message').hide();
 
     if (! $("#PIN_CONFIRM1").prop('checked')) {
         console.log('Confirm checkbox not checked');
@@ -96,9 +86,9 @@ function togglePin(pin_id, new_pin_state, pin_button) {
     }
     $("#PIN_CONFIRM1").prop('checked', false);
 
-    $('#pin-loader').css({'display' : 'block'});
+    $('#pin-loader').show();
 
-    $('#' + pin_button).attr({'disabled' : 'disabled'});
+    $('#' + pin_button).prop('disabled', true);
 
 
     var json_data = {
@@ -113,17 +103,17 @@ function togglePin(pin_id, new_pin_state, pin_button) {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $('#pin-loader').css({'display' : 'none'});
-            $('#' + pin_button).removeAttr('disabled');
+            $('#pin-loader').hide();
+            $('#' + pin_button).prop('disabled', false);
 
 
             if (rdata['pin_state']) {
-                $('#' + pin_button).removeClass('btn-success btn-danger');
-                $('#' + pin_button).addClass('btn-success');
+                $('#' + pin_button).removeClass('tw:btn-success tw:btn-error tw:btn-neutral');
+                $('#' + pin_button).addClass('tw:btn-success');
                 $('#' + pin_button).text('On');
             } else {
-                $('#' + pin_button).removeClass('btn-success btn-danger');
-                $('#' + pin_button).addClass('btn-danger');
+                $('#' + pin_button).removeClass('tw:btn-success tw:btn-error tw:btn-neutral');
+                $('#' + pin_button).addClass('tw:btn-error');
                 $('#' + pin_button).text('Off');
             }
 
@@ -131,20 +121,16 @@ function togglePin(pin_id, new_pin_state, pin_button) {
             pin_states[pin_id - 1] = Number(rdata['pin_state']);
 
 
-            $('#success-message').html(rdata['success-message']);
-            $('#success-message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success-message').css({'display' : 'none'});
-            }, 15000);
+            $('#success-message').html(rdata['success-message']).show();
+            setTimeout(function() { $('#success-message').fadeOut(); }, 15000);
         },
         error: function(rdata){
-            $('#pin-loader').css({'display' : 'none'});
+            $('#pin-loader').hide();
 
             var errors = JSON.parse(rdata.responseText);
 
-            $('#' + pin_button).removeAttr('disabled');
-            $('#failure-message').html(errors['failure-message']);
-            $('#failure-message').css({'display' : 'block'});
+            $('#' + pin_button).prop('disabled', false);
+            $('#failure-message').html(errors['failure-message']).show();
         },
     });
 }
@@ -156,52 +142,52 @@ function init() {
     if (gpio_class) {
         if (pin_states[0] != -1) {
             if (pin_states[0]) {
-                $('#pin-1-button').addClass('btn-success');
+                $('#pin-1-button').addClass('tw:btn-success');
                 $('#pin-1-button').text('On');
             } else {
-                $('#pin-1-button').addClass('btn-danger');
+                $('#pin-1-button').addClass('tw:btn-error');
                 $('#pin-1-button').text('Off');
             }
 
-            $('#pin-1-button').removeClass('btn-dark');
-            $('#pin-1-button').removeAttr('disabled');
+            $('#pin-1-button').removeClass('tw:btn-neutral tw:btn-disabled');
+            $('#pin-1-button').prop('disabled', false);
         } else {
             $('#pin-1-button').text('Error');
-            $('#pin-1-button').attr({'disabled' : 'disabled'});
+            $('#pin-1-button').prop('disabled', true);
         }
 
 
         if (pin_states[1] != -1) {
             if (pin_states[1]) {
-                $('#pin-2-button').addClass('btn-success');
+                $('#pin-2-button').addClass('tw:btn-success');
                 $('#pin-2-button').text('On');
             } else {
-                $('#pin-2-button').addClass('btn-danger');
+                $('#pin-2-button').addClass('tw:btn-error');
                 $('#pin-2-button').text('Off');
             }
 
-            $('#pin-2-button').removeClass('btn-dark');
-            $('#pin-2-button').removeAttr('disabled');
+            $('#pin-2-button').removeClass('tw:btn-neutral tw:btn-disabled');
+            $('#pin-2-button').prop('disabled', false);
         } else {
             $('#pin-2-button').text('Error');
-            $('#pin-2-button').attr({'disabled' : 'disabled'});
+            $('#pin-2-button').prop('disabled', true);
         }
 
 
         if (pin_states[2] != -1) {
             if (pin_states[2]) {
-                $('#pin-3-button').addClass('btn-success');
+                $('#pin-3-button').addClass('tw:btn-success');
                 $('#pin-3-button').text('On');
             } else {
-                $('#pin-3-button').addClass('btn-danger');
+                $('#pin-3-button').addClass('tw:btn-error');
                 $('#pin-3-button').text('Off');
             }
 
-            $('#pin-3-button').removeClass('btn-dark');
-            $('#pin-3-button').removeAttr('disabled');
+            $('#pin-3-button').removeClass('tw:btn-neutral tw:btn-disabled');
+            $('#pin-3-button').prop('disabled', false);
         } else {
             $('#pin-3-button').text('Error');
-            $('#pin-3-button').attr({'disabled' : 'disabled'});
+            $('#pin-3-button').prop('disabled', true);
         }
     }
 }

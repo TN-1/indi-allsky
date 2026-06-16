@@ -12,21 +12,6 @@ figure {
 }
 figure img {width: 100%;}
 .spacer {height: 5em;}
-
-.loader {
-  display: block;
-  border: 3px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 </style>
 
 <script src="{{ url_for('indi_allsky.static', filename='photoswipe/dist/umd/photoswipe.umd.min.js') }}"></script>
@@ -99,7 +84,7 @@ var newest_entry_default = true;
             </div>
 
             <div class="tw:flex tw:items-center">
-                <div class="loader" id="loader_filter"></div>
+                <span id="loader_filter" class="tw:loading tw:loading-spinner tw:loading-xs tw:text-primary" style="display: none;"></span>
             </div>
         </div>
 
@@ -210,7 +195,7 @@ function populate_gallery(gallery_data) {
             'data-pswp-height' : item['height'],
             'target'      : "_blank",
             'rel'         : "noopener noreferrer",
-            'class'       : "text-decoration-none",
+            'class'       : "tw:no-underline",
             'data-exclude' : item['exclude'],
             'data-image_id' : item['id'],
             'data-ts'     : item['ts'],
@@ -494,14 +479,13 @@ function hour_change(json_data) {
 
             populate_gallery(rdata['IMAGE_DATA']);
 
-            $("#loader_filter").css({'display' : 'none'});
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -510,12 +494,12 @@ function hour_change(json_data) {
 
 $("#HOUR_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -562,13 +546,13 @@ function day_change(json_data) {
 
             populate_gallery(rdata['IMAGE_DATA']);
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -577,12 +561,12 @@ function day_change(json_data) {
 
 $("#DAY_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -635,13 +619,13 @@ function month_change(json_data) {
 
             populate_gallery(rdata['IMAGE_DATA']);
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -650,12 +634,12 @@ function month_change(json_data) {
 
 $("#MONTH_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -704,13 +688,13 @@ function year_change(json_data) {
 
             populate_gallery(rdata['IMAGE_DATA']);
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -719,12 +703,12 @@ function year_change(json_data) {
 
 $("#YEAR_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -738,12 +722,12 @@ $("#YEAR_SELECT").on("change", function() {
 
 $("#FILTER_DETECTIONS").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'          : fields["CAMERA_ID"].input.val(),
@@ -778,13 +762,13 @@ $("#FILTER_DETECTIONS").on("change", function() {
 
             populate_gallery(rdata['IMAGE_DATA']);
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });

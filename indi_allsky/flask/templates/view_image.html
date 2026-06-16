@@ -26,16 +26,17 @@ var image_url = "{{ image_url }}";
 
 {% block content %}
 <style>
+    /* Direct override block to bypass parent container layout restrictions */
     .allsky-workspace-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
         .allsky-workspace-grid {
             grid-template-columns: 2fr 1fr !important;
-            align-items: start;
+            align-items: start !important;
         }
     }
     /* Enforce modern responsive image containment without stretching */
@@ -158,7 +159,7 @@ function init() {
     $('#permalink').html(
         $('<span />', {
             'text'  : "Copy Link to Clipboard",
-            'class' : "badge pill bg-primary copy-clipboard",
+            'class' : "tw:badge tw:badge-primary copy-clipboard",
             'style' : "cursor: pointer;",
             'data-clipboard-text' : "{{ url_for(file_view, _external=True) }}?id=" + image_id,
         })
@@ -171,7 +172,7 @@ function init() {
         }).html(
             $('<span />', {
                 'text'  : 'Download',
-                'class' : "badge pill bg-danger",
+                'class' : "tw:badge tw:badge-error tw:font-bold tw:text-error-content",
             })
         )
     );

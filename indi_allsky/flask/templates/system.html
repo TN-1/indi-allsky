@@ -4,15 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-    /* Tab transitions */
-    .tab-content-panel {
-        display: none;
-    }
-    .tab-content-panel.active {
-        display: block;
-    }
-</style>
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 </script>
@@ -21,15 +12,6 @@ var camera_id = {{ camera_id }};
 {% block content %}
 <div class="tw:p-4 tw:flex tw:flex-col tw:gap-6">
     
-    <!-- Navigation Tabs - Styled as Pills -->
-    <div role="tablist" class="tw:flex tw:flex-wrap tw:gap-2">
-        <button type="button" class="tw:btn tw:btn-sm tw:btn-primary nav-tab-btn tw:px-6" data-target="nav-info">INFORMATION</button>
-        <button type="button" class="tw:btn tw:btn-sm tw:bg-base-300 nav-tab-btn tw:px-6" data-target="nav-time">TIME</button>
-        <button type="button" class="tw:btn tw:btn-sm tw:bg-base-300 nav-tab-btn tw:px-6" data-target="nav-indiserver">INDI DRIVERS</button>
-        <button type="button" class="tw:btn tw:btn-sm tw:bg-base-300 nav-tab-btn tw:px-6" data-target="nav-services">SERVICES</button>
-        <button type="button" class="tw:btn tw:btn-sm tw:bg-base-300 nav-tab-btn tw:px-6" data-target="nav-powercontrol">UTILITIES</button>
-    </div>
-
     <!-- Global Warnings -->
     {% if docker %}
     <div class="tw:alert tw:alert-warning tw:py-2 tw:text-sm">
@@ -38,12 +20,14 @@ var camera_id = {{ camera_id }};
     </div>
     {% endif %}
 
-    <div class="tw:card tw:bg-base-200 tw:shadow-sm">
-        <div class="tw:card-body tw:p-6">
-            
-            <!-- TAB: INFORMATION -->
-            <div id="nav-info" class="tab-content-panel active">
-                <div class="tw:flex tw:flex-col tw:gap-8">
+    <!-- Navigation Tabs - Using DaisyUI 5 Radio Pattern with tw: prefix -->
+    <div role="tablist" class="tw:tabs tw:tabs-boxed tw:bg-base-200 tw:p-1 tw:rounded-xl">
+        
+        <!-- TAB: INFORMATION -->
+        <input type="radio" name="system_tabs" id="nav-info-tab" role="tab" class="tw:tab tw:font-bold tw:uppercase tw:tracking-wider tw:text-[11px]" aria-label="Information" checked="checked" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:shadow-sm">
+                <div class="tw:card-body tw:p-6 tw:flex tw:flex-col tw:gap-8">
                     
                     <!-- Release Section -->
                     <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-4 tw:gap-4 tw:items-center">
@@ -181,7 +165,7 @@ var camera_id = {{ camera_id }};
                     <div class="tw:divider tw:my-0"></div>
 
                     <!-- Environment & Versions -->
-                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-8">
+                    <div class="allsky-workspace-grid tw:gap-8">
                         <div class="tw:flex tw:flex-col tw:gap-4">
                             <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Environment</span>
                             <div class="tw:grid tw:grid-cols-2 tw:gap-2 tw:bg-base-300/30 tw:p-4 tw:rounded-lg">
@@ -214,14 +198,15 @@ var camera_id = {{ camera_id }};
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+        </div>
 
-            <!-- TAB: TIME -->
-            <div id="nav-time" class="tab-content-panel">
-                <div class="tw:flex tw:flex-col tw:gap-8">
-                    
+        <!-- TAB: TIME -->
+        <input type="radio" name="system_tabs" id="nav-time-tab" role="tab" class="tw:tab tw:font-bold tw:uppercase tw:tracking-wider tw:text-[11px]" aria-label="Time" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:shadow-sm">
+                <div class="tw:card-body tw:p-6 tw:flex tw:flex-col tw:gap-8">
                     <div class="tw:grid tw:grid-cols-1 lg:tw:grid-cols-2 tw:gap-8">
                         <!-- Time Status -->
                         <div class="tw:flex tw:flex-col tw:gap-4">
@@ -269,11 +254,11 @@ var camera_id = {{ camera_id }};
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">{{ form_settime.NEW_DATETIME.label.text }}</span>
                                 </label>
                                 {{ form_settime.NEW_DATETIME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full') }}
-                                <div id="NEW_DATETIME-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="NEW_DATETIME-error" class="tw:text-error tw:text-[10px]" style="display: none;"></div>
                             </div>
                             <div class="lg:tw:col-span-4 tw:flex tw:gap-2">
                                 <button type="submit" class="tw:btn tw:btn-primary tw:btn-sm tw:h-11 tw:flex-1">Set Time</button>
-                                <div class="loader" id="loader_settime"></div>
+                                <span class="tw:loading tw:loading-spinner tw:loading-xs tw:text-primary" id="loader_settime" style="display: none;"></span>
                             </div>
                         </div>
                         <div id="form_settime_success-message" class="tw:alert tw:alert-success tw:py-2 tw:text-sm" style="display: none;"></div>
@@ -291,11 +276,11 @@ var camera_id = {{ camera_id }};
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">{{ form_timezone.NEW_TIMEZONE.label.text }}</span>
                                 </label>
                                 {{ form_timezone.NEW_TIMEZONE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:w-full') }}
-                                <div id="NEW_TIMEZONE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="NEW_TIMEZONE-error" class="tw:text-error tw:text-[10px]" style="display: none;"></div>
                             </div>
                             <div class="lg:tw:col-span-4 tw:flex tw:gap-2">
                                 <button type="submit" class="tw:btn tw:btn-primary tw:btn-sm tw:h-11 tw:flex-1">Update Timezone</button>
-                                <div class="loader" id="loader_timezone"></div>
+                                <span class="tw:loading tw:loading-spinner tw:loading-xs tw:text-primary" id="loader_timezone" style="display: none;"></span>
                             </div>
                         </div>
                         <div class="tw:alert tw:alert-info tw:py-2 tw:text-[10px] tw:rounded-md">
@@ -305,13 +290,15 @@ var camera_id = {{ camera_id }};
                         <div id="form_timezone_success-message" class="tw:alert tw:alert-success tw:py-2 tw:text-sm" style="display: none;"></div>
                         <div id="form_timezone_failure-message" class="tw:alert tw:alert-error tw:py-2 tw:text-sm" style="display: none;"></div>
                     </form>
-
                 </div>
             </div>
+        </div>
 
-            <!-- TAB: INDI DRIVERS -->
-            <div id="nav-indiserver" class="tab-content-panel">
-                <div class="tw:flex tw:flex-col tw:gap-6">
+        <!-- TAB: INDI DRIVERS -->
+        <input type="radio" name="system_tabs" id="nav-indiserver-tab" role="tab" class="tw:tab tw:font-bold tw:uppercase tw:tracking-wider tw:text-[11px]" aria-label="INDI Drivers" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:shadow-sm">
+                <div class="tw:card-body tw:p-6 tw:flex tw:flex-col tw:gap-6">
                     <p class="tw:text-sm tw:opacity-80">This page may be used to update the camera and GPS driver servers configured in the local indiserver.</p>
                     
                     <div class="tw:flex tw:flex-col tw:gap-2">
@@ -369,10 +356,13 @@ var camera_id = {{ camera_id }};
                     </form>
                 </div>
             </div>
+        </div>
 
-            <!-- TAB: SERVICES -->
-            <div id="nav-services" class="tab-content-panel">
-                <div class="tw:flex tw:flex-col tw:gap-2">
+        <!-- TAB: SERVICES -->
+        <input type="radio" name="system_tabs" id="nav-services-tab" role="tab" class="tw:tab tw:font-bold tw:uppercase tw:tracking-wider tw:text-[11px]" aria-label="Services" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:shadow-sm">
+                <div class="tw:card-body tw:p-6 tw:flex tw:flex-col tw:gap-2">
                     <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60 tw:mb-4">Service Management</span>
                     
                     <!-- indiserver -->
@@ -452,10 +442,13 @@ var camera_id = {{ camera_id }};
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- TAB: UTILITIES -->
-            <div id="nav-powercontrol" class="tab-content-panel">
-                <div class="tw:flex tw:flex-col tw:gap-8">
+        <!-- TAB: UTILITIES -->
+        <input type="radio" name="system_tabs" id="nav-powercontrol-tab" role="tab" class="tw:tab tw:font-bold tw:uppercase tw:tracking-wider tw:text-[11px]" aria-label="Utilities" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="tw:card tw:bg-base-200 tw:border tw:border-base-300 tw:shadow-sm">
+                <div class="tw:card-body tw:p-6 tw:flex tw:flex-col tw:gap-8">
                     
                     <!-- System Controls -->
                     <div class="tw:flex tw:flex-col tw:gap-4">
@@ -566,11 +559,11 @@ var camera_id = {{ camera_id }};
                             <span class="tw:text-lg tw:font-black tw:uppercase tw:tracking-widest">Danger Zone</span>
                         </div>
                         <p class="tw:text-xs tw:opacity-70">These actions are irreversible. Files will be permanently deleted from the system.</p>
-                        <div class="loader" id="loader_shutdown"></div>
+                        <span class="tw:loading tw:loading-spinner tw:loading-md tw:text-error" id="loader_shutdown" style="display: none;"></span>
 
                         <div class="tw:grid tw:grid-cols-1 lg:tw:grid-cols-2 tw:gap-4">
                             <!-- Flush Images -->
-                            <div class="tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
+                            <div class="tw:card tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
                                 <span class="tw:text-xs tw:font-bold">Flush Images</span>
                                 <div class="tw:flex tw:gap-3 tw:items-center">
                                     <input class="tw:checkbox tw:checkbox-xs" id="FLUSH_IMAGES_CONFIRM1" type="checkbox">
@@ -579,7 +572,7 @@ var camera_id = {{ camera_id }};
                                 </div>
                             </div>
                             <!-- Flush Timelapses -->
-                            <div class="tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
+                            <div class="tw:card tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
                                 <span class="tw:text-xs tw:font-bold">Flush Timelapses / Keograms / Startrails</span>
                                 <div class="tw:flex tw:gap-3 tw:items-center">
                                     <input class="tw:checkbox tw:checkbox-xs" id="FLUSH_TIMELAPSES_CONFIRM1" type="checkbox">
@@ -588,7 +581,7 @@ var camera_id = {{ camera_id }};
                                 </div>
                             </div>
                             <!-- Flush Daytime -->
-                            <div class="tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
+                            <div class="tw:card tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
                                 <span class="tw:text-xs tw:font-bold">Flush Daytime Content</span>
                                 <div class="tw:flex tw:gap-3 tw:items-center">
                                     <input class="tw:checkbox tw:checkbox-xs" id="FLUSH_DAYTIME_CONFIRM1" type="checkbox">
@@ -597,7 +590,7 @@ var camera_id = {{ camera_id }};
                                 </div>
                             </div>
                             <!-- Flush 16min -->
-                            <div class="tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
+                            <div class="tw:card tw:bg-base-200 tw:p-4 tw:rounded-lg tw:flex tw:flex-col tw:gap-3">
                                 <span class="tw:text-xs tw:font-bold">Flush Recent (16min)</span>
                                 <div class="tw:flex tw:gap-3 tw:items-center">
                                     <input class="tw:checkbox tw:checkbox-xs" id="FLUSH_16MIN_IMAGES_CONFIRM1" type="checkbox">
@@ -609,8 +602,8 @@ var camera_id = {{ camera_id }};
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <!-- Global Feedback -->
@@ -623,14 +616,6 @@ var camera_id = {{ camera_id }};
 </div>
 
 <script type="text/javascript">
-
-// TAB SWITCHER
-$('.nav-tab-btn').on('click', function() {
-    $('.nav-tab-btn').removeClass('tw:btn-primary').addClass('tw:bg-base-300');
-    $(this).removeClass('tw:bg-base-300').addClass('tw:btn-primary');
-    $('.tab-content-panel').removeClass('active');
-    $('#' + $(this).data('target')).addClass('active');
-});
 
 const successMessage = $('#success-message');
 const failureMessage = $('#failure-message');
@@ -885,6 +870,26 @@ $(document).ready(function() {
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     $('#NEW_DATETIME').val(now.toISOString().slice(0, 19));
+
+    // Handle hash-based tab activation for DaisyUI radio tabs
+    function activateTabFromHash() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tabId = hash.replace('#', '');
+            const $tab = $(`#nav-${tabId}-tab`);
+            if ($tab.length) {
+                $tab.prop('checked', true);
+            }
+        }
+    }
+    activateTabFromHash();
+    window.addEventListener('hashchange', activateTabFromHash);
+
+    // Update hash when switching tabs
+    $('input[name="system_tabs"]').on('change', function() {
+        const tabId = $(this).attr('id').replace('nav-', '').replace('-tab', '');
+        history.replaceState(null, '', '#' + tabId);
+    });
 
     setTimeout(reloadPage, 300000);
 });

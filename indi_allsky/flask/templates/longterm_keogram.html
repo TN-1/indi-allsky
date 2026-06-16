@@ -63,7 +63,7 @@ function showImage(image_b64, image_uri) {
             }).html(
                 $('<span />', {
                     'text'  : 'Download',
-                    'class' : "badge pill bg-info text-dark",
+                    'class' : "tw:badge tw:badge-info tw:text-info-content",
                 })
             )
         );
@@ -147,12 +147,12 @@ function closeFullscreen() {
 
                 <div class="tw:flex tw:items-center tw:gap-2">
                     {{ form_longterm_keogram.REVERSE.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
-                    {{ form_longterm_keogram.REVERSE(class='toggle toggle-primary toggle-sm') }}
+                    {{ form_longterm_keogram.REVERSE(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
                 </div>
 
                 <div class="tw:flex tw:items-center tw:gap-2">
                     {{ form_longterm_keogram.LABEL.label(class='tw:label-text tw:font-semibold tw:whitespace-nowrap') }}
-                    {{ form_longterm_keogram.LABEL(class='toggle toggle-primary toggle-sm') }}
+                    {{ form_longterm_keogram.LABEL(class='tw:toggle tw:toggle-primary tw:toggle-sm') }}
                 </div>
 
                 <div class="tw:flex tw:items-center tw:gap-3 tw:ml-auto">
@@ -313,9 +313,9 @@ $('#form_longterm_keogram').on('submit', function() {
     }
 
 
-    $("#generate-button").attr("class", "btn btn-primary");
+    $("#generate-button").attr("class", "tw:btn tw:btn-neutral");
     $("#generate-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Loading</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Generation processing...'
     );
 
     $.ajax({
@@ -326,10 +326,8 @@ $('#form_longterm_keogram').on('submit', function() {
         success: function(rdata){
             json_data = rdata;
 
-            $("#generate-button").attr("class", "btn btn-success");
-            $("#generate-button").html(
-              'Generate'
-            );
+            $("#generate-button").attr("class", "tw:btn tw:btn-success tw:btn-sm");
+            $("#generate-button").html('Generate');
 
             showImage(json_data['image_b64'], keogram_uri);
 
@@ -341,41 +339,27 @@ $('#form_longterm_keogram').on('submit', function() {
                 }).html(
                     $('<span />', {
                         'text'  : 'Download',
-                        'class' : "badge pill bg-info text-dark",
+                        'class' : "tw:badge tw:badge-info tw:text-info-content",
                     })
                 )
             );
 
             $('#processing_time').text('Processed in ' + json_data['processing_time'] + 's');
 
-            $('#success_message').html(json_data['success-message']);
-            $('#success_message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success_message').css({'display' : 'none'});
-            }, 15000);
+            $('#success_message').html(json_data['success-message']).show();
+            setTimeout(function() { $('#success_message').fadeOut(); }, 15000);
 
             // Also show errors
-            $('#failure_message').html(json_data['failure-message']);
-            $('#failure_message').css({'display' : 'block'});
-
-            setTimeout(function() {
-                $('#failure_message').css({'display' : 'none'});
-            }, 30000);
+            $('#failure_message').html(json_data['failure-message']).show();
+            setTimeout(function() { $('#failure_message').fadeOut(); }, 30000);
         },
         error: function(rdata){
-            $("#generate-button").attr("class", "btn btn-success");
-            $("#generate-button").html(
-              'Generate'
-            );
+            $("#generate-button").attr("class", "tw:btn tw:btn-success tw:btn-sm");
+            $("#generate-button").html('Generate');
 
             var errors = JSON.parse(rdata.responseText);
-
-            $('#failure_message').html(errors['failure-message']);
-            $('#failure_message').css({'display' : 'block'});
-
-            setTimeout(function() {
-                $('#failure_message').css({'display' : 'none'});
-            }, 15000);
+            $('#failure_message').html(errors['failure-message']).show();
+            setTimeout(function() { $('#failure_message').fadeOut(); }, 15000);
         },
     });
 

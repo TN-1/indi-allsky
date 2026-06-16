@@ -96,11 +96,11 @@ function loadJS(url, data, onDone, onError) {
         contentType: "application/json",
         data: data,
         success: function(rdata){
-            json_data = rdata
+            json_data = rdata
             $('#message').html(json_data['latest_image']['message']);
         },
         error: function(rdata){
-            onError(rdata.status);
+            onError(rdata.status);
             $('#message').html('Error loading data.  Please check the logs.');
         },
     });
@@ -189,4 +189,5 @@ $( document ).ready(function() {
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -24,22 +24,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-.loader {
-  display: block;
-  border: 3px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
 <link rel="stylesheet" href="{{ url_for('indi_allsky.static', filename='astropanel/css/style.css') }}">
 
 <script type="text/javascript">
@@ -325,6 +309,27 @@ function populateData() {
 
 $( document ).ready(function() {
     init();
+
+    // Handle hash-based tab activation for DaisyUI radio tabs
+    function activateTabFromHash() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tabId = hash.replace('#', '');
+            const $tab = $(`#nav-${tabId}-tab`);
+            if ($tab.length) {
+                $tab.prop('checked', true);
+            }
+        }
+    }
+
+    activateTabFromHash();
+    window.addEventListener('hashchange', activateTabFromHash);
+
+    // Update hash when switching tabs
+    $('input[name="astro_tabs"]').on('change', function() {
+        const tabId = $(this).attr('id').replace('nav-', '').replace('-tab', '');
+        history.replaceState(null, '', '#' + tabId);
+    });
 });
 
 </script>
@@ -353,6 +358,7 @@ $( document ).ready(function() {
         background: transparent !important;
         border: none !important;
         padding-left: 1.25rem !important;
+        white-space: nowrap;
     }
     
     /* The cute indicator dot base styling */
@@ -387,35 +393,29 @@ $( document ).ready(function() {
         transform: translateY(-50%) scale(1.2);
     }
 
-    /* Bootstrap active state handling for modern text tabs */
-    .astropanel-text-tab.active {
+    /* DaisyUI Radio Tab checked state handling */
+    .astropanel-text-tab:checked {
         color: oklch(var(--bc)) !important;
         opacity: 1 !important;
         font-weight: 800;
+        --tab-border-color: oklch(var(--bc) / 0.2);
     }
-    .astropanel-text-tab.active::before {
+    .astropanel-text-tab:checked::before {
         opacity: 1 !important;
         transform: translateY(-50%) scale(1.2);
     }
 
-    /* Force horizontal display on large screens, fallback to stacked on mobile */
-    .astro-split-row {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+    /* Responsive workspace grid override */
+    .allsky-workspace-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
-        .astro-split-row {
-            flex-direction: row !important;
-            align-items: stretch !important;
-        }
-        .astro-split-left {
-            width: 40% !important;
-            flex-shrink: 0;
-        }
-        .astro-split-right {
-            width: 60% !important;
-            flex-grow: 1;
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 3fr !important;
+            align-items: start !important;
         }
     }
 
@@ -437,6 +437,7 @@ $( document ).ready(function() {
 
 <div class="tw:container tw:mx-auto tw:flex tw:flex-col tw:gap-6 astropanel-wrapper">
 
+    <!-- Header Area -->
     <div class="tw:w-full tw:bg-base-200 tw:p-5 tw:rounded-2xl tw:flex tw:items-center tw:justify-between tw:border tw:border-base-300">
         <div>
             <h1 class="tw:text-lg tw:font-black tw:uppercase tw:tracking-[0.2em] tw:text-base-content tw:m-0">Astropanel</h1>
@@ -444,50 +445,30 @@ $( document ).ready(function() {
         </div>
         <div class="tw:flex tw:items-center tw:gap-3">
             <span class="tw:text-[10px] tw:font-mono tw:text-base-content/30 tw:uppercase">Live Telemetry</span>
-            <span class="loader" id="loader_data"></span>
+            <span id="loader_data" class="loading loading-spinner loading-xs tw:text-primary" style="display: none;"></span>
         </div>
     </div>
 
-    <div class="tw:w-full tw:border-b tw:border-base-300/60 tw:pb-2">
-        <div class="tw:flex tw:flex-wrap tw:gap-8 tw:px-2" id="nav-tab" role="tablist">
-            <button class="astropanel-text-tab active tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:py-2" 
-                    id="nav-polaris-tab" data-bs-toggle="tab" data-bs-target="#nav-polaris" type="button" role="tab" aria-controls="nav-polaris" aria-selected="true">
-                <span class="tw:text-error tw:mr-1.5">●</span> Polar Finder
-            </button>
-            <button class="astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:py-2" 
-                    id="nav-moon-tab" data-bs-toggle="tab" data-bs-target="#nav-moon" type="button" role="tab" aria-controls="nav-moon" aria-selected="false">
-                <span class="tw:text-base-content/70 tw:mr-1.5">●</span> Moon
-            </button>
-            <button class="astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:py-2" 
-                    id="nav-sun-tab" data-bs-toggle="tab" data-bs-target="#nav-sun" type="button" role="tab" aria-controls="nav-sun" aria-selected="false">
-                <span class="tw:text-warning tw:mr-1.5">●</span> Sun
-            </button>
-            <button class="astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:py-2" 
-                    id="nav-planets-tab" data-bs-toggle="tab" data-bs-target="#nav-planets" type="button" role="tab" aria-controls="nav-planets" aria-selected="false">
-                <span class="tw:text-info tw:mr-1.5">●</span> Solar System
-            </button>
-            <button class="astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:py-2" 
-                    id="nav-satellites-tab" data-bs-toggle="tab" data-bs-target="#nav-satellites" type="button" role="tab" aria-controls="nav-satellites" aria-selected="false">
-                <span class="tw:text-success tw:mr-1.5">●</span> Satellites
-            </button>
-        </div>
-    </div>
-
-    <div class="tab-content" id="nav-tabContent">
-
-        <div class="tab-pane fade show active" id="nav-polaris" role="tabpanel" aria-labelledby="nav-polaris-tab">
-            <div class="astro-split-row">
-                <div class="astro-split-left tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-4 shadow-sm">
+    <!-- Main Navigation & Content Area -->
+    <div role="tablist" class="tw:tabs tw:tabs-bordered tw:w-full">
+        
+        <!-- Polar Finder Tab -->
+        <input type="radio" name="astro_tabs" id="nav-polaris-tab" role="tab" 
+               class="tw:tab astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:h-12" 
+               aria-label="Polar Finder" checked="checked" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="allsky-workspace-grid">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-4 shadow-sm">
                     <div class="reticle-container">
                         <img id="polaris_marker" src="{{ url_for('indi_allsky.static', filename='astropanel/img/polaris.png') }}" alt="Polar Finder" class="tw:w-full tw:h-full">
                     </div>
                     <p class="tw:text-[10px] tw:text-base-content/40 tw:font-mono tw:uppercase tw:tracking-[0.2em] tw:m-0">View: Polaris Scope Reticle</p>
                 </div>
-                <div class="astro-split-right tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
                     <div class="tw:bg-base-300/40 tw:px-5 tw:py-4 tw:border-b tw:border-base-300">
                         <h2 class="tw:text-xs tw:font-black tw:uppercase tw:tracking-widest tw:text-primary m-0">Alignment Vectors</h2>
                     </div>
-                    <table class="table table-sm tw:w-full tw:m-0">
+                    <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                         <tbody class="tw:divide-y tw:divide-base-300/20">
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-4 tw:text-xs tw:font-bold tw:text-base-content/50 tw:uppercase">Hour Angle</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-sm tw:font-bold tw:text-base-content"><span id="pha"></span></td></tr>
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-3 tw:text-xs tw:font-semibold tw:text-base-content/40">Next Transit</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-xs"><span id="polaris_next_transit"></span></td></tr>
@@ -501,19 +482,23 @@ $( document ).ready(function() {
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-moon" role="tabpanel" aria-labelledby="nav-moon-tab">
-            <div class="astro-split-row">
-                <div class="astro-split-left tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-4 shadow-sm">
+        <!-- Moon Tab -->
+        <input type="radio" name="astro_tabs" id="nav-moon-tab" role="tab" 
+               class="tw:tab astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:h-12" 
+               aria-label="Moon" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="allsky-workspace-grid">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-4 shadow-sm">
                     <img src="{{ url_for('indi_allsky.static', filename='astropanel/img/moon_rot.png') }}" alt="Moon" class="tw:w-44 tw:h-44 tw:opacity-95 tw:drop-shadow-2xl">
                     <div class="tw:text-center tw:mt-2">
                         <span id="moon_phase" class="tw:badge tw:badge-outline tw:badge-primary tw:font-black tw:tracking-widest tw:uppercase tw:px-5 tw:text-xs">&nbsp;</span>
                     </div>
                 </div>
-                <div class="astro-split-right tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
                     <div class="tw:bg-base-300/40 tw:px-5 tw:py-4 tw:border-b tw:border-base-300">
                         <h4 class="tw:text-xs tw:font-black tw:uppercase tw:tracking-widest tw:text-info m-0">Lunar Ephemeris</h4>
                     </div>
-                    <table class="table table-sm tw:w-full tw:m-0">
+                    <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                         <tbody class="tw:divide-y tw:divide-base-300/20">
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-3 tw:text-xs tw:font-bold tw:text-base-content/40 tw:uppercase">Horizon</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-xs tw:font-bold"><span id="moon_rise" class="tw:text-success">↑ Rise</span>&nbsp;&nbsp;&nbsp;<span id="moon_set" class="tw:text-error">↓ Set</span></td></tr>
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-3 tw:text-xs tw:font-semibold tw:text-base-content/40">Transit</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-xs"><span id="moon_transit"></span></td></tr>
@@ -528,19 +513,23 @@ $( document ).ready(function() {
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-sun" role="tabpanel" aria-labelledby="nav-sun-tab">
-            <div class="astro-split-row">
-                <div class="astro-split-left tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center shadow-sm">
+        <!-- Sun Tab -->
+        <input type="radio" name="astro_tabs" id="nav-sun-tab" role="tab" 
+               class="tw:tab astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:h-12" 
+               aria-label="Sun" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
+            <div class="allsky-workspace-grid">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center shadow-sm">
                     <img src="{{ url_for('indi_allsky.static', filename='astropanel/img/sun.png') }}" alt="Sun" class="tw:w-44 tw:h-44 tw:animate-[spin_240s_linear_infinite] tw:drop-shadow-[0_0_35px_rgba(255,165,0,0.15)]">
                     <div class="tw:text-center tw:mt-4">
                         <h2 class="tw:text-sm tw:font-black tw:text-base-content tw:uppercase tw:tracking-[0.3em] tw:m-0">Solar Core</h2>
                     </div>
                 </div>
-                <div class="astro-split-right tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
+                <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
                     <div class="tw:bg-base-300/40 tw:px-5 tw:py-4 tw:border-b tw:border-base-300">
                         <h4 class="tw:text-xs tw:font-black tw:uppercase tw:tracking-widest tw:text-warning m-0">Twilight Horizons</h4>
                     </div>
-                    <table class="table table-sm tw:w-full tw:m-0">
+                    <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                         <tbody class="tw:divide-y tw:divide-base-300/20">
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-2 tw:text-xs tw:font-semibold tw:text-base-content/40">Astro Twilight Start</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-xs tw:text-info"><span id="sun_at_start"></span></td></tr>
                             <tr class="hover:tw:bg-base-300/20 tw:transition-colors"><td class="tw:pl-5 tw:py-2 tw:text-xs tw:font-bold tw:text-base-content/40 tw:uppercase">Sunrise</td><td class="tw:text-end tw:pr-5 tw:font-mono tw:text-xs tw:text-success tw:font-black"><span id="sun_rise"></span></td></tr>
@@ -555,9 +544,12 @@ $( document ).ready(function() {
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-planets" role="tabpanel" aria-labelledby="nav-planets-tab">
+        <!-- Solar System Tab -->
+        <input type="radio" name="astro_tabs" id="nav-planets-tab" role="tab" 
+               class="tw:tab astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:h-12" 
+               aria-label="Solar System" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
             <div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
-                
                 <div class="tw:w-full tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:p-6 tw:flex tw:flex-col tw:items-center tw:justify-center shadow-sm">
                     <img src="{{ url_for('indi_allsky.static', filename='astropanel/img/solar_system.png') }}" alt="Solar System" class="tw:h-44 tw:opacity-85 tw:drop-shadow-2xl">
                 </div>
@@ -566,7 +558,7 @@ $( document ).ready(function() {
                     <div class="tw:bg-base-300/40 tw:px-5 tw:py-4 tw:border-b tw:border-base-300">
                         <h2 class="tw:text-xs tw:font-black tw:uppercase tw:tracking-widest tw:text-info m-0">Planetary Ephemeris Matrix</h2>
                     </div>
-                    <table class="table table-sm tw:w-full tw:m-0">
+                    <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                         <thead>
                             <tr class="tw:border-b tw:border-base-300 tw:bg-base-300/20 tw:text-[10px] tw:uppercase tw:tracking-widest tw:text-base-content/40">
                                 <th class="tw:pl-5 tw:py-4">Target Body</th>
@@ -591,21 +583,25 @@ $( document ).ready(function() {
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-satellites" role="tabpanel" aria-labelledby="nav-satellites-tab">
+        <!-- Satellites Tab -->
+        <input type="radio" name="astro_tabs" id="nav-satellites-tab" role="tab" 
+               class="tw:tab astropanel-text-tab tw:text-sm tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:h-12" 
+               aria-label="Satellites" />
+        <div role="tabpanel" class="tw:tab-content tw:py-6">
             <div class="tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-2xl tw:overflow-hidden shadow-sm">
                 <div class="tw:bg-base-300/40 tw:px-5 tw:py-4 tw:border-b tw:border-base-300">
                     <h2 class="tw:text-xs tw:font-black tw:uppercase tw:tracking-widest tw:text-success m-0">Low Earth Satellites</h2>
                 </div>
-                <table id="satellites-table" class="table table-sm tw:w-full tw:m-0"></table>
+                <table id="satellites-table" class="tw:table tw:table-xs tw:w-full tw:m-0"></table>
             </div>
         </div>
 
     </div>
 
+    <!-- Footer Copyright -->
     <div class="tw:w-full tw:text-center tw:mt-4 tw:opacity-15">
         <span class="tw:text-[9px] tw:font-mono tw:uppercase tw:tracking-[0.5em]">&#169; Radek Kaczorek</span>
     </div>
@@ -613,4 +609,3 @@ $( document ).ready(function() {
 </div>
 
 {% endblock %}
-

@@ -5,17 +5,6 @@
 {% block head %}
 <meta charset="UTF-8">
 <style>
-#nav-drives-tab, #nav-mounts-tab {
-	width: 150px;
-	margin-top: 10px;
-	margin-right: 5px;
-	height: 50px;
-}
-
-.inline {
-   display: inline;
-}
-
 #drive-loader {
   display: block;
 }
@@ -52,7 +41,7 @@ var camera_id = {{ camera_id }};
         <div class="tw:card-body tw:p-0">
             
             <div role="tablist" class="tw:tabs tw:tabs-boxed tw:bg-base-300 tw:rounded-b-none tw:p-2">
-                <input type="radio" name="drives_tabs" role="tab" class="tw:tab" aria-label="Drives" checked />
+                <input type="radio" name="drives_tabs" role="tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase" aria-label="Drives" checked />
                 <div role="tabpanel" class="tw:tab-content tw:p-6 tw:bg-base-200 tw:border-t-0">
                     <form id="form_drives" onSubmit="return false;" autocomplete="off">
                         
@@ -77,7 +66,7 @@ var camera_id = {{ camera_id }};
                     </form>
                 </div>
 
-                <input type="radio" name="drives_tabs" role="tab" class="tw:tab" aria-label="Mounts" />
+                <input type="radio" name="drives_tabs" role="tab" class="tw:tab tw:text-xs tw:font-bold tw:uppercase" aria-label="Mounts" />
                 <div role="tabpanel" class="tw:tab-content tw:p-6 tw:bg-base-200 tw:border-t-0">
                     <div class="tw:flex tw:flex-wrap tw:items-end tw:gap-4">
                         <div class="tw:form-control tw:flex-1">
@@ -134,8 +123,8 @@ function updateDriveInfo(rdata) {
 
 
 function showDrive() {
-    $('#success-message').css({'display' : 'none'});
-    $('#failure-message').css({'display' : 'none'});
+    $('#success-message').hide();
+    $('#failure-message').hide();
 
     $("#DRIVE_CONFIRM1").prop('checked', false);
 
@@ -144,7 +133,7 @@ function showDrive() {
     }
 
 
-    $('#drive-loader').css({'display' : 'block'});
+    $('#drive-loader').show();
 
 
     var json_data = {
@@ -159,27 +148,11 @@ function showDrive() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $('#drive-loader').css({'display' : 'none'});
-
+            $('#drive-loader').hide();
             updateDriveInfo(rdata);
-            //$('#success-message').html(rdata['success-message']);
-            //$('#success-message').css({'display' : 'block'});
-            //setTimeout(function() {
-            //    $('#success-message').css({'display' : 'none'});
-            //}, 15000);
         },
         error: function(rdata){
-            $('#drive-loader').css({'display' : 'none'});
-
-            //$("#activate-button").attr("class", "btn btn-danger");
-            //$("#activate-button").html(
-            //  'Activate'
-            //);
-
-            //var errors = JSON.parse(rdata.responseText);
-
-            //$('#failure-message').html(errors['failure-message']);
-            //$('#failure-message').css({'display' : 'block'});
+            $('#drive-loader').hide();
         },
     });
 }
@@ -190,8 +163,8 @@ $('#DRIVES_SELECT').on('change', function() {
 
 
 $('#poweroff-button').on('click', function() {
-    $('#success-message').css({'display' : 'none'});
-    $('#failure-message').css({'display' : 'none'});
+    $('#success-message').hide();
+    $('#failure-message').hide();
 
 
     if (! $("#DRIVE_CONFIRM1").prop('checked')) {
@@ -205,9 +178,9 @@ $('#poweroff-button').on('click', function() {
         return;
     }
 
-    $("#poweroff-button").attr("class", "btn btn-dark text-danger");
+    $("#poweroff-button").attr("class", "tw:btn tw:btn-sm tw:btn-neutral tw:text-error");
     $("#poweroff-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Power Off</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Power Off'
     );
 
 
@@ -223,35 +196,27 @@ $('#poweroff-button').on('click', function() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $("#poweroff-button").html(
-              'Power Off'
-            );
+            $("#poweroff-button").attr("class", "tw:btn tw:btn-sm tw:btn-error tw:btn-outline tw:rounded-lg");
+            $("#poweroff-button").html('Power Off');
 
-            $('#success-message').html(rdata['success-message']);
-            $('#success-message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success-message').css({'display' : 'none'});
-            }, 15000);
+            $('#success-message').html(rdata['success-message']).show();
+            setTimeout(function() { $('#success-message').fadeOut(); }, 15000);
 
         },
         error: function(rdata){
-            $("#poweroff-button").attr("class", "btn btn-danger");
-            $("#poweroff-button").html(
-              'Power Off'
-            );
+            $("#poweroff-button").attr("class", "tw:btn tw:btn-sm tw:btn-error tw:rounded-lg");
+            $("#poweroff-button").html('Power Off');
 
             var errors = JSON.parse(rdata.responseText);
-
-            $('#failure-message').html(errors['failure-message']);
-            $('#failure-message').css({'display' : 'block'});
+            $('#failure-message').html(errors['failure-message']).show();
         },
     });
 });
 
 
 $('#unmount-button').on('click', function() {
-    $('#success-message').css({'display' : 'none'});
-    $('#failure-message').css({'display' : 'none'});
+    $('#success-message').hide();
+    $('#failure-message').hide();
 
 
     if (! $("#DEVICE_CONFIRM1").prop('checked')) {
@@ -265,9 +230,9 @@ $('#unmount-button').on('click', function() {
         return;
     }
 
-    $("#unmount-button").attr("class", "btn btn-warning");
+    $("#unmount-button").attr("class", "tw:btn tw:btn-sm tw:btn-warning");
     $("#unmount-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Unmount</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Unmount'
     );
 
 
@@ -283,35 +248,27 @@ $('#unmount-button').on('click', function() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $("#unmount-button").html(
-              'Unmount'
-            );
+            $("#unmount-button").attr("class", "tw:btn tw:btn-sm tw:btn-warning tw:btn-outline tw:rounded-lg");
+            $("#unmount-button").html('Unmount');
 
-            $('#success-message').html(rdata['success-message']);
-            $('#success-message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success-message').css({'display' : 'none'});
-            }, 15000);
+            $('#success-message').html(rdata['success-message']).show();
+            setTimeout(function() { $('#success-message').fadeOut(); }, 15000);
 
         },
         error: function(rdata){
-            $("#unmount-button").attr("class", "btn btn-danger");
-            $("#unmount-button").html(
-              'Unmount'
-            );
+            $("#unmount-button").attr("class", "tw:btn tw:btn-sm tw:btn-error tw:rounded-lg");
+            $("#unmount-button").html('Unmount');
 
             var errors = JSON.parse(rdata.responseText);
-
-            $('#failure-message').html(errors['failure-message']);
-            $('#failure-message').css({'display' : 'block'});
+            $('#failure-message').html(errors['failure-message']).show();
         },
     });
 });
 
 
 $('#mount-button').on('click', function() {
-    $('#success-message').css({'display' : 'none'});
-    $('#failure-message').css({'display' : 'none'});
+    $('#success-message').hide();
+    $('#failure-message').hide();
 
 
     if (! $("#DEVICE_CONFIRM1").prop('checked')) {
@@ -325,9 +282,9 @@ $('#mount-button').on('click', function() {
         return;
     }
 
-    $("#mount-button").attr("class", "btn btn-success");
+    $("#mount-button").attr("class", "tw:btn tw:btn-sm tw:btn-success");
     $("#mount-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Mount</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Mount'
     );
 
 
@@ -343,27 +300,19 @@ $('#mount-button').on('click', function() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $("#mount-button").html(
-              'Mount'
-            );
+            $("#mount-button").attr("class", "tw:btn tw:btn-sm tw:btn-success tw:btn-outline tw:rounded-lg");
+            $("#mount-button").html('Mount');
 
-            $('#success-message').html(rdata['success-message']);
-            $('#success-message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success-message').css({'display' : 'none'});
-            }, 15000);
+            $('#success-message').html(rdata['success-message']).show();
+            setTimeout(function() { $('#success-message').fadeOut(); }, 15000);
 
         },
         error: function(rdata){
-            $("#mount-button").attr("class", "btn btn-danger");
-            $("#mount-button").html(
-              'Mount'
-            );
+            $("#mount-button").attr("class", "tw:btn tw:btn-sm tw:btn-error tw:rounded-lg");
+            $("#mount-button").html('Mount');
 
             var errors = JSON.parse(rdata.responseText);
-
-            $('#failure-message').html(errors['failure-message']);
-            $('#failure-message').css({'display' : 'block'});
+            $('#failure-message').html(errors['failure-message']).show();
         },
     });
 });

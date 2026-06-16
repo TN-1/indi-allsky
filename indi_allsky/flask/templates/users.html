@@ -41,48 +41,48 @@ var camera_id = {{ camera_id }};
     <div class="allsky-workspace-grid tw:w-full tw:grow">
         
         <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10 tw:overflow-x-auto">
-            <table id="users-table" class="table table-striped compact tw:table tw:table-xs tw:w-full" data-bs-theme="dark">
+            <table id="users-table" class="tw:table tw:table-sm tw:table-pin-rows tw:w-full">
                 <thead>
-                    <tr class="tw:border-b tw:border-base-content/10">
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Create Date</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Username</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Name</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Active</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Staff</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Admin</th>
+                    <tr class="tw:border-b tw:border-base-content/10 tw:bg-base-300/60 tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/50">
+                        <th class="tw:py-3.5 tw:px-4">Create Date</th>
+                        <th class="tw:py-3.5">Username</th>
+                        <th class="tw:py-3.5">Name</th>
+                        <th class="tw:py-3.5">Active</th>
+                        <th class="tw:py-3.5">Staff</th>
+                        <th class="tw:py-3.5 tw:px-4">Admin</th>
                     </tr>
                 </thead>
-                <tbody class="tw:divide-y tw:divide-base-content/5">
+                <tbody class="tw:text-xs tw:divide-y tw:divide-base-content/5">
                     {% for user in user_list %}
-                    <tr class="tw:hover:bg-base-300/40 tw:transition-colors">
-                        <td class="tw:whitespace-nowrap tw:font-mono tw:text-base-content/80">
+                    <tr class="tw:hover:bg-base-300/30 tw:transition-colors tw:duration-150">
+                        <td class="tw:py-3 tw:px-4 tw:whitespace-nowrap tw:font-mono tw:text-base-content/70">
                             {{ user.createDate.strftime('%Y-%m-%d %H:%M:%S') }}
                         </td>
-                        <td class="tw:font-semibold tw:text-base-content">
+                        <td class="tw:py-3 tw:font-semibold tw:text-base-content">
                             {{ user.username }}
                         </td>
-                        <td class="tw:text-base-content/90">
+                        <td class="tw:py-3 tw:text-base-content/90">
                             {{ user.name }}
                         </td>
-                        <td>
+                        <td class="tw:py-3">
                             {% if user.active %}
                                 <span class="tw:badge tw:badge-success tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">True</span>
                             {% else %}
-                                <span class="tw:badge tw:badge-ghost tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
+                                <span class="tw:badge tw:badge-neutral tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="tw:py-3">
                             {% if user.staff %}
                                 <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">True</span>
                             {% else %}
-                                <span class="tw:badge tw:badge-ghost tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
+                                <span class="tw:badge tw:badge-neutral tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="tw:py-3 tw:px-4">
                             {% if user.admin %}
                                 <span class="tw:badge tw:badge-primary tw:text-[10px] tw:font-bold tw:uppercase">True</span>
                             {% else %}
-                                <span class="tw:badge tw:badge-ghost tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
+                                <span class="tw:badge tw:badge-neutral tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">False</span>
                             {% endif %}
                         </td>
                     </tr>

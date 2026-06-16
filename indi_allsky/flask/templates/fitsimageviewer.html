@@ -5,21 +5,6 @@
 {% block head %}
 <meta charset="UTF-8">
 <style>
-.loader {
-  display: block;
-  border: 3px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .fit {
     max-width: 100%;
     max-height: 80vh;
@@ -148,6 +133,10 @@ function closeFullscreen() {
                 </div>
             </div>
 
+            <div class="tw:flex tw:items-center tw:ml-auto">
+                <span id="loader_filter" class="tw:loading tw:loading-spinner tw:loading-xs tw:text-primary" style="display: none;"></span>
+            </div>
+
         </div>
 
         <div id="success-message" class="tw:text-success tw:text-sm tw:font-medium tw:text-center tw:mt-3" style="display: none;"></div>
@@ -225,9 +214,9 @@ fields['form_global'] = {
 
 $("#IMG_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
 
@@ -274,13 +263,13 @@ function hour_change(json_data) {
             img.src = fields['IMG_SELECT'].input.val();
 
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -289,12 +278,12 @@ function hour_change(json_data) {
 
 $("#HOUR_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -329,13 +318,13 @@ function day_change(json_data) {
 
             img.src = fields['IMG_SELECT'].input.val();
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -344,12 +333,12 @@ function day_change(json_data) {
 
 $("#DAY_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -388,13 +377,13 @@ function month_change(json_data) {
 
             img.src = fields['IMG_SELECT'].input.val();
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -403,12 +392,12 @@ function month_change(json_data) {
 
 $("#MONTH_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -451,13 +440,13 @@ function year_change(json_data) {
 
             img.src = fields['IMG_SELECT'].input.val();
 
-            $("#loader_filter").css({'display' : 'none'});
+            $("#loader_filter").hide();
         },
         error: function(rdata){
-            Object.keys(rdata).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key][0]);
-                fields[key].error.css({'display' : 'block'});
+            var errors = JSON.parse(rdata.responseText);
+            Object.keys(errors).forEach((key) => {
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key][0]).show();
             });
         },
     });
@@ -466,12 +455,12 @@ function year_change(json_data) {
 
 $("#YEAR_SELECT").on("change", function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
     });
 
-    $("#loader_filter").css({'display' : 'block'});
+    $("#loader_filter").show();
 
     var json_data = {
         'CAMERA_ID'         : fields["CAMERA_ID"].input.val(),
@@ -512,12 +501,12 @@ function init() {
                     $('<a />', {
                         'href'   : image_data[image_index]['fits'],
                         'rel'    : 'noopener noreferrer',
-                        'class'  : "text-decoration-none link-warning",
+                        'class'  : "tw:no-underline tw:link-warning",
                         'download' : '',
                     }).html(
                         $('<span />', {
                             'text'  : 'Download',
-                            'class' : "badge pill bg-danger",
+                            'class' : "tw:badge tw:badge-error",
                         })
                     )
                 );
@@ -527,11 +516,11 @@ function init() {
                         'href'   : "{{ url_for('indi_allsky.image_processing_view') }}?type=light&id=" + image_data[image_index]['id'],
                         'target' : '_blank',
                         'rel'    : 'noopener noreferrer',
-                        'class'  : "text-decoration-none link-warning",
+                        'class'  : "tw:no-underline tw:link-warning",
                     }).html(
                         $('<span />', {
                             'text'  : 'FITS Processing',
-                            'class' : "badge pill bg-success",
+                            'class' : "tw:badge tw:badge-success",
                         })
                     )
                 );

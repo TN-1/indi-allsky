@@ -3,8 +3,6 @@
 {% block title %}{{ website_title }}: {{ page_title }}{% endblock %}
 
 {% block head %}
-<style>
-</style>
 <link href="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.css') }}" rel="stylesheet">
 <script src="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript">
@@ -14,22 +12,6 @@ var camera_id = {{ camera_id }};
 {% endblock %}
 
 {% block content %}
-<style>
-    /* Prevent inherited Bootstrap properties from forcing light backgrounds or overriding text contrast */
-    .storage-table-container table,
-    .storage-table-container thead,
-    .storage-table-container tr,
-    .storage-table-container th,
-    .storage-table-container td {
-        background-color: transparent !important;
-        background-image: none !important;
-        --bs-table-bg: transparent !important;
-        --bs-table-accent-bg: transparent !important;
-        --bs-table-striped-bg: transparent !important;
-        color: inherit !important;
-    }
-</style>
-
 <div class="tw:container tw:mx-auto tw:flex tw:flex-col tw:gap-4 storage-table-container">
 
     <div class="tw:bg-base-200 tw:px-4 tw:py-3 tw:rounded-t-xl tw:border-t tw:border-x tw:border-base-300">
@@ -37,7 +19,7 @@ var camera_id = {{ camera_id }};
     </div>
 
     <div class="tw:overflow-x-auto tw:bg-base-200 tw:border tw:border-base-300 tw:rounded-b-xl">
-        <table id="images-table" class="table table-sm tw:w-full tw:m-0">
+        <table id="images-table" class="tw:table tw:table-xs tw:w-full tw:m-0">
             <thead>
                 <tr class="tw:border-b tw:border-base-300 tw:bg-base-300/50 tw:text-[11px] tw:uppercase tw:tracking-wider tw:text-base-content/80">
                     <th class="tw:pl-4 tw:py-3">Date</th>

@@ -72,7 +72,7 @@ function init() {
     $('#permalink').html(
         $('<span />', {
             'text' : "Copy Link to Clipboard",
-            'class' : "badge pill bg-primary copy-clipboard",
+            'class' : "tw:badge tw:badge-primary tw:font-bold tw:text-primary-content copy-clipboard",
             'style' : "cursor: pointer;",
             'data-clipboard-text' : "{{ url_for(file_view, _external=True) }}?id=" + video_id,
         })
@@ -85,7 +85,7 @@ function init() {
         }).html(
             $('<span />', {
                 'text'  : 'Download',
-                'class' : "badge pill bg-danger",
+                'class' : "tw:badge tw:badge-error tw:font-bold tw:text-error-content",
             })
         )
     );

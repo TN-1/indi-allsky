@@ -82,7 +82,7 @@ function loadJS(url, data, onDone, onError) {
     if(!onDone)onDone=function(){};
     if(!onError)onError=function(){};
 
-    $("#loader_generate").css({'display' : 'block'});
+    $("#loader_generate").show();
 
     $.ajax({
         type: "GET",
@@ -90,7 +90,7 @@ function loadJS(url, data, onDone, onError) {
         contentType: "application/json",
         data: data,
         success: function(rdata){
-            $("#loader_generate").css({'display' : 'none'});
+            $("#loader_generate").hide();
             json_data = rdata
 
             var image_count = rdata['image_list'].length;
@@ -99,7 +99,7 @@ function loadJS(url, data, onDone, onError) {
             $('#message').html(json_data['message']);
         },
         error: function(rdata){
-            $("#loader_generate").css({'display' : 'none'});
+            $("#loader_generate").hide();
             onError(rdata.status);
             $('#message').text('Error loading data.  Please check the logs.');
             $('#video_length').html('');
@@ -169,18 +169,6 @@ $( document ).ready(function() {
         background-color: rgba(0, 0, 0, 0.4) !important;
         border-color: var(--p) !important;
     }
-    /* Minimal canvas spinner if no daisy/lucide icon fallback exists */
-    .allsky-mini-spinner {
-        width: 1.25rem;
-        height: 1.25rem;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-top-color: var(--su, #198754);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
 </style>
 
 <div class="tw:w-full tw:h-full tw:flex tw:flex-col tw:gap-4">
@@ -226,7 +214,7 @@ $( document ).ready(function() {
                     </button>
                     
                     <div id="loader_generate" class="tw:flex tw:items-center tw:justify-center tw:w-10 tw:h-10 tw:bg-base-300/50 tw:rounded-lg tw:border tw:border-base-content/5" style="display: none;">
-                        <div class="allsky-mini-spinner"></div>
+                        <span class="tw:loading tw:loading-spinner tw:loading-sm tw:text-success"></span>
                     </div>
                 </div>
             </div>
@@ -309,26 +297,19 @@ $('#form_mini_timelapse').on('submit', function() {
         contentType: "application/json",
         data: JSON.stringify(form_data),
         success: function(rdata){
-            $("#loader_generate").css({'display' : 'none'});
+            $("#loader_generate").hide();
             $('#NOTE').val('');
 
-            $('#success_message').html(rdata['success-message']);
-            $('#success_message').css({'display' : 'block'});
-            setTimeout(function() {
-                $('#success_message').css({'display' : 'none'});
-            }, 15000);
+            $('#success_message').html(rdata['success-message']).show();
+            setTimeout(function() { $('#success_message').fadeOut(); }, 15000);
         },
         error: function(rdata){
-            $("#loader_config").css({'display' : 'none'});
+            $("#loader_generate").hide();
 
             var errors = JSON.parse(rdata.responseText);
 
-            $('#failure_message').html(errors['failure-message']);
-            $('#failure_message').css({'display' : 'block'});
-
-            setTimeout(function() {
-                $('#failure_message').css({'display' : 'none'});
-            }, 15000);
+            $('#failure_message').html(errors['failure-message']).show();
+            setTimeout(function() { $('#failure_message').fadeOut(); }, 15000);
         },
     });
 

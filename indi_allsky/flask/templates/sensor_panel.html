@@ -64,46 +64,17 @@ $(document).ready(function() {
 {% block content %}
 
 <style>
-    /* Enforce side-by-side tables on desktop viewports */
-    .allsky-sensor-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
-    }
-    @media (min-width: 1280px) {
-        .allsky-sensor-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            align-items: start;
-        }
-    }
-
-    /* Target the table wrappers explicitly to completely kill nested Bootstrap cell styling overrides */
-    .sensor-panel-table-container table,
-    .sensor-panel-table-container thead,
-    .sensor-panel-table-container tr,
-    .sensor-panel-table-container th,
-    .sensor-panel-table-container td {
-        background-color: transparent !important;
-        background-image: none !important;
-        --bs-table-bg: transparent !important;
-        --bs-table-accent-bg: transparent !important;
-        --bs-table-striped-bg: transparent !important;
-        color: inherit !important;
-    }
-</style>
-
-<style>
+    /* Direct override block to bypass parent container layout restrictions */
     .allsky-workspace-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
         .allsky-workspace-grid {
             grid-template-columns: 1fr 1fr !important;
-            align-items: start;
+            align-items: start !important;
         }
     }
 </style>
@@ -160,7 +131,7 @@ $(document).ready(function() {
                 <h4 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/90 tw:m-0">User sensor slots</h4>
             </div>
             <div class="tw:overflow-x-auto">
-                <table class="table table-sm tw:table tw:table-xs tw:w-full tw:m-0">
+                <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                     <thead>
                         <tr class="tw:border-b tw:border-base-content/10 tw:bg-base-300/30 tw:text-[10px] tw:uppercase tw:tracking-wider tw:text-base-content/60">
                             <th style="width: 120px;" class="tw:pl-4 tw:py-3 tw:font-bold">Slot</th>
@@ -191,7 +162,7 @@ $(document).ready(function() {
                 <h4 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/90 tw:m-0">Temp sensor slots</h4>
             </div>
             <div class="tw:overflow-x-auto">
-                <table class="table table-sm tw:table tw:table-xs tw:w-full tw:m-0">
+                <table class="tw:table tw:table-xs tw:w-full tw:m-0">
                     <thead>
                         <tr class="tw:border-b tw:border-base-content/10 tw:bg-base-300/30 tw:text-[10px] tw:uppercase tw:tracking-wider tw:text-base-content/60">
                             <th style="width: 120px;" class="tw:pl-4 tw:py-3 tw:font-bold">Slot</th>

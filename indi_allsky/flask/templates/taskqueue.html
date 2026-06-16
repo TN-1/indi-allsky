@@ -41,33 +41,33 @@ var camera_id = {{ camera_id }};
     <div class="allsky-workspace-grid tw:w-full tw:grow">
         
         <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10 tw:overflow-x-auto">
-            <table id="tasks-table" class="table table-striped compact tw:table tw:table-xs tw:w-full" data-bs-theme="dark">
+            <table id="tasks-table" class="tw:table tw:table-sm tw:table-pin-rows tw:w-full">
                 <thead>
-                    <tr class="tw:border-b tw:border-base-content/10">
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">ID</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Date</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Queue</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Action</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">State</th>
-                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Result</th>
+                    <tr class="tw:border-b tw:border-base-content/10 tw:bg-base-300/60 tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/50">
+                        <th class="tw:py-3.5 tw:px-4">ID</th>
+                        <th class="tw:py-3.5">Date</th>
+                        <th class="tw:py-3.5">Queue</th>
+                        <th class="tw:py-3.5">Action</th>
+                        <th class="tw:py-3.5">State</th>
+                        <th class="tw:py-3.5 tw:px-4">Result</th>
                     </tr>
                 </thead>
-                <tbody class="tw:divide-y tw:divide-base-content/5">
+                <tbody class="tw:text-xs tw:divide-y tw:divide-base-content/5">
                     {% for task in task_list %}
-                    <tr class="tw:hover:bg-base-300/40 tw:transition-colors">
-                        <td class="tw:font-mono tw:text-xs tw:text-base-content/70">
+                    <tr class="tw:hover:bg-base-300/30 tw:transition-colors tw:duration-150">
+                        <td class="tw:py-3 tw:px-4 tw:font-mono tw:font-bold tw:text-primary">
                             {{ task.id }}
                         </td>
-                        <td class="tw:whitespace-nowrap tw:font-mono tw:text-base-content/80">
+                        <td class="tw:py-3 tw:whitespace-nowrap tw:font-mono tw:text-base-content/70">
                             {{ task.createDate.strftime('%Y-%m-%d %H:%M:%S') }}
                         </td>
-                        <td class="tw:font-semibold tw:text-base-content/90">
+                        <td class="tw:py-3 tw:font-semibold tw:text-base-content/80">
                             {{ task.queue }}
                         </td>
-                        <td class="tw:font-mono tw:text-xs tw:text-primary">
+                        <td class="tw:py-3 tw:font-mono tw:text-xs tw:text-info">
                             {{ task.action }}
                         </td>
-                        <td>
+                        <td class="tw:py-3">
                             {% if task.state == 'SUCCESS' %}
                                 <span class="tw:badge tw:badge-success tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">{{ task.state }}</span>
                             {% elif task.state == 'FAILURE' %}
@@ -75,10 +75,10 @@ var camera_id = {{ camera_id }};
                             {% elif task.state == 'PENDING' %}
                                 <span class="tw:badge tw:badge-warning tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">{{ task.state }}</span>
                             {% else %}
-                                <span class="tw:badge tw:badge-ghost tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-60">{{ task.state }}</span>
+                                <span class="tw:badge tw:badge-neutral tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-60">{{ task.state }}</span>
                             {% endif %}
                         </td>
-                        <td class="tw:max-w-xs tw:truncate tw:font-mono tw:text-[11px] tw:text-base-content/60" title="{{ task.result }}">
+                        <td class="tw:py-3 tw:px-4 tw:max-w-xs tw:truncate tw:font-mono tw:text-[11px] tw:text-base-content/60" title="{{ task.result }}">
                             {{ task.result }}
                         </td>
                     </tr>

@@ -185,8 +185,8 @@ function focuserMove(direction, degrees) {
         success: function(response_data){
             $('#focus_controller_error').empty();
 
-            $('#FOCUS_CCW').addClass("btn-primary");
-            $('#FOCUS_CW').addClass("btn-danger");
+            $('#FOCUS_CCW').addClass("tw:btn-primary");
+            $('#FOCUS_CW').addClass("tw:btn-error");
             $('#FOCUS_CCW').prop("disabled", false);
             $('#FOCUS_CW').prop("disabled", false);
 
@@ -200,8 +200,8 @@ function focuserMove(direction, degrees) {
             $('#focus_controller_error').text(errors['focuser_error'][0]);
 
             // Leave disabled on errors
-            //$('#FOCUS_CCW').addClass("btn-primary");
-            //$('#FOCUS_CW').addClass("btn-danger");
+            //$('#FOCUS_CCW').addClass("tw:btn-primary");
+            //$('#FOCUS_CW').addClass("tw:btn-error");
             //$('#FOCUS_CCW').prop("disabled", false);
             //$('#FOCUS_CW').prop("disabled", false);
         },
@@ -313,7 +313,7 @@ function closeFullscreen() {
     }
 </style>
 
-<div class="tw:container tw:mx-auto tw:flex tw:flex-col tw:gap-6 astropanel-wrapper focus-wrapper">
+<div class="tw:container tw:mx-auto tw:flex tw:flex-col tw:gap-6 focus-wrapper">
 
     <form id="form_focus" onSubmit="return false;" class="tw:w-full tw:flex tw:flex-col tw:gap-6 force-desktop-row">
         
@@ -423,8 +423,8 @@ $("#FOCUS_CCW").on("click", function() {
     console.log('Focus CCW');
     $('#FOCUS_CCW').prop("disabled", true);
     $('#FOCUS_CW').prop("disabled", true);
-    $('#FOCUS_CCW').removeClass("btn-primary");
-    $('#FOCUS_CW').removeClass("btn-danger");
+    $('#FOCUS_CCW').removeClass("tw:btn-primary");
+    $('#FOCUS_CW').removeClass("tw:btn-error");
     focuserMove('ccw', $('#STEP_DEGREES').val());
 });
 
@@ -432,8 +432,8 @@ $("#FOCUS_CW").on("click", function() {
     console.log('Focus CW');
     $('#FOCUS_CCW').prop("disabled", true);
     $('#FOCUS_CW').prop("disabled", true);
-    $('#FOCUS_CCW').removeClass("btn-primary");
-    $('#FOCUS_CW').removeClass("btn-danger");
+    $('#FOCUS_CCW').removeClass("tw:btn-primary");
+    $('#FOCUS_CW').removeClass("tw:btn-error");
     focuserMove('cw', $('#STEP_DEGREES').val());
 });
 
@@ -507,7 +507,6 @@ function init() {
                     beginAtZero:true,
                     grid: {
                         display: false,
-                        drawTicks: false,
                         color: 'rgba(75, 75, 75, 1)',
                         stacked: true,
                     },

@@ -3,7 +3,7 @@
 To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a component library
 
 ## Plan
-1: Move the bulk of each template from Bootstrap to Tailwind.
+1: Move the bulk of each template from Bootstrap to Tailwind. - DONE
 2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS
 3: Go through each template removing hacks used to bypass Bootstrap overrides
 3.5: Finalise new overall design language
@@ -14,32 +14,32 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 
 ## Progress tracker
 
-**Currently working on: 1 - Move the bulk of each template from Bootstrap to Tailwind.**
+**Currently working on: 2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS.**
 
 - [x] adu.html
 - [x] astropanel.html
-- [x] base.html
+- [ ] base.html
 - [x] camera_simulator.html
 - [x] cameraLens.html
 - [x] cameras.html
 - [x] chart.html
-- [x] config.html
-  - [x] admin.html
-  - [x] camera.html
-  - [x] filetransfer.html
-  - [x] location.html
-  - [x] overlays.html
-  - [x] s3.html
-  - [x] sensors.html
-  - [x] timelapse.html
-  - [x] adsb.html
-  - [x] devices.html
-  - [x] image.html
-  - [x] mqtt.html
-  - [x] processing.html
-  - [x] sat_track.html
-  - [x] syncapi.html
-  - [x] youtube.html
+- [ ] config.html
+  - [ ] admin.html
+  - [ ] camera.html
+  - [ ] filetransfer.html
+  - [ ] location.html
+  - [ ] overlays.html
+  - [ ] s3.html
+  - [ ] sensors.html
+  - [ ] timelapse.html
+  - [ ] adsb.html
+  - [ ] devices.html
+  - [ ] image.html
+  - [ ] mqtt.html
+  - [ ] processing.html
+  - [ ] sat_track.html
+  - [ ] syncapi.html
+  - [ ] youtube.html
 - [x] config_list.html
 - [x] config_restore.html
 - [x] darks.html
@@ -48,18 +48,18 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] fitsimageviewer.html
 - [x] focus.html
 - [x] gallery.html
-- [x] generate.html
-- [x] imagecirclehelper.html
-- [x] imageprocessing.html
-- [x] imageviewer.html
+- [ ] generate.html
+- [ ] imagecirclehelper.html
+- [ ] imageprocessing.html
+- [ ] imageviewer.html
 - [x] index_canvas.html
 - [x] index_img.html
 - [x] lag.html
 - [x] log.html
 - [x] login.html
 - [x] longterm_keogram.html
-- [x] loop_canvas.html
-- [x] loop_img.html
+- [ ] loop_canvas.html
+- [ ] loop_img.html
 - [x] manual_gpio.html
 - [x] mask.html
 - [x] mini_generate.html
@@ -76,7 +76,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] users.html
 - [x] videoviewer.html
 - [x] view_image.html
-- [x] virtualsky.html
+- [ ] virtualsky.html
 - [x] watch_video.html
 
 ## To Test

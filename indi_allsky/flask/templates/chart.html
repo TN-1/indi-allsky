@@ -5,21 +5,6 @@
 {% block head %}
 <meta charset="UTF-8">
 <style>
-.loader {
-  display: block;
-  border: 3px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 canvas {
     width:100%;
     height:100%;
@@ -1032,7 +1017,7 @@ $( document ).ready(function() {
             </div>
 
             <div class="tw:flex tw:items-center tw:ml-auto">
-                <div class="loader" id="loader_chart"></div>
+                <span id="loader_chart" class="tw:loading tw:loading-spinner tw:loading-xs tw:text-primary" style="display: none;"></span>
             </div>
 
         </div>

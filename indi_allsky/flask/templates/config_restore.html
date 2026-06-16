@@ -3,8 +3,7 @@
 {% block title %}{{ website_title }}: {{ page_title }}{% endblock %}
 
 {% block head %}
-<style>
-</style>
+<meta charset="UTF-8">
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 </script>
@@ -191,9 +190,9 @@ $('#form_config_restore').on('submit', function() {
     var formData = new FormData();
 
 
-    $("#restore-button").attr("class", "btn btn-secondary");
+    $("#restore-button").attr("class", "tw:btn tw:btn-neutral");
     $("#restore-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Restore</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Restoration processing...'
     );
 
 
@@ -231,16 +230,16 @@ $('#form_config_restore').on('submit', function() {
         contentType: false,  // tell jQuery not to set contentType
         data: formData,
         success: function(rdata){
-            $("#restore-button").attr("class", "btn btn-success");
+            $("#restore-button").attr("class", "tw:btn tw:btn-success");
             $("#restore-button").html(
-                'Restore'
+                '<i class="tw:icon-[lucide--check-circle] tw:w-4 tw:h-4"></i> Restore'
             );
 
 
-            successMessage.html(rdata['success-message']);
-            successMessage.css({'display' : 'block'});
+            successMessage.find('span').html(rdata['success-message']);
+            successMessage.css({'display' : 'flex'});
             setTimeout(function() {
-                successMessage.css({'display' : 'none'});
+                successMessage.fadeOut();
             }, 15000);
 
 
@@ -251,16 +250,16 @@ $('#form_config_restore').on('submit', function() {
 
         },
         error: function(rdata){
-            $("#restore-button").attr("class", "btn btn-danger");
+            $("#restore-button").attr("class", "tw:btn tw:btn-error");
             $("#restore-button").html(
-                'Restore'
+                '<i class="tw:icon-[lucide--x-circle] tw:w-4 tw:h-4"></i> Restore'
             );
 
             var errors = JSON.parse(rdata.responseText);
 
             var error_fields = new Array();
             Object.keys(errors).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
+                fields[key].input.addClass('tw:border-error');
                 fields[key].error.html(errors[key].join('<br>'));
                 fields[key].error.css({'display' : 'block'});
             });
