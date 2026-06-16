@@ -16,23 +16,53 @@ var file_view = "{{ file_view }}";
 {% endblock %}
 
 {% block content %}
-<h3>{{ dayDate_full }} - {{ timeofday}}</h3>
+<style>
+    .allsky-workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 1fr !important;
+            align-items: start;
+        }
+    }
+</style>
 
-<hr>
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-<div class="row">
-    <div class="col-sm-12 text-center">
-        <video style="max-width: 100%; max-height: 80vh; width: auto; height: auto; object-fit: contain;" controls>
-            <source src="{{ video_url }}">
-        </video>
+    <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10">
+        <h3 class="tw:text-sm tw:font-bold tw:tracking-wide tw:text-base-content tw:m-0">
+            {{ dayDate_full }} - {{ timeofday }}
+        </h3>
     </div>
-</div>
 
-<div class="row">
-    <div class="text-center">
-        <span id="permalink"></span>
-        <span id="download"></span>
+    <div class="tw:w-full">
+        <hr class="tw:border-base-content/10 tw:m-0">
     </div>
+
+    <div class="allsky-workspace-grid tw:w-full tw:grow">
+        
+        <div class="tw:w-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:bg-neutral tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10">
+            
+            <video style="max-width: 100%; max-height: 80vh; width: auto; height: auto; object-fit: contain;" class="tw:rounded-lg tw:shadow-2xl tw:bg-black/40" controls>
+                <source src="{{ video_url }}">
+            </video>
+
+            <div class="tw:flex tw:items-center tw:justify-center tw:gap-4 tw:mt-5">
+                <span id="permalink" class="tw:inline-flex tw:items-center"></span>
+                <span id="download" class="tw:inline-flex tw:items-center"></span>
+            </div>
+            
+        </div>
+
+        <div class="tw:w-full">
+            </div>
+
+    </div>
+
 </div>
 
 <script>

@@ -14,32 +14,84 @@ var camera_id = {{ camera_id }};
 {% endblock %}
 
 {% block content %}
-<div class="container">
-<div class="row">
-  <table id="tasks-table" class="table table-striped compact" data-bs-theme="dark">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Queue</th>
-        <th>Action</th>
-        <th>State</th>
-        <th>Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for task in task_list %}
-      <tr>
-        <td>{{ task.id }}</td>
-        <td>{{ task.createDate.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-        <td>{{ task.queue }}</td>
-        <td>{{ task.action }}</td>
-        <td>{{ task.state }}</td>
-        <td>{{ task.result }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<style>
+    .allsky-workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 1fr !important;
+            align-items: start;
+        }
+    }
+</style>
+
+<div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
+
+    <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10">
+        <h3 class="tw:text-sm tw:font-bold tw:tracking-wide tw:text-base-content tw:m-0 tw:flex tw:items-center tw:gap-2">
+            <i class="tw:icon-[lucide--cpu] tw:w-4 tw:h-4 tw:text-primary"></i>
+            Asynchronous Task Orchestration Queue
+        </h3>
+    </div>
+
+    <div class="allsky-workspace-grid tw:w-full tw:grow">
+        
+        <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10 tw:overflow-x-auto">
+            <table id="tasks-table" class="table table-striped compact tw:table tw:table-xs tw:w-full" data-bs-theme="dark">
+                <thead>
+                    <tr class="tw:border-b tw:border-base-content/10">
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">ID</th>
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Date</th>
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Queue</th>
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Action</th>
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">State</th>
+                        <th class="tw:text-[10px] tw:font-bold tw:tracking-wide tw:uppercase tw:text-base-content/70">Result</th>
+                    </tr>
+                </thead>
+                <tbody class="tw:divide-y tw:divide-base-content/5">
+                    {% for task in task_list %}
+                    <tr class="tw:hover:bg-base-300/40 tw:transition-colors">
+                        <td class="tw:font-mono tw:text-xs tw:text-base-content/70">
+                            {{ task.id }}
+                        </td>
+                        <td class="tw:whitespace-nowrap tw:font-mono tw:text-base-content/80">
+                            {{ task.createDate.strftime('%Y-%m-%d %H:%M:%S') }}
+                        </td>
+                        <td class="tw:font-semibold tw:text-base-content/90">
+                            {{ task.queue }}
+                        </td>
+                        <td class="tw:font-mono tw:text-xs tw:text-primary">
+                            {{ task.action }}
+                        </td>
+                        <td>
+                            {% if task.state == 'SUCCESS' %}
+                                <span class="tw:badge tw:badge-success tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">{{ task.state }}</span>
+                            {% elif task.state == 'FAILURE' %}
+                                <span class="tw:badge tw:badge-error tw:text-[10px] tw:font-bold tw:uppercase">{{ task.state }}</span>
+                            {% elif task.state == 'PENDING' %}
+                                <span class="tw:badge tw:badge-warning tw:badge-outline tw:text-[10px] tw:font-bold tw:uppercase">{{ task.state }}</span>
+                            {% else %}
+                                <span class="tw:badge tw:badge-ghost tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-60">{{ task.state }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="tw:max-w-xs tw:truncate tw:font-mono tw:text-[11px] tw:text-base-content/60" title="{{ task.result }}">
+                            {{ task.result }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tw:w-full">
+            </div>
+
+    </div>
+
 </div>
 
 <script>

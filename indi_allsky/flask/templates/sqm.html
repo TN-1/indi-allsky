@@ -304,18 +304,41 @@ $( document ).ready(function() {
 {% endblock %}
 
 {% block content %}
+<style>
+    .allsky-workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    @media (min-width: 1024px) {
+        .allsky-workspace-grid {
+            grid-template-columns: 2fr 1fr !important;
+            align-items: start;
+        }
+    }
+</style>
+
 <div class="tw:container tw:h-full tw:mx-auto tw:flex tw:flex-col tw:gap-4">
 
-    <div class="tw:flex tw:justify-center">
-        <div class="tw:text-base-content tw:text-center tw:font-medium" id="message">
+    <div class="tw:w-full tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10 tw:flex tw:justify-center tw:items-center tw:gap-3">
+        <div class="tw:loading tw:loading-spinner tw:loading-sm tw:text-primary" id="status-spinner"></div>
+        <div class="tw:text-base-content tw:text-sm tw:font-semibold tw:tracking-wide tw:uppercase" id="message">
             Loading...
         </div>
     </div>
 
-    <div class="tw:h-3/4 tw:flex tw:items-center tw:justify-center">
-        <div class="tw:w-full tw:flex tw:justify-center">
-            <canvas id="canvas" class="tw:max-w-full tw:max-h-full tw:object-contain"></canvas>
+    <div class="allsky-workspace-grid tw:w-full tw:grow">
+        
+        <div class="tw:w-full tw:flex tw:items-center tw:justify-center tw:bg-neutral tw:p-4 tw:rounded-xl tw:border tw:border-base-content/10 tw:min-h-[50vh]">
+            <div class="tw:w-full tw:flex tw:justify-center">
+                <canvas id="canvas" class="tw:max-w-full tw:max-h-full tw:object-contain tw:rounded-lg tw:shadow-2xl tw:bg-black/40"></canvas>
+            </div>
         </div>
+
+        <div class="tw:w-full">
+            </div>
+
     </div>
 
 </div>

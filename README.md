@@ -65,19 +65,19 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] mini_generate.html
 - [x] minivideoviewer.html
 - [x] network.html
-- [ ] notifications.html
+- [x] notifications.html
 - [x] realtime_keogram.html
-- [ ] sensor_panel.html
-- [ ] sqm.html
+- [x] sensor_panel.html
+- [x] sqm.html
 - [x] support_info.html
 - [x] system.html
-- [ ] taskqueue.html
-- [ ] user.html
-- [ ] users.html
-- [ ] videoviewer.html
-- [ ] view_image.html
+- [x] taskqueue.html
+- [x] user.html
+- [x] users.html
+- [x] videoviewer.html
+- [x] view_image.html
 - [x] virtualsky.html
-- [ ] watch_video.html
+- [x] watch_video.html
 
 ## To Test
 Clone my fork `git clone https://github.com/TN-1/indi-allsky`, `git checkout ui-upgrade`, run `./misc/dev_run.sh` to spin up a local UI only server, access at `http://localhost:5000/indi-allsky/` Not all features will be available
