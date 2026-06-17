@@ -4,7 +4,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 
 ## Plan
 1: Move the bulk of each template from Bootstrap to Tailwind. - DONE
-2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS
+2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS - DONE
 3: Go through each template removing hacks used to bypass Bootstrap overrides
 3.5: Finalise new overall design language
 4: Review each template for themeing consistency
@@ -14,85 +14,81 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 
 ## Progress tracker
 
-**Currently working on: 2: Clean up remaining Bootstrap code, Remove imports of Bootstrap CSS.**
+**Currently working on: 3: Go through each template removing hacks used to bypass Bootstrap overrides**
 
-- [x] adu.html
-- [x] astropanel.html
+- [ ] adu.html
+- [ ] astropanel.html
 - [x] base.html
-- [x] camera_simulator.html
-- [x] cameraLens.html
-- [x] cameras.html
-- [x] chart.html
-- [x] config.html
-  - [x] admin.html
-  - [x] adsb.html
-  - [x] camera.html
-  - [x] devices.html
-  - [x] filetransfer.html
-  - [x] image.html
-  - [x] location.html
-  - [x] mqtt.html
-  - [x] overlays.html
-  - [x] processing.html
-  - [x] s3.html
-  - [x] sat_track.html
-  - [x] sensors.html
-  - [x] syncapi.html
-  - [x] timelapse.html
-  - [x] youtube.html
-- [x] config_list.html
-- [x] config_restore.html
-- [x] darks.html
-- [x] drive_manager.html
-- [x] filespaceusage.html
-- [x] fitsimageviewer.html
-- [x] focus.html
-- [x] gallery.html
-- [x] generate.html
-- [x] imagecirclehelper.html
-- [x] imageprocessing.html
-- [x] imageviewer.html
-- [x] index_canvas.html
-- [x] index_img.html
-- [x] lag.html
-- [x] log.html
-- [x] login.html
-- [x] longterm_keogram.html
-- [x] loop_canvas.html
-- [x] loop_img.html
-- [x] manual_gpio.html
-- [x] mask.html
-- [x] mini_generate.html
-- [x] minivideoviewer.html
-- [x] network.html
-- [x] notifications.html
-- [x] realtime_keogram.html
-- [x] sensor_panel.html
-- [x] sqm.html
-- [x] support_info.html
-- [x] system.html
-- [x] taskqueue.html
-- [x] user.html
-- [x] users.html
-- [x] videoviewer.html
-- [x] view_image.html
-- [x] virtualsky.html
-- [x] watch_video.html
+- [ ] camera_simulator.html
+- [ ] cameraLens.html
+- [ ] cameras.html
+- [ ] chart.html
+- [ ] config.html
+  - [ ] admin.html
+  - [ ] adsb.html
+  - [ ] camera.html
+  - [ ] devices.html
+  - [ ] filetransfer.html
+  - [ ] image.html
+  - [ ] location.html
+  - [ ] mqtt.html
+  - [ ] overlays.html
+  - [ ] processing.html
+  - [ ] s3.html
+  - [ ] sat_track.html
+  - [ ] sensors.html
+  - [ ] syncapi.html
+  - [ ] timelapse.html
+  - [ ] youtube.html
+- [ ] config_list.html
+- [ ] config_restore.html
+- [ ] darks.html
+- [ ] drive_manager.html
+- [ ] filespaceusage.html
+- [ ] fitsimageviewer.html
+- [ ] focus.html
+- [ ] gallery.html
+- [ ] generate.html
+- [ ] imagecirclehelper.html
+- [ ] imageprocessing.html
+- [ ] imageviewer.html
+- [ ] index_canvas.html
+- [ ] index_img.html
+- [ ] lag.html
+- [ ] log.html
+- [ ] login.html
+- [ ] longterm_keogram.html
+- [ ] loop_canvas.html
+- [ ] loop_img.html
+- [ ] manual_gpio.html
+- [ ] mask.html
+- [ ] mini_generate.html
+- [ ] minivideoviewer.html
+- [ ] network.html
+- [ ] notifications.html
+- [ ] realtime_keogram.html
+- [ ] sensor_panel.html
+- [ ] sqm.html
+- [ ] support_info.html
+- [ ] system.html
+- [ ] taskqueue.html
+- [ ] user.html
+- [ ] users.html
+- [ ] videoviewer.html
+- [ ] view_image.html
+- [ ] virtualsky.html
+- [ ] watch_video.html
 
 ## To Test
 Clone my fork `git clone https://github.com/TN-1/indi-allsky`, `git checkout ui-upgrade`, run `./misc/dev_run.sh` to spin up a local UI only server, access at `http://localhost:5000/indi-allsky/` Not all features will be available
 Otherwise, install as normal. **Not ready for use in an actual deployment**
 
 ## Known issues
-- Mobile layout responsive sidebar doesnt close
+- Mobile layout responsive sidebar doesnt close (Fixed in design.html)
 - Mobile pages BG colour
-- Objects styled inside script tags are still bootstrap themed
 - Images not centred in index_img (and index_canvas??)
 
 ## Things that need doing
-- Remove bootstrap CSS includes
-- Fix hardcoded styling
-- Fix CSS inside script tags
 - Test styling hacks in base.html for removal
 - Theme consistency check
 - Allow users to choose from the built in DaisyUI themes for default Light and Dark themes

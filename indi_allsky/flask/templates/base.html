@@ -8,52 +8,6 @@
     <link href="{{ url_for('indi_allsky.static', filename='css/dist.css') }}" rel="stylesheet">    
     <script src="{{ url_for('indi_allsky.static', filename='js/jquery-3.7.1.min.js') }}"></script>
     
-    <style>
-    /* Final UI Refinements */
-    
-    /* 1. Reset details/summary for DaisyUI menus */
-    .tw\:menu details > summary {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-        list-style: none !important;
-    }
-    .tw\:menu details > summary::-webkit-details-marker { display: none !important; }
-    
-    /* 2. Menu link normalization */
-    .tw\:menu a {
-        text-decoration: none !important;
-    }
-
-    /* 3. Typography Isolation */
-    .tw\:drawer-content h1, 
-    .tw\:drawer-content h2, 
-    .tw\:drawer-content h3, 
-    .tw\:drawer-content h4, 
-    .tw\:drawer-content h5, 
-    .tw\:drawer-content h6 {
-        color: inherit !important;
-        font-weight: inherit !important;
-        margin-top: 0 !important;
-    }
-
-    /* 4. Scrollbar Theming */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-        background: oklch(var(--b3));
-    }
-    ::-webkit-scrollbar-thumb {
-        background: oklch(var(--bc) / 0.1);
-        border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: oklch(var(--bc) / 0.2);
-    }
-    </style>
     {% block head %}{% endblock %}
   </head>
 
