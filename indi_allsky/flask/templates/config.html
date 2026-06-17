@@ -137,7 +137,7 @@ var camera_id = {{ camera_id }};
                 </div>
             </div>
 
-            <div class="tw:grid tw:grid-columns-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:w-full">
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:w-full">
                 <div class="md:tw:col-span-2">
                     <button id="save-button" class="tw:btn tw:btn-primary tw:btn-block tw:h-11 tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider">
                         Save Configuration
@@ -493,6 +493,8 @@ const field_names = [
     'FILETRANSFER__REMOTE_STARTRAIL_FOLDER',
     'FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME',
     'FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER',
+    'FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME',
+    'FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER',
     'FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME',
     'FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER',
     'FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER',
@@ -925,11 +927,14 @@ fields['form_global'] = {
 
 $('#form_config').on('submit', function() {
     // hide all errors
-    successMessage.css({'display' : 'none'});
+    successMessage.hide();
     Object.keys(fields).forEach((key) => {
-        fields[key].error.css({'display' : 'none'});
+        fields[key].error.hide();
+        if(fields[key].input) {
+            fields[key].input.removeClass('tw:border-error');
+        }
     });
-    $('#failure-fields').css({'display' : 'none'});
+    $('#failure-fields').hide();
 
 
     // Populate fields object
@@ -938,9 +943,9 @@ $('#form_config').on('submit', function() {
         json_data[item] = fields[item].input.val();
     });
 
-    $("#save-button").attr("class", "btn btn-secondary");
+    $("#save-button").attr("class", "tw:btn tw:btn-neutral");
     $("#save-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Save</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Saving...'
     );
 
     // checkboxes
@@ -958,40 +963,33 @@ $('#form_config').on('submit', function() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $("#save-button").attr("class", "btn btn-success");
-            $("#save-button").html(
-                'Save'
-            );
+            $("#save-button").attr("class", "tw:btn tw:btn-success");
+            $("#save-button").html('Save');
 
-            successMessage.html(rdata['success-message']);
-            successMessage.css({'display' : 'block'});
+            successMessage.html(rdata['success-message']).show();
             setTimeout(function() {
-                successMessage.css({'display' : 'none'});
+                successMessage.fadeOut();
             }, 15000);
 
             $('#CONFIG_NOTE').val('');
         },
         error: function(rdata){
-            $("#save-button").attr("class", "btn btn-danger");
-            $("#save-button").html(
-                'Save'
-            );
+            $("#save-button").attr("class", "tw:btn tw:btn-error");
+            $("#save-button").html('Save');
 
             var errors = JSON.parse(rdata.responseText);
 
             var error_fields = new Array();
             Object.keys(errors).forEach((key) => {
-                fields[key].input.addClass('is-invalid');
-                fields[key].error.html(errors[key].join('<br>'));
-                fields[key].error.css({'display' : 'block'});
+                fields[key].input.addClass('tw:border-error');
+                fields[key].error.html(errors[key].join('<br>')).show();
 
                 if (key != 'form_global') {
                     error_fields.push(key);
                 };
             });
 
-            $('#failure-fields').html(error_fields.join('<br>'));
-            $('#failure-fields').css({'display' : 'block'});
+            $('#failure-fields').html(error_fields.join('<br>')).show();
         },
     });
 
@@ -1001,12 +999,12 @@ function setBrowserLocationStatus(msg, is_error) {
     const el = document.getElementById('BROWSER_LOCATION_STATUS');
     if (!el) return;
 
-    el.classList.remove('text-danger', 'text-success', 'text-secondary');
+    el.classList.remove('tw:text-error', 'tw:text-success', 'tw:text-base-content/60');
 
     if (is_error) {
-        el.classList.add('text-danger');
+        el.classList.add('tw:text-error');
     } else {
-        el.classList.add('text-success');
+        el.classList.add('tw:text-success');
     }
 
     el.textContent = msg;
@@ -1033,7 +1031,6 @@ function setLocationFromBrowser() {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
 
-            // Repo-genau: IDs sind LOCATION_LATITUDE / LOCATION_LONGITUDE / LOCATION_ELEVATION
             const latEl = document.getElementById('LOCATION_LATITUDE');
             const lonEl = document.getElementById('LOCATION_LONGITUDE');
             const eleEl = document.getElementById('LOCATION_ELEVATION');
@@ -1068,7 +1065,7 @@ function group_on_change(trigger_checkbox_field, group_fields, group_checkbox_fi
         if (!enable) {
             group_fields.forEach(item => {
                 $('#' + item).attr({'readonly': true, 'disabled': true});
-                $('#' + item).addClass('bg-dark text-secondary');
+                $('#' + item).addClass('tw:bg-base-300 tw:text-base-content/40');
             });
 
             group_checkbox_fields.forEach(item => {
@@ -1077,7 +1074,7 @@ function group_on_change(trigger_checkbox_field, group_fields, group_checkbox_fi
         } else {
             group_fields.forEach(item => {
                 $('#' + item).removeAttr('readonly disabled');
-                $('#' + item).removeClass('bg-dark text-secondary');
+                $('#' + item).removeClass('tw:bg-base-300 tw:text-base-content/40');
             });
 
             group_checkbox_fields.forEach(item => {
@@ -1095,7 +1092,7 @@ function group_on_ready(trigger_checkbox_field, group_fields, group_checkbox_fie
     if (!enable) {
         group_fields.forEach(item => {
             $('#' + item).attr({'readonly': true, 'disabled': true});
-            $('#' + item).addClass('bg-dark text-secondary');
+            $('#' + item).addClass('tw:bg-base-300 tw:text-base-content/40');
         });
 
         group_checkbox_fields.forEach(item => {
@@ -1173,11 +1170,11 @@ $('#LIBCAMERA__AWB_ENABLE').on('change', function() {
         $('#LIBCAMERA__CCM_DISABLE').prop('checked', false);
         $('#LIBCAMERA__CCM_DISABLE').attr({'disabled': true});
         $('#LIBCAMERA__AWB').removeAttr('readonly disabled');
-        $('#LIBCAMERA__AWB').removeClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#LIBCAMERA__CCM_DISABLE').removeAttr('disabled');
         $('#LIBCAMERA__AWB').attr({'readonly': true, 'disabled': true});
-        $('#LIBCAMERA__AWB').addClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1186,11 +1183,11 @@ $('#LIBCAMERA__AWB_ENABLE_DAY').on('change', function() {
         $('#LIBCAMERA__CCM_DISABLE_DAY').prop('checked', false);
         $('#LIBCAMERA__CCM_DISABLE_DAY').attr({'disabled': true});
         $('#LIBCAMERA__AWB_DAY').removeAttr('readonly disabled');
-        $('#LIBCAMERA__AWB_DAY').removeClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#LIBCAMERA__CCM_DISABLE_DAY').removeAttr('disabled');
         $('#LIBCAMERA__AWB_DAY').attr({'readonly': true, 'disabled': true});
-        $('#LIBCAMERA__AWB_DAY').addClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1229,81 +1226,81 @@ $('#CARDINAL_DIRS__ENABLE').on('change', function() {
 $('#USE_NIGHT_COLOR').on('change', function() {
     if ($('#USE_NIGHT_COLOR').prop('checked')) {
         $('#SCNR_ALGORITHM_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SCNR_ALGORITHM_DAY').addClass('bg-dark text-secondary');
+        $('#SCNR_ALGORITHM_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SCNR_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SCNR_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#SCNR_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#IMAGE_DENOISE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#IMAGE_DENOISE_STRENGTH_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_COLOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBR_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBR_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBR_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBG_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBG_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBB_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBB_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBR_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBR_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBR_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBG_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBG_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBB_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBB_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#AUTO_WB_DAY').attr({'disabled': true});
         $('#SATURATION_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SATURATION_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#SATURATION_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#GAMMA_CORRECTION_DAY').attr({'readonly': true, 'disabled': true});
-        $('#GAMMA_CORRECTION_DAY').addClass('bg-dark text-secondary');
+        $('#GAMMA_CORRECTION_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SHARPEN_AMOUNT_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SHARPEN_AMOUNT_DAY').addClass('bg-dark text-secondary');
+        $('#SHARPEN_AMOUNT_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#SCNR_ALGORITHM_DAY').removeAttr('readonly disabled');
-        $('#SCNR_ALGORITHM_DAY').removeClass('bg-dark text-secondary');
+        $('#SCNR_ALGORITHM_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SCNR_MTF_MIDTONES_DAY').removeAttr('readonly disabled');
-        $('#SCNR_MTF_MIDTONES_DAY').removeClass('bg-dark text-secondary');
+        $('#SCNR_MTF_MIDTONES_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#IMAGE_DENOISE_DAY').removeAttr('readonly disabled');
-        $('#IMAGE_DENOISE_DAY').removeClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         // re-evaluate denoise day dependent fields based on day dropdown
         if ($('#IMAGE_DENOISE_DAY').val()) {
             $('#IMAGE_DENOISE_STRENGTH_DAY').removeAttr('readonly disabled');
-            $('#IMAGE_DENOISE_STRENGTH_DAY').removeClass('bg-dark text-secondary');
+            $('#IMAGE_DENOISE_STRENGTH_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         } else {
             $('#IMAGE_DENOISE_STRENGTH_DAY').attr({'readonly': true, 'disabled': true});
-            $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('bg-dark text-secondary');
+            $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         }
         if ($('#IMAGE_DENOISE_DAY').val() === 'bilateral') {
             $('#BILATERAL_SIGMA_COLOR_DAY').removeAttr('readonly disabled');
-            $('#BILATERAL_SIGMA_COLOR_DAY').removeClass('bg-dark text-secondary');
+            $('#BILATERAL_SIGMA_COLOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
             $('#BILATERAL_SIGMA_SPACE_DAY').removeAttr('readonly disabled');
-            $('#BILATERAL_SIGMA_SPACE_DAY').removeClass('bg-dark text-secondary');
+            $('#BILATERAL_SIGMA_SPACE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         } else {
             $('#BILATERAL_SIGMA_COLOR_DAY').attr({'readonly': true, 'disabled': true});
-            $('#BILATERAL_SIGMA_COLOR_DAY').addClass('bg-dark text-secondary');
+            $('#BILATERAL_SIGMA_COLOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
             $('#BILATERAL_SIGMA_SPACE_DAY').attr({'readonly': true, 'disabled': true});
-            $('#BILATERAL_SIGMA_SPACE_DAY').addClass('bg-dark text-secondary');
+            $('#BILATERAL_SIGMA_SPACE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         }
         $('#WBR_FACTOR_DAY').removeAttr('readonly disabled');
-        $('#WBR_FACTOR_DAY').removeClass('bg-dark text-secondary');
+        $('#WBR_FACTOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_FACTOR_DAY').removeAttr('readonly disabled');
-        $('#WBG_FACTOR_DAY').removeClass('bg-dark text-secondary');
+        $('#WBG_FACTOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_FACTOR_DAY').removeAttr('readonly disabled');
-        $('#WBB_FACTOR_DAY').removeClass('bg-dark text-secondary');
+        $('#WBB_FACTOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBR_MTF_MIDTONES_DAY').removeAttr('readonly disabled');
-        $('#WBR_MTF_MIDTONES_DAY').removeClass('bg-dark text-secondary');
+        $('#WBR_MTF_MIDTONES_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_MTF_MIDTONES_DAY').removeAttr('readonly disabled');
-        $('#WBG_MTF_MIDTONES_DAY').removeClass('bg-dark text-secondary');
+        $('#WBG_MTF_MIDTONES_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_MTF_MIDTONES_DAY').removeAttr('readonly disabled');
-        $('#WBB_MTF_MIDTONES_DAY').removeClass('bg-dark text-secondary');
+        $('#WBB_MTF_MIDTONES_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#AUTO_WB_DAY').removeAttr('disabled');
         $('#SATURATION_FACTOR_DAY').removeAttr('readonly disabled');
-        $('#SATURATION_FACTOR_DAY').removeClass('bg-dark text-secondary');
+        $('#SATURATION_FACTOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#GAMMA_CORRECTION_DAY').removeAttr('readonly disabled');
-        $('#GAMMA_CORRECTION_DAY').removeClass('bg-dark text-secondary');
+        $('#GAMMA_CORRECTION_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SHARPEN_AMOUNT_DAY').removeAttr('readonly disabled');
-        $('#SHARPEN_AMOUNT_DAY').removeClass('bg-dark text-secondary');
+        $('#SHARPEN_AMOUNT_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1312,23 +1309,23 @@ $('#IMAGE_DENOISE').on('change', function() {
     var val = $(this).val();
     if (val) {
         $('#IMAGE_DENOISE_STRENGTH').removeAttr('readonly disabled');
-        $('#IMAGE_DENOISE_STRENGTH').removeClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH').removeClass('tw:bg-base-300 tw:text-base-content/40');
         // Set default to 3 for all methods
         $('#IMAGE_DENOISE_STRENGTH').val(3);
     } else {
         $('#IMAGE_DENOISE_STRENGTH').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
     if (val === 'bilateral') {
         $('#BILATERAL_SIGMA_COLOR').removeAttr('readonly disabled');
-        $('#BILATERAL_SIGMA_COLOR').removeClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE').removeAttr('readonly disabled');
-        $('#BILATERAL_SIGMA_SPACE').removeClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#BILATERAL_SIGMA_COLOR').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1337,23 +1334,23 @@ $('#IMAGE_DENOISE_DAY').on('change', function() {
     var val = $(this).val();
     if (val) {
         $('#IMAGE_DENOISE_STRENGTH_DAY').removeAttr('readonly disabled');
-        $('#IMAGE_DENOISE_STRENGTH_DAY').removeClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         // Set default to 3 for all methods
         $('#IMAGE_DENOISE_STRENGTH_DAY').val(3);
     } else {
         $('#IMAGE_DENOISE_STRENGTH_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
     if (val === 'bilateral') {
         $('#BILATERAL_SIGMA_COLOR_DAY').removeAttr('readonly disabled');
-        $('#BILATERAL_SIGMA_COLOR_DAY').removeClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE_DAY').removeAttr('readonly disabled');
-        $('#BILATERAL_SIGMA_SPACE_DAY').removeClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#BILATERAL_SIGMA_COLOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1362,26 +1359,26 @@ $('#IMAGE_DENOISE_DAY').on('change', function() {
 $('#TIMELAPSE__USE_NIGHT_CONFIG').on('change', function() {
     if ($('#TIMELAPSE__USE_NIGHT_CONFIG').prop('checked')) {
         $('#TIMELAPSE__PRE_PROCESSOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#TIMELAPSE__PRE_PROCESSOR_DAY').addClass('bg-dark text-secondary');
+        $('#TIMELAPSE__PRE_PROCESSOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_FRAMERATE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_FRAMERATE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_FRAMERATE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_BITRATE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_BITRATE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_BITRATE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_VFSCALE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_VFSCALE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_VFSCALE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_EXTRA_OPTIONS_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_EXTRA_OPTIONS_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_EXTRA_OPTIONS_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#TIMELAPSE__PRE_PROCESSOR_DAY').removeAttr('readonly disabled');
-        $('#TIMELAPSE__PRE_PROCESSOR_DAY').removeClass('bg-dark text-secondary');
+        $('#TIMELAPSE__PRE_PROCESSOR_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_FRAMERATE_DAY').removeAttr('readonly disabled');
-        $('#FFMPEG_FRAMERATE_DAY').removeClass('bg-dark text-secondary');
+        $('#FFMPEG_FRAMERATE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_BITRATE_DAY').removeAttr('readonly disabled');
-        $('#FFMPEG_BITRATE_DAY').removeClass('bg-dark text-secondary');
+        $('#FFMPEG_BITRATE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_VFSCALE_DAY').removeAttr('readonly disabled');
-        $('#FFMPEG_VFSCALE_DAY').removeClass('bg-dark text-secondary');
+        $('#FFMPEG_VFSCALE_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_EXTRA_OPTIONS_DAY').removeAttr('readonly disabled');
-        $('#FFMPEG_EXTRA_OPTIONS_DAY').removeClass('bg-dark text-secondary');
+        $('#FFMPEG_EXTRA_OPTIONS_DAY').removeClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1391,43 +1388,43 @@ $('#DEW_HEATER__THOLD_ENABLE').on('change', function() {
     if ($('#DEW_HEATER__THOLD_ENABLE').prop('checked')) {
         $('#DEW_HEATER__LEVEL_DEF').val(0);
         $('#DEW_HEATER__TEMP_USER_VAR_SLOT').removeAttr('readonly disabled');
-        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').removeAttr('readonly disabled');
-        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__MANUAL_TARGET').removeAttr('readonly disabled');
-        $('#DEW_HEATER__MANUAL_TARGET').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__MANUAL_TARGET').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_LOW').removeAttr('readonly disabled');
-        $('#DEW_HEATER__LEVEL_LOW').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_LOW').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_MED').removeAttr('readonly disabled');
-        $('#DEW_HEATER__LEVEL_MED').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_MED').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_HIGH').removeAttr('readonly disabled');
-        $('#DEW_HEATER__LEVEL_HIGH').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_HIGH').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_LOW').removeAttr('readonly disabled');
-        $('#DEW_HEATER__THOLD_DIFF_LOW').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_LOW').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_MED').removeAttr('readonly disabled');
-        $('#DEW_HEATER__THOLD_DIFF_MED').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_MED').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_HIGH').removeAttr('readonly disabled');
-        $('#DEW_HEATER__THOLD_DIFF_HIGH').removeClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_HIGH').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#DEW_HEATER__LEVEL_DEF').val(100);
         $('#DEW_HEATER__TEMP_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__MANUAL_TARGET').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__MANUAL_TARGET').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__MANUAL_TARGET').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_LOW').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_LOW').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_MED').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_MED').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_HIGH').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_LOW').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_LOW').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_MED').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_MED').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_HIGH').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1437,38 +1434,38 @@ $('#FAN__THOLD_ENABLE').on('change', function() {
     if ($('#FAN__THOLD_ENABLE').prop('checked')) {
         $('#FAN__LEVEL_DEF').val(0);
         $('#FAN__TEMP_USER_VAR_SLOT').removeAttr('readonly disabled');
-        $('#FAN__TEMP_USER_VAR_SLOT').removeClass('bg-dark text-secondary');
+        $('#FAN__TEMP_USER_VAR_SLOT').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__TARGET').removeAttr('readonly disabled');
-        $('#FAN__TARGET').removeClass('bg-dark text-secondary');
+        $('#FAN__TARGET').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_LOW').removeAttr('readonly disabled');
-        $('#FAN__LEVEL_LOW').removeClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_LOW').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_MED').removeAttr('readonly disabled');
-        $('#FAN__LEVEL_MED').removeClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_MED').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_HIGH').removeAttr('readonly disabled');
-        $('#FAN__LEVEL_HIGH').removeClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_HIGH').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_LOW').removeAttr('readonly disabled');
-        $('#FAN__THOLD_DIFF_LOW').removeClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_LOW').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_MED').removeAttr('readonly disabled');
-        $('#FAN__THOLD_DIFF_MED').removeClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_MED').removeClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_HIGH').removeAttr('readonly disabled');
-        $('#FAN__THOLD_DIFF_HIGH').removeClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_HIGH').removeClass('tw:bg-base-300 tw:text-base-content/40');
     } else {
         $('#FAN__LEVEL_DEF').val(100);
         $('#FAN__TEMP_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#FAN__TEMP_USER_VAR_SLOT').addClass('bg-dark text-secondary');
-        $('#FAN__TARGET').addClass('bg-dark text-secondary');
+        $('#FAN__TEMP_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
+        $('#FAN__TARGET').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_LOW').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_LOW').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_MED').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_MED').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_HIGH').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_LOW').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_LOW').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_MED').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_MED').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_HIGH').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 });
 
@@ -1510,7 +1507,7 @@ $('#IMAGE_EXPORT_RAW').on('change', function() {
     if ($('#IMAGE_EXPORT_RAW').val() == '') {
         group_fields_export.forEach(item => {
             $('#' + item).attr({'readonly': true, 'disabled': true});
-            $('#' + item).addClass('bg-dark text-secondary');
+            $('#' + item).addClass('tw:bg-base-300 tw:text-base-content/40');
         });
 
         group_checkbox_fields_export.forEach(item => {
@@ -1519,7 +1516,7 @@ $('#IMAGE_EXPORT_RAW').on('change', function() {
     } else {
         group_fields_export.forEach(item => {
             $('#' + item).removeAttr('readonly disabled');
-            $('#' + item).removeClass('bg-dark text-secondary');
+            $('#' + item).removeClass('tw:bg-base-300 tw:text-base-content/40');
         });
 
         group_checkbox_fields_export.forEach(item => {
@@ -1648,7 +1645,7 @@ $( document ).ready(function() {
         $('#LIBCAMERA__CCM_DISABLE').attr({'disabled': true});
     } else {
         $('#LIBCAMERA__AWB').attr({'readonly': true, 'disabled': true});
-        $('#LIBCAMERA__AWB').addClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     if ($('#LIBCAMERA__AWB_ENABLE_DAY').prop('checked')) {
@@ -1656,7 +1653,7 @@ $( document ).ready(function() {
         $('#LIBCAMERA__CCM_DISABLE_DAY').attr({'disabled': true});
     } else {
         $('#LIBCAMERA__AWB_DAY').attr({'readonly': true, 'disabled': true});
-        $('#LIBCAMERA__AWB_DAY').addClass('bg-dark text-secondary');
+        $('#LIBCAMERA__AWB_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
 
@@ -1677,124 +1674,124 @@ $( document ).ready(function() {
     // Night color settings
     if ($('#USE_NIGHT_COLOR').prop('checked')) {
         $('#SCNR_ALGORITHM_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SCNR_ALGORITHM_DAY').addClass('bg-dark text-secondary');
+        $('#SCNR_ALGORITHM_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SCNR_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SCNR_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#SCNR_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#IMAGE_DENOISE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#IMAGE_DENOISE_STRENGTH_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_COLOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBR_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBR_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBR_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBG_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBG_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBB_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#WBB_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBR_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBR_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBR_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBG_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBG_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBG_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#WBB_MTF_MIDTONES_DAY').attr({'readonly': true, 'disabled': true});
-        $('#WBB_MTF_MIDTONES_DAY').addClass('bg-dark text-secondary');
+        $('#WBB_MTF_MIDTONES_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#AUTO_WB_DAY').attr({'disabled': true});
         $('#SATURATION_FACTOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SATURATION_FACTOR_DAY').addClass('bg-dark text-secondary');
+        $('#SATURATION_FACTOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#GAMMA_CORRECTION_DAY').attr({'readonly': true, 'disabled': true});
-        $('#GAMMA_CORRECTION_DAY').addClass('bg-dark text-secondary');
+        $('#GAMMA_CORRECTION_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#SHARPEN_AMOUNT_DAY').attr({'readonly': true, 'disabled': true});
-        $('#SHARPEN_AMOUNT_DAY').addClass('bg-dark text-secondary');
+        $('#SHARPEN_AMOUNT_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     // Denoise dependent fields - grey out on page load (night)
     if (!$('#IMAGE_DENOISE').val()) {
         $('#IMAGE_DENOISE_STRENGTH').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
     if ($('#IMAGE_DENOISE').val() !== 'bilateral') {
         $('#BILATERAL_SIGMA_COLOR').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     // Denoise dependent fields - grey out on page load (day)
     if (!$('#IMAGE_DENOISE_DAY').val() || $('#USE_NIGHT_COLOR').prop('checked')) {
         $('#IMAGE_DENOISE_STRENGTH_DAY').attr({'readonly': true, 'disabled': true});
-        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('bg-dark text-secondary');
+        $('#IMAGE_DENOISE_STRENGTH_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
     if ($('#IMAGE_DENOISE_DAY').val() !== 'bilateral' || $('#USE_NIGHT_COLOR').prop('checked')) {
         $('#BILATERAL_SIGMA_COLOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_COLOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#BILATERAL_SIGMA_SPACE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('bg-dark text-secondary');
+        $('#BILATERAL_SIGMA_SPACE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     // Night timelapse settings
     if ($('#TIMELAPSE__USE_NIGHT_CONFIG').prop('checked')) {
         $('#TIMELAPSE__PRE_PROCESSOR_DAY').attr({'readonly': true, 'disabled': true});
-        $('#TIMELAPSE__PRE_PROCESSOR_DAY').addClass('bg-dark text-secondary');
+        $('#TIMELAPSE__PRE_PROCESSOR_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_FRAMERATE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_FRAMERATE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_FRAMERATE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_BITRATE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_BITRATE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_BITRATE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_VFSCALE_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_VFSCALE_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_VFSCALE_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FFMPEG_EXTRA_OPTIONS_DAY').attr({'readonly': true, 'disabled': true});
-        $('#FFMPEG_EXTRA_OPTIONS_DAY').addClass('bg-dark text-secondary');
+        $('#FFMPEG_EXTRA_OPTIONS_DAY').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     // Dew Heater thresholds
     if (!$('#DEW_HEATER__THOLD_ENABLE').prop('checked')) {
         $('#DEW_HEATER__TEMP_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__TEMP_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__DEWPOINT_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__MANUAL_TARGET').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__MANUAL_TARGET').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__MANUAL_TARGET').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_LOW').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_LOW').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_MED').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_MED').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__LEVEL_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__LEVEL_HIGH').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__LEVEL_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_LOW').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_LOW').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_MED').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_MED').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#DEW_HEATER__THOLD_DIFF_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#DEW_HEATER__THOLD_DIFF_HIGH').addClass('bg-dark text-secondary');
+        $('#DEW_HEATER__THOLD_DIFF_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
     // Fan thresholds
     if (!$('#FAN__THOLD_ENABLE').prop('checked')) {
         $('#FAN__TEMP_USER_VAR_SLOT').attr({'readonly': true, 'disabled': true});
-        $('#FAN__TEMP_USER_VAR_SLOT').addClass('bg-dark text-secondary');
+        $('#FAN__TEMP_USER_VAR_SLOT').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__TARGET').attr({'readonly': true, 'disabled': true});
         $('#FAN__TARGET').attr('disabled', true);
-        $('#FAN__TARGET').addClass('bg-dark text-secondary');
+        $('#FAN__TARGET').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_LOW').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_LOW').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_MED').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_MED').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__LEVEL_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#FAN__LEVEL_HIGH').addClass('bg-dark text-secondary');
+        $('#FAN__LEVEL_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_LOW').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_LOW').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_LOW').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_MED').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_MED').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_MED').addClass('tw:bg-base-300 tw:text-base-content/40');
         $('#FAN__THOLD_DIFF_HIGH').attr({'readonly': true, 'disabled': true});
-        $('#FAN__THOLD_DIFF_HIGH').addClass('bg-dark text-secondary');
+        $('#FAN__THOLD_DIFF_HIGH').addClass('tw:bg-base-300 tw:text-base-content/40');
     }
 
 
     if ($('#IMAGE_EXPORT_RAW').val() == '') {
         group_fields_export.forEach(item => {
             $('#' + item).attr({'readonly': true, 'disabled': true});
-            $('#' + item).addClass('bg-dark text-secondary');
+            $('#' + item).addClass('tw:bg-base-300 tw:text-base-content/40');
         });
 
         group_checkbox_fields_export.forEach(item => {
@@ -1826,7 +1823,7 @@ $( document ).ready(function() {
         });
         const $toggle = $('#TEMP_SENSOR__FC37_ACTIVE_LOW');
         $toggle.prop('disabled', !fc37Selected);
-        $toggle.closest('.form-group.row').toggleClass('text-muted', !fc37Selected).css('opacity', fc37Selected ? '' : '0.5');
+        $toggle.closest('.tw:form-control').toggleClass('tw:opacity-50', !fc37Selected);
     }
 
     $('#TEMP_SENSOR__A_CLASSNAME, #TEMP_SENSOR__B_CLASSNAME, #TEMP_SENSOR__C_CLASSNAME, #TEMP_SENSOR__D_CLASSNAME, #TEMP_SENSOR__E_CLASSNAME, #TEMP_SENSOR__F_CLASSNAME').on('change', updateFc37ActiveLowState);
@@ -1849,9 +1846,11 @@ $( document ).ready(function() {
         } else {
             panelId = 'collapseIndi';
         }
-        const el = document.getElementById(panelId);
-        if (el) {
-            bootstrap.Collapse.getOrCreateInstance(el).show();
+        
+        // Use radio tab mechanism instead of Bootstrap Collapse
+        const $radio = $(`input[name="camera-accordion"][data-panel="${panelId}"]`);
+        if ($radio.length) {
+            $radio.prop('checked', true);
         }
 
         const mqttFields = document.getElementById('libcamera-mqtt-fields');

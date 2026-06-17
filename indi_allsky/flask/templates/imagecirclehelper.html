@@ -289,8 +289,8 @@ function closeFullscreen() {
     }
 
     /* Text & Select Inputs UI Refinement */
-    .allsky-core-layout-matrix .input,
-    .allsky-core-layout-matrix .select {
+    .allsky-core-layout-matrix .tw-input,
+    .allsky-core-layout-matrix .tw-select {
         display: block !important;
         width: 100% !important;
         height: 2.5rem !important;
@@ -306,15 +306,15 @@ function closeFullscreen() {
         transition: all 0.15s ease-in-out !important;
     }
     
-    .allsky-core-layout-matrix .input:focus,
-    .allsky-core-layout-matrix .select:focus {
+    .allsky-core-layout-matrix .tw-input:focus,
+    .allsky-core-layout-matrix .tw-select:focus {
         @apply tw:border-primary tw:ring-1 tw:ring-primary/20 !important;
         outline: none !important;
     }
 
     /* Fixed DaisyUI Toggle Component Properties */
-    .allsky-core-layout-matrix .toggle {
-        @apply toggle toggle-primary !important;
+    .allsky-core-layout-matrix .tw-toggle {
+        @apply tw:toggle tw:toggle-primary !important;
         width: 3rem !important;
         height: 1.6rem !important;
         min-height: 1.6rem !important;
@@ -353,7 +353,7 @@ function closeFullscreen() {
                             </p>
                         </div>
                     </div>
-                    <div id="message" class="badge badge-neutral tw:border tw:border-base-300 tw:px-4 tw:py-3.5 tw:text-xs tw:font-semibold tw:tracking-wide tw:text-base-content/80 tw:rounded-lg">
+                    <div id="message" class="tw:badge tw:badge-neutral tw:border tw:border-base-300 tw:px-4 tw:py-3.5 tw:text-xs tw:font-semibold tw:tracking-wide tw:text-base-content/80 tw:rounded-lg">
                         Loading...
                     </div>
                 </div>
@@ -385,7 +385,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.IMAGE_CIRCLE_DIAMETER.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.IMAGE_CIRCLE_DIAMETER(class='input') }}
+                            {{ form_imagecircle.IMAGE_CIRCLE_DIAMETER(class='tw-input') }}
                             <div id="IMAGE_CIRCLE_DIAMETER-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -395,7 +395,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.KEOGRAM_ANGLE.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.KEOGRAM_ANGLE(class='input') }}
+                            {{ form_imagecircle.KEOGRAM_ANGLE(class='tw-input') }}
                             <div id="KEOGRAM_ANGLE-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -405,7 +405,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.OFFSET_X.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.OFFSET_X(class='input') }}
+                            {{ form_imagecircle.OFFSET_X(class='tw-input') }}
                             <div id="OFFSET_X-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -415,7 +415,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.OFFSET_Y.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.OFFSET_Y(class='input') }}
+                            {{ form_imagecircle.OFFSET_Y(class='tw-input') }}
                             <div id="OFFSET_Y-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -425,7 +425,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.AZIMUTH_ANGLE.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.AZIMUTH_ANGLE(class='input') }}
+                            {{ form_imagecircle.AZIMUTH_ANGLE(class='tw-input') }}
                             <div id="AZIMUTH_ANGLE-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -435,7 +435,7 @@ function closeFullscreen() {
                                     {{ form_imagecircle.LINE_WIDTH.label.text }}
                                 </span>
                             </div>
-                            {{ form_imagecircle.LINE_WIDTH(class='input') }}
+                            {{ form_imagecircle.LINE_WIDTH(class='tw-input') }}
                             <div id="LINE_WIDTH-error" class="allsky-hidden-validation-node"></div>
                         </div>
 
@@ -447,7 +447,7 @@ function closeFullscreen() {
                                 {{ form_imagecircle.LINE_COLOR.label.text }}
                             </span>
                         </div>
-                        {{ form_imagecircle.LINE_COLOR(class='select') }}
+                        {{ form_imagecircle.LINE_COLOR(class='tw-select') }}
                         <div id="LINE_COLOR-error" class="allsky-hidden-validation-node"></div>
                     </div>
 
@@ -456,7 +456,7 @@ function closeFullscreen() {
                             {{ form_imagecircle.KEOGRAM_LINE.label.text }}
                         </span>
                         <div class="tw:inline-flex tw:items-center">
-                            {{ form_imagecircle.KEOGRAM_LINE(class='toggle') }}
+                            {{ form_imagecircle.KEOGRAM_LINE(class='tw-toggle') }}
                         </div>
                         <div id="KEOGRAM_LINE-error" class="allsky-hidden-validation-node"></div>
                     </div>

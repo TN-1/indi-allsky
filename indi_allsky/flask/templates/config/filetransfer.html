@@ -1,14 +1,14 @@
 <style>
     .allsky-filetransfer-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
         .allsky-filetransfer-grid {
             grid-template-columns: 1.2fr 2fr !important;
-            align-items: start;
+            align-items: start !important;
         }
     }
     /* Enforce absolute dark baseline properties across input types */
@@ -19,10 +19,14 @@
     }
     .allsky-input-dark:focus {
         background-color: rgba(0, 0, 0, 0.4) !important;
-        border-color: var(--p) !important; /* Maps back to DaisyUI primary accent variable */
+        border-color: var(--p) !important;
     }
     .path-group {
-        @apply tw:p-4 tw:bg-black/10 tw:rounded-lg tw:border tw:border-white/5;
+        @apply tw:p-4 tw:bg-black/10 tw:rounded-xl tw:border tw:border-white/5 !important;
+    }
+    .field-micro-label {
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-1 !important;
+        display: block !important;
     }
 </style>
 
@@ -37,7 +41,7 @@
                     <i class="tw:icon-[lucide--server] tw:w-4 tw:h-4"></i>
                     Connection & Auth
                 </h3>
-                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/File-transfers" target="_blank" class="tw:badge tw:badge-info tw:badge-outline tw:gap-1 tw:py-3 tw:px-3 tw:text-[10px] tw:no-underline">
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/File-transfers" target="_blank" class="tw:btn tw:btn-xs tw:btn-info tw:btn-outline tw:gap-1.5 tw:no-underline tw:px-3">
                     <i class="tw:icon-[lucide--book-open] tw:w-3 tw:h-3"></i>
                     Wiki
                 </a>
@@ -45,40 +49,47 @@
 
             <div class="tw:flex tw:flex-col tw:gap-5">
                 <div class="tw:form-control">
-                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Protocol</label>
+                    <label class="field-micro-label">Protocol</label>
                     {{ form_config.FILETRANSFER__CLASSNAME(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                    <div id="FILETRANSFER__CLASSNAME-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                 </div>
 
                 <div class="tw:grid tw:grid-cols-4 tw:gap-4">
                     <div class="tw:form-control tw:col-span-3">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Host</label>
-                        {{ form_config.FILETRANSFER__HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <label class="field-micro-label">Host</label>
+                        {{ form_config.FILETRANSFER__HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs') }}
+                        <div id="FILETRANSFER__HOST-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Port</label>
-                        {{ form_config.FILETRANSFER__PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', placeholder='0') }}
+                        <label class="field-micro-label">Port</label>
+                        {{ form_config.FILETRANSFER__PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs', placeholder='0') }}
+                        <div id="FILETRANSFER__PORT-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
                 <div class="tw:grid tw:grid-cols-2 tw:gap-4">
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Username</label>
+                        <label class="field-micro-label">Username</label>
                         {{ form_config.FILETRANSFER__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="FILETRANSFER__USERNAME-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Password</label>
+                        <label class="field-micro-label">Password</label>
                         {{ form_config.FILETRANSFER__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', type='password') }}
+                        <div id="FILETRANSFER__PASSWORD-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
                 <div class="tw:form-control">
-                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Private Key (SSH)</label>
-                    {{ form_config.FILETRANSFER__PRIVATE_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <label class="field-micro-label">Private Key (SSH)</label>
+                    {{ form_config.FILETRANSFER__PRIVATE_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-[10px]') }}
+                    <div id="FILETRANSFER__PRIVATE_KEY-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                 </div>
 
                 <div class="tw:form-control">
-                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Public Key (SSH)</label>
-                    {{ form_config.FILETRANSFER__PUBLIC_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                    <label class="field-micro-label">Public Key (SSH)</label>
+                    {{ form_config.FILETRANSFER__PUBLIC_KEY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-[10px]') }}
+                    <div id="FILETRANSFER__PUBLIC_KEY-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -92,45 +103,48 @@
 
             <div class="tw:flex tw:flex-col tw:gap-5">
                 <div class="tw:form-control">
-                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Upload Workers</label>
+                    <label class="field-micro-label">Upload Workers</label>
                     {{ form_config.UPLOAD_WORKERS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
-                    <div class="tw:text-[9px] tw:mt-1 tw:opacity-40">Number of parallel upload threads.</div>
+                    <div class="tw:text-[9px] tw:mt-1.5 tw:opacity-40 tw:italic">Number of parallel upload threads.</div>
+                    <div id="UPLOAD_WORKERS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                 </div>
 
                 <div class="tw:grid tw:grid-cols-2 tw:gap-4">
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Connect Timeout</label>
+                        <label class="field-micro-label">Connect Timeout (s)</label>
                         {{ form_config.FILETRANSFER__CONNECT_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="FILETRANSFER__CONNECT_TIMEOUT-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                     </div>
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">Transfer Timeout</label>
+                        <label class="field-micro-label">Transfer Timeout (s)</label>
                         {{ form_config.FILETRANSFER__TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="FILETRANSFER__TIMEOUT-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                     </div>
                 </div>
 
-                <div class="tw:space-y-3">
-                    <div class="tw:flex tw:items-center tw:justify-between">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Bypass Cert Check</span>
+                <div class="tw:space-y-2 tw:pt-2">
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Bypass Cert Check</span>
                         {{ form_config.FILETRANSFER__CERT_BYPASS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </div>
-                    <div class="tw:flex tw:items-center tw:justify-between">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Atomic Transfers</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Atomic Transfers</span>
                         {{ form_config.FILETRANSFER__ATOMIC_TRANSFERS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </div>
-                    <div class="tw:flex tw:items-center tw:justify-between">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Force IPv4 (PycURL)</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Force IPv4 (PycURL)</span>
                         {{ form_config.FILETRANSFER__FORCE_IPV4(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </div>
-                    <div class="tw:flex tw:items-center tw:justify-between">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Force IPv6</span>
+                    </label>
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
+                        <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Force IPv6</span>
                         {{ form_config.FILETRANSFER__FORCE_IPV6(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </div>
+                    </label>
                 </div>
 
                 <div class="tw:form-control">
-                    <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/40 tw:mb-1">libcurl Options</label>
-                    {{ form_config.FILETRANSFER__LIBCURL_OPTIONS(class='tw:textarea tw:textarea-bordered tw:bg-black/20 tw:font-mono tw:text-[10px]', rows='4') }}
-                    <div class="tw:badge tw:badge-warning tw:badge-outline tw:text-[9px] tw:mt-2">NOT FULLY VALIDATED</div>
+                    <label class="field-micro-label">libcurl Options</label>
+                    {{ form_config.FILETRANSFER__LIBCURL_OPTIONS(class='tw:textarea tw:textarea-bordered tw:bg-black/20 tw:font-mono tw:text-[10px] tw:leading-relaxed', rows='4') }}
+                    <div class="tw:badge tw:badge-warning tw:badge-outline tw:text-[9px] tw:font-bold tw:mt-2">NOT FULLY VALIDATED</div>
                 </div>
             </div>
         </div>
@@ -149,44 +163,46 @@
             <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
                 <!-- Group: Images -->
                 <div class="path-group tw:col-span-full">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Standard Images & Folders</h4>
-                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Standard Images & Folders</h4>
+                    <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-6 tw:gap-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Latest Images Folder</label>
-                            {{ form_config.FILETRANSFER__REMOTE_LATEST_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <label class="field-micro-label tw:opacity-40">Latest Images Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_LATEST_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">End of Night Folder</label>
-                            {{ form_config.FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <label class="field-micro-label tw:opacity-40">End of Night Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_ENDOFNIGHT_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Images Name</label>
-                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <label class="field-micro-label tw:opacity-40">Images Name</label>
+                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Images Folder</label>
-                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <label class="field-micro-label tw:opacity-40">Images Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_IMAGE_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                         </div>
                     </div>
-                    <div class="tw:text-[9px] tw:mt-3 tw:opacity-50 tw:italic">Vars: timestamp, ts, ext, camera_uuid, day_date, timeofday</div>
+                    <div class="tw:text-[9px] tw:mt-4 tw:opacity-40 tw:italic tw:bg-black/10 tw:p-2 tw:rounded tw:border tw:border-white/5">
+                        <span class="tw:font-bold">Tokens:</span> timestamp, ts, ext, camera_uuid, day_date, timeofday
+                    </div>
                 </div>
 
                 <!-- Group: Specialized Data -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">RAW & FITS</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">RAW & FITS</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">RAW Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">RAW Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_RAW_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_RAW_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_RAW_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_RAW_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">FITS Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">FITS Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_FITS_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_FITS_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_FITS_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_FITS_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                     </div>
@@ -194,38 +210,38 @@
 
                 <!-- Group: Metadata & Backup -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Metadata & System</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Metadata & System</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Metadata Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Metadata Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_METADATA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_METADATA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_METADATA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_METADATA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">DB Backup Folder</label>
-                            {{ form_config.FILETRANSFER__REMOTE_DB_BACKUP_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                            <label class="field-micro-label tw:opacity-40">DB Backup Folder</label>
+                            {{ form_config.FILETRANSFER__REMOTE_DB_BACKUP_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                         </div>
                     </div>
                 </div>
 
                 <!-- Group: Video -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Timelapse Videos</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Timelapse Videos</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Full Video Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Full Video Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Mini Video Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Mini Video Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_MINI_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                     </div>
@@ -233,20 +249,20 @@
 
                 <!-- Group: Analytics -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Keograms & Trails</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Keograms & Trails</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Keogram Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Keogram Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Startrail Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Startrail Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                     </div>
@@ -254,20 +270,20 @@
 
                 <!-- Group: Analytics Video -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Trail & Pano Videos</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Trail & Pano Videos</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Startrail Video Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Startrail Video Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_STARTRAIL_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Video Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Pano Video Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_VIDEO_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                     </div>
@@ -275,20 +291,20 @@
 
                 <!-- Group: Pano & Realtime -->
                 <div class="path-group">
-                    <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:text-primary/60 tw:mb-4">Pano & Realtime</h4>
+                    <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:text-primary/60 tw:mb-4">Pano & Realtime</h4>
                     <div class="tw:space-y-4">
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Pano Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_PANORAMA_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                         <div class="tw:form-control">
-                            <label class="tw:text-[9px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Realtime Keo Name / Folder</label>
+                            <label class="field-micro-label tw:opacity-40">Realtime Keo Name / Folder</label>
                             <div class="tw:join tw:w-full">
-                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
-                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 allsky-input-dark') }}
+                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
+                                {{ form_config.FILETRANSFER__REMOTE_REALTIME_KEOGRAM_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:join-item tw:flex-1 allsky-input-dark tw:font-mono tw:text-[11px]') }}
                             </div>
                         </div>
                     </div>
@@ -307,89 +323,61 @@
                 <!-- Frequency Inputs -->
                 <div class="tw:flex tw:flex-col tw:gap-4">
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Image Upload (Freq)</label>
+                        <label class="field-micro-label">Image Upload (Freq)</label>
                         {{ form_config.FILETRANSFER__UPLOAD_IMAGE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
-                        <span class="tw:text-[9px] tw:mt-1 tw:opacity-40">0=Off, 1=Every, 2=Every 2nd...</span>
+                        <span class="tw:text-[9px] tw:mt-1.5 tw:opacity-40 tw:italic">0=Off, 1=Every, 2=Every 2nd...</span>
+                        <div id="FILETRANSFER__UPLOAD_IMAGE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                     </div>
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Pano Upload (Freq)</label>
+                        <label class="field-micro-label">Pano Upload (Freq)</label>
                         {{ form_config.FILETRANSFER__UPLOAD_PANORAMA(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="FILETRANSFER__UPLOAD_PANORAMA-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                     </div>
                     <div class="tw:form-control">
-                        <label class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-40 tw:mb-1">Realtime Keo (Freq)</label>
+                        <label class="field-micro-label">Realtime Keo (Freq)</label>
                         {{ form_config.FILETRANSFER__UPLOAD_REALTIME_KEOGRAM(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                        <div id="FILETRANSFER__UPLOAD_REALTIME_KEOGRAM-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
                     </div>
                 </div>
 
                 <!-- Toggle Grid -->
-                <div class="tw:space-y-2">
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Metadata</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_METADATA(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+                <div class="tw:space-y-1.5 tw:pt-1">
+                    {% for field in [
+                        form_config.FILETRANSFER__UPLOAD_METADATA,
+                        form_config.FILETRANSFER__UPLOAD_RAW,
+                        form_config.FILETRANSFER__UPLOAD_FITS,
+                        form_config.FILETRANSFER__UPLOAD_VIDEO,
+                        form_config.FILETRANSFER__UPLOAD_MINI_VIDEO,
+                        form_config.FILETRANSFER__UPLOAD_KEOGRAM,
+                        form_config.FILETRANSFER__UPLOAD_STARTRAIL,
+                        form_config.FILETRANSFER__UPLOAD_STARTRAIL_VIDEO,
+                        form_config.FILETRANSFER__UPLOAD_PANORAMA_VIDEO
+                    ] %}
+                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer hover:tw:bg-white/5 tw:rounded tw:transition-colors">
+                        <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">{{ field.label.text if field.label.text else field.name.replace('FILETRANSFER__UPLOAD_', '').replace('_', ' ') }}</span>
+                        {{ field(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                     </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload RAW</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_RAW(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload FITS</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_FITS(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Video</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Mini Video</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_MINI_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Keogram</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_KEOGRAM(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Startrail</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Trail Video</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_STARTRAIL_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
-                    <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                        <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Upload Pano Video</span>
-                        {{ form_config.FILETRANSFER__UPLOAD_PANORAMA_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                    </label>
+                    {% endfor %}
                 </div>
             </div>
 
             <div class="tw:divider tw:my-1 tw:opacity-10"></div>
 
             <!-- "Latest" Toggles -->
-            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-12 tw:gap-y-2">
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Image</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_IMAGE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
+            <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-12 tw:gap-y-1.5">
+                {% for field in [
+                    form_config.FILETRANSFER__UPLOAD_LATEST_IMAGE,
+                    form_config.FILETRANSFER__UPLOAD_LATEST_PANORAMA,
+                    form_config.FILETRANSFER__UPLOAD_LATEST_RAW,
+                    form_config.FILETRANSFER__UPLOAD_LATEST_VIDEO,
+                    form_config.FILETRANSFER__UPLOAD_ENDOFNIGHT,
+                    form_config.FILETRANSFER__UPLOAD_DB_BACKUP
+                ] %}
+                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer hover:tw:bg-white/5 tw:rounded tw:transition-colors">
+                    <span class="tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">{{ field.label.text if field.label.text else field.name.replace('FILETRANSFER__UPLOAD_', '').replace('_', ' ') }}</span>
+                    {{ field(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                 </label>
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Panorama</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_PANORAMA(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                </label>
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest RAW</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_RAW(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                </label>
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">Latest Video/Keo/Trail</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_LATEST_VIDEO(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                </label>
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">End of Night</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_ENDOFNIGHT(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                </label>
-                <label class="tw:flex tw:items-center tw:justify-between tw:p-1 tw:cursor-pointer">
-                    <span class="tw:text-[10px] tw:font-bold tw:uppercase tw:opacity-50">DB Backup</span>
-                    {{ form_config.FILETRANSFER__UPLOAD_DB_BACKUP(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
-                </label>
+                {% endfor %}
             </div>
         </div>
 

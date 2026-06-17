@@ -1,36 +1,37 @@
 <style>
     .allsky-workspace-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
         .allsky-workspace-grid {
-            grid-template-columns: 2fr 1fr !important;
-            align-items: start;
+            grid-template-columns: 2fr 1.2fr !important;
+            align-items: start !important;
         }
     }
     .field-micro-label {
-        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-0.5;
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-1 !important;
+        display: block !important;
     }
     .settings-row {
-        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0;
+        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0 !important;
     }
     .settings-info {
-        @apply tw:flex-1;
+        @apply tw:flex-1 !important;
     }
     .settings-control {
-        @apply tw:flex-none tw:w-full md:tw:w-72;
+        @apply tw:flex-none tw:w-full md:tw:w-72 !important;
     }
     .config-card {
-        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden;
+        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden !important;
     }
     .config-card-header {
-        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center;
+        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center !important;
     }
     .config-card-body {
-        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0;
+        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0 !important;
     }
 </style>
 
@@ -48,12 +49,12 @@
                     <div class="settings-info">
                         <label class="field-micro-label">{{ form_config.CAMERA_INTERFACE.label.text }}</label>
                         <div class="tw:flex tw:gap-2 tw:mt-1">
-                            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Camera-Interfaces" target="_blank" class="tw:link tw:link-primary tw:text-[10px]">Interface Wiki</a>
+                            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Camera-Interfaces" target="_blank" class="tw:link tw:link-primary tw:text-[10px] tw:font-bold tw:uppercase">Interface Wiki</a>
                         </div>
                     </div>
                     <div class="settings-control">
                         {{ form_config.CAMERA_INTERFACE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:w-full tw:bg-base-100') }}
-                        <div id="CAMERA_INTERFACE-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        <div id="CAMERA_INTERFACE-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -64,9 +65,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 tw:block">Host</span>
                             {{ form_config.INDI_SERVER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='localhost') }}
                         </div>
                         <div class="tw:w-24">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 tw:block">Port</span>
                             {{ form_config.INDI_PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='7624') }}
                         </div>
                     </div>
@@ -79,7 +82,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.INDI_CAMERA_NAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100', placeholder='Auto-detect') }}
-                        <div id="INDI_CAMERA_NAME-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        <div id="INDI_CAMERA_NAME-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -89,7 +92,7 @@
         <div class="config-card">
             <div class="config-card-header">
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Exposure Control</h3>
-                <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px]">FULL RESTART RECOMMENDED</span>
+                <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px] tw:font-bold">FULL RESTART RECOMMENDED</span>
             </div>
             <div class="config-card-body">
                 <!-- Night Exposure -->
@@ -101,11 +104,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Max (s)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Max (s)</span>
                             {{ form_config.CCD_EXPOSURE_MAX(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Def (0=auto)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Def (0=auto)</span>
                             {{ form_config.CCD_EXPOSURE_DEF(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -120,11 +123,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Min (s)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Min (s)</span>
                             {{ form_config.CCD_EXPOSURE_MIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Day Min (s)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Day Min (s)</span>
                             {{ form_config.CCD_EXPOSURE_MIN_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -139,11 +142,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Night (s)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Night (s)</span>
                             {{ form_config.EXPOSURE_PERIOD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Day (s)</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Day (s)</span>
                             {{ form_config.EXPOSURE_PERIOD_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -156,6 +159,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.CCD_EXPOSURE_TIMEOUT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        <div id="CCD_EXPOSURE_TIMEOUT-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -174,11 +178,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Gain</span>
                             {{ form_config.CCD_CONFIG__NIGHT__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Binning</span>
                             {{ form_config.CCD_CONFIG__NIGHT__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -190,11 +194,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Gain</span>
                             {{ form_config.CCD_CONFIG__MOONMODE__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Binning</span>
                             {{ form_config.CCD_CONFIG__MOONMODE__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -207,11 +211,11 @@
                     </div>
                     <div class="settings-control tw:flex tw:gap-2">
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Gain</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Gain</span>
                             {{ form_config.CCD_CONFIG__DAY__GAIN(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                         <div class="tw:flex-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1">Binning</span>
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50 tw:mb-1 tw:block">Binning</span>
                             {{ form_config.CCD_CONFIG__DAY__BINNING(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                         </div>
                     </div>
@@ -229,26 +233,26 @@
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Cooling Control</h3>
             </div>
             <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
-                <div class="tw:space-y-3">
-                    <div class="tw:flex tw:flex-col tw:gap-1">
+                <div class="tw:space-y-4">
+                    <div class="tw:flex tw:flex-col tw:gap-2">
                         <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                            <span class="tw:label-text tw:text-[11px] tw:font-medium">Night Cooling</span>
+                            <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Night Cooling</span>
                             {{ form_config.CCD_COOLING(class='tw:toggle tw:toggle-xs tw:toggle-info') }}
                         </label>
-                        <div class="tw:flex tw:items-center tw:gap-2 tw:mt-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Target °C</span>
-                            {{ form_config.CCD_TEMP(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:w-full tw:bg-base-100') }}
+                        <div class="tw:flex tw:items-center tw:gap-2">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:w-16">Target °C</span>
+                            {{ form_config.CCD_TEMP(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:flex-1 tw:bg-base-100') }}
                         </div>
                     </div>
                     
-                    <div class="tw:flex tw:flex-col tw:gap-1">
+                    <div class="tw:flex tw:flex-col tw:gap-2">
                         <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                            <span class="tw:label-text tw:text-[11px] tw:font-medium">Day Cooling</span>
+                            <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Day Cooling</span>
                             {{ form_config.CCD_COOLING_DAY(class='tw:toggle tw:toggle-xs tw:toggle-info') }}
                         </label>
-                        <div class="tw:flex tw:items-center tw:gap-2 tw:mt-1">
-                            <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Target °C</span>
-                            {{ form_config.CCD_TEMP_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:w-full tw:bg-base-100') }}
+                        <div class="tw:flex tw:items-center tw:gap-2">
+                            <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:w-16">Target °C</span>
+                            {{ form_config.CCD_TEMP_DAY(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:flex-1 tw:bg-base-100') }}
                         </div>
                     </div>
                 </div>
@@ -262,14 +266,14 @@
             </div>
             <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
                 <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Enable Auto Gain</span>
+                    <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Enable Auto Gain</span>
                     {{ form_config.CCD_CONFIG__AUTO_GAIN_ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                 </label>
                 <div class="tw:form-control">
                     <span class="field-micro-label">Gain Levels</span>
                     {{ form_config.CCD_CONFIG__AUTO_GAIN_LEVELS(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:w-full tw:bg-base-100') }}
                 </div>
-                <p class="tw:text-[10px] tw:opacity-60">Dynamically adjusts gain to maximize exposure time.</p>
+                <p class="tw:text-[10px] tw:opacity-50 tw:italic">Dynamically adjusts gain to maximize exposure time.</p>
             </div>
         </div>
 
@@ -277,13 +281,13 @@
         <div class="config-card">
             <div class="config-card-header">
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Camera SQM</h3>
-                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/SQM-Sky-Brightness-Measurement" target="_blank">
-                    <i class="tw:icon-[lucide--help-circle] tw:w-4 tw:h-4 tw:opacity-50"></i>
+                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/SQM-Sky-Brightness-Measurement" target="_blank" class="tw:text-base-content/40 hover:tw:text-primary">
+                    <i class="tw:icon-[lucide--help-circle] tw:w-4 tw:h-4"></i>
                 </a>
             </div>
             <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
                 <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                    <span class="tw:label-text tw:text-[11px] tw:font-medium">Enable SQM Images</span>
+                    <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Enable SQM Images</span>
                     {{ form_config.CAMERA_SQM__ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                 </label>
                 <div class="tw:grid tw:grid-cols-2 tw:gap-2">
@@ -300,9 +304,9 @@
                     <span class="field-micro-label">Magnitude Offset</span>
                     {{ form_config.CAMERA_SQM__MAGNITUDE_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
                 </div>
-                <div class="tw:bg-base-300 tw:rounded tw:p-2 tw:text-[10px] tw:font-mono">
-                    Raw Mag: {{ camera_sqm_raw_mag_str }}<br>
-                    Calc SQM: {{ camera_sqm_calc_sqm_str }}
+                <div class="tw:bg-black/20 tw:rounded-lg tw:p-3 tw:text-[10px] tw:font-mono tw:border tw:border-white/5">
+                    <div class="tw:flex tw:justify-between"><span class="tw:opacity-40">RAW MAG</span><span>{{ camera_sqm_raw_mag_str }}</span></div>
+                    <div class="tw:flex tw:justify-between tw:mt-1"><span class="tw:opacity-40">CALC SQM</span><span class="tw:text-info tw:font-bold">{{ camera_sqm_calc_sqm_str }}</span></div>
                 </div>
             </div>
         </div>
@@ -312,24 +316,24 @@
             <div class="config-card-header">
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Units & Scripts</h3>
             </div>
-            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-3">
+            <div class="tw:p-4 tw:flex tw:flex-col tw:gap-4">
                 <div class="tw:grid tw:grid-cols-3 tw:gap-1">
                     <div class="tw:form-control">
-                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Temp</span>
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 tw:block">Temp</span>
                         {{ form_config.TEMP_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
                     <div class="tw:form-control">
-                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Pres</span>
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 tw:block">Pres</span>
                         {{ form_config.PRESSURE_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
                     <div class="tw:form-control">
-                        <span class="tw:text-[9px] tw:uppercase tw:opacity-50">Wind</span>
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1 tw:block">Wind</span>
                         {{ form_config.WINDSPEED_DISPLAY(class='tw:select tw:select-bordered tw:select-sm tw:h-9 tw:bg-base-100 tw:px-1') }}
                     </div>
                 </div>
                 <div class="tw:form-control">
                     <span class="field-micro-label">Temp Script</span>
-                    {{ form_config.CCD_TEMP_SCRIPT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:text-[10px]') }}
+                    {{ form_config.CCD_TEMP_SCRIPT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:font-mono tw:text-[10px]') }}
                 </div>
             </div>
         </div>
@@ -348,28 +352,34 @@
             <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6 tw:p-4">
                 <div class="tw:flex tw:flex-col tw:gap-4">
                     <div class="tw:form-control">
-                        {{ form_config.LIBCAMERA__CAMERA_ID.label(class='field-micro-label') }}
+                        <label class="field-micro-label">Camera ID</label>
                         {{ form_config.LIBCAMERA__CAMERA_ID(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
                     </div>
                     <div class="tw:form-control">
-                        {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE.label(class='field-micro-label') }}
+                        <label class="field-micro-label">Image Format</label>
                         {{ form_config.LIBCAMERA__IMAGE_FILE_TYPE(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100') }}
                     </div>
                     <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                        <span class="tw:label-text tw:text-[11px]">{{ form_config.LIBCAMERA__AWB_ENABLE.label.text }}</span>
+                        <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Enable AWB</span>
                         {{ form_config.LIBCAMERA__AWB_ENABLE(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                     </label>
                 </div>
                 <div class="tw:flex tw:flex-col tw:gap-4">
                     <div class="tw:form-control">
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS.label(class='field-micro-label') }}
-                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                        <label class="field-micro-label">Extra libcamera-still Options</label>
+                        {{ form_config.LIBCAMERA__EXTRA_OPTIONS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:font-mono tw:text-xs') }}
                     </div>
-                    <div class="tw:bg-base-300 tw:p-3 tw:rounded-lg">
-                        <h4 class="tw:text-[10px] tw:font-bold tw:uppercase tw:mb-2">MQTT libcamera</h4>
-                        <div class="tw:grid tw:grid-cols-2 tw:gap-2">
-                            {{ form_config.LIBCAMERA__MQTT_HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Host') }}
-                            {{ form_config.LIBCAMERA__MQTT_PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100', placeholder='Port') }}
+                    <div class="tw:bg-black/20 tw:p-4 tw:rounded-xl tw:border tw:border-white/5">
+                        <h4 class="tw:text-[10px] tw:font-black tw:uppercase tw:tracking-wider tw:mb-3 tw:opacity-50">MQTT Remote Control</h4>
+                        <div class="tw:grid tw:grid-cols-2 tw:gap-3">
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Host</span>
+                                {{ form_config.LIBCAMERA__MQTT_HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100 tw:font-mono tw:text-[10px]', placeholder='Host') }}
+                            </div>
+                            <div class="tw:form-control">
+                                <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Port</span>
+                                {{ form_config.LIBCAMERA__MQTT_PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-9 tw:bg-base-100 tw:font-mono tw:text-[10px]', placeholder='Port') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -384,21 +394,21 @@
         <div class="tw:collapse-content tw:bg-base-300/30">
             <div class="tw:flex tw:flex-col tw:gap-4 tw:p-4">
                 <div class="tw:form-control">
-                    {{ form_config.INDI_CONFIG_DEFAULTS.label(class='field-micro-label') }}
-                    {{ form_config.INDI_CONFIG_DEFAULTS(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:font-mono tw:text-xs', rows='6') }}
+                    <label class="field-micro-label">INDI Property Defaults</label>
+                    {{ form_config.INDI_CONFIG_DEFAULTS(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:font-mono tw:text-[10px] tw:leading-relaxed', rows='6') }}
                 </div>
-                <div class="tw:grid tw:grid-cols-2 tw:gap-4">
+                <div class="tw:grid tw:grid-cols-2 tw:gap-6">
                     <div class="tw:form-control">
-                        {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX.label(class='field-micro-label') }}
+                        <label class="field-micro-label">Accum Sub-Exp Max (s)</label>
                         {{ form_config.ACCUM_CAMERA__SUB_EXPOSURE_MAX(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
                     </div>
                     <div class="tw:flex tw:flex-col tw:gap-2 tw:justify-center">
                         <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                            <span class="tw:label-text tw:text-[11px]">Even Exposures</span>
+                            <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Even Exposures</span>
                             {{ form_config.ACCUM_CAMERA__EVEN_EXPOSURES(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                         </label>
                         <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                            <span class="tw:label-text tw:text-[11px]">Clamp 16-bit</span>
+                            <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:opacity-70">Clamp 16-bit</span>
                             {{ form_config.ACCUM_CAMERA__CLAMP_16BIT(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                         </label>
                     </div>
@@ -414,12 +424,18 @@
         <div class="tw:collapse-content tw:bg-base-300/30">
             <div class="tw:flex tw:flex-col tw:gap-4 tw:p-4">
                 <div class="tw:form-control">
-                    {{ form_config.PYCURL_CAMERA__URL.label(class='field-micro-label') }}
-                    {{ form_config.PYCURL_CAMERA__URL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    <label class="field-micro-label">MJPEG / Snapshot URL</label>
+                    {{ form_config.PYCURL_CAMERA__URL(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:font-mono tw:text-[10px]') }}
                 </div>
                 <div class="tw:grid tw:grid-cols-2 tw:gap-4">
-                    {{ form_config.PYCURL_CAMERA__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Username') }}
-                    {{ form_config.PYCURL_CAMERA__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Password', type='password') }}
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Username</span>
+                        {{ form_config.PYCURL_CAMERA__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Username') }}
+                    </div>
+                    <div class="tw:form-control">
+                        <span class="tw:text-[9px] tw:uppercase tw:opacity-40 tw:mb-1">Password</span>
+                        {{ form_config.PYCURL_CAMERA__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100', placeholder='Password', type='password') }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -430,19 +446,21 @@
         <input type="radio" name="camera-accordion" /> 
         <div class="tw:collapse-title tw:text-sm tw:font-bold">Test Camera Settings</div>
         <div class="tw:collapse-content tw:bg-base-300/30">
-            <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:p-4">
+            <div class="tw:grid tw:grid-cols-2 tw:gap-8 tw:p-6">
                 <div class="tw:form-control">
-                    <span class="field-micro-label">Width x Height</span>
-                    <div class="tw:flex tw:gap-2">
-                        {{ form_config.TEST_CAMERA__WIDTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
-                        {{ form_config.TEST_CAMERA__HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                    <span class="field-micro-label">Simulated Resolution</span>
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.TEST_CAMERA__WIDTH(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 tw:bg-base-100 tw:font-mono', placeholder='Width') }}
+                        <span class="tw:bg-base-300 tw:border tw:border-base-300 tw:px-3 tw:flex tw:items-center tw:text-[10px] tw:font-black tw:join-item">×</span>
+                        {{ form_config.TEST_CAMERA__HEIGHT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 tw:bg-base-100 tw:font-mono', placeholder='Height') }}
                     </div>
                 </div>
                 <div class="tw:form-control">
-                    <span class="field-micro-label">Star Count / Factor</span>
-                    <div class="tw:flex tw:gap-2">
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_COUNT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
-                        {{ form_config.TEST_CAMERA__ROTATING_STAR_FACTOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                    <span class="field-micro-label">Star Simulation Dynamics</span>
+                    <div class="tw:join tw:w-full">
+                        {{ form_config.TEST_CAMERA__ROTATING_STAR_COUNT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 tw:bg-base-100 tw:font-mono', placeholder='Count') }}
+                        <span class="tw:bg-base-300 tw:border tw:border-base-300 tw:px-3 tw:flex tw:items-center tw:text-[10px] tw:font-black tw:join-item">/</span>
+                        {{ form_config.TEST_CAMERA__ROTATING_STAR_FACTOR(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:join-item tw:flex-1 tw:bg-base-100 tw:font-mono', placeholder='Factor') }}
                     </div>
                 </div>
             </div>

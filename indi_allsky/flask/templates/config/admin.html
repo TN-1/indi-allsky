@@ -1,36 +1,37 @@
 <style>
     .allsky-workspace-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
     }
     @media (min-width: 1024px) {
         .allsky-workspace-grid {
             grid-template-columns: 2fr 1fr !important;
-            align-items: start;
+            align-items: start !important;
         }
     }
     .field-micro-label {
-        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-0.5;
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-1 !important;
+        display: block !important;
     }
     .settings-row {
-        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0;
+        @apply tw:flex tw:flex-col md:tw:flex-row tw:gap-4 tw:py-4 tw:border-b tw:border-base-content/5 last:tw:border-0 !important;
     }
     .settings-info {
-        @apply tw:flex-1;
+        @apply tw:flex-1 !important;
     }
     .settings-control {
-        @apply tw:flex-none tw:w-full md:tw:w-72;
+        @apply tw:flex-none tw:w-full md:tw:w-72 !important;
     }
     .config-card {
-        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden;
+        @apply tw:card tw:bg-base-200 tw:shadow-sm tw:border tw:border-base-300 tw:overflow-hidden !important;
     }
     .config-card-header {
-        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center;
+        @apply tw:bg-base-300/50 tw:px-4 tw:py-3 tw:border-b tw:border-base-300 tw:flex tw:justify-between tw:items-center !important;
     }
     .config-card-body {
-        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0;
+        @apply tw:card-body tw:p-0 tw:px-4 tw:gap-0 !important;
     }
 </style>
 
@@ -52,7 +53,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.BACKUP_DB_PERIOD_DAYS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
-                        <div id="BACKUP_DB_PERIOD_DAYS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        <div id="BACKUP_DB_PERIOD_DAYS-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -64,7 +65,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.IMAGE_EXPIRE_DAYS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
-                        <div id="IMAGE_EXPIRE_DAYS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
+                        <div id="IMAGE_EXPIRE_DAYS-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -94,6 +95,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.TIMELAPSE_EXPIRE_DAYS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        <div id="TIMELAPSE_EXPIRE_DAYS-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -105,7 +107,7 @@
                     </div>
                     <div class="settings-control tw:flex tw:items-center">
                         <label class="tw:label tw:cursor-pointer tw:gap-4">
-                            <span class="tw:label-text tw:text-xs">{{ form_config.TIMELAPSE_OVERWRITE.label.text }}</span>
+                            <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70">{{ form_config.TIMELAPSE_OVERWRITE.label.text }}</span>
                             {{ form_config.TIMELAPSE_OVERWRITE(class='tw:toggle tw:toggle-primary') }}
                         </label>
                     </div>
@@ -128,6 +130,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.IMAGE_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100 tw:font-mono tw:text-xs') }}
+                        <div id="IMAGE_FOLDER-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
                 <div class="settings-row tw:border-0">
@@ -136,6 +139,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.VARLIB_FOLDER(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100 tw:font-mono tw:text-xs') }}
+                        <div id="VARLIB_FOLDER-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -154,6 +158,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.WEBSITE__TITLE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        <div id="WEBSITE__TITLE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -162,12 +167,13 @@
                         <label class="field-micro-label">Status Template</label>
                         <p class="tw:text-xs tw:opacity-60">HTML/Python format string for the overlay.</p>
                         <div class="tw:flex tw:gap-3 tw:mt-2">
-                            <a href="https://docs.python.org/3/library/string.html#formatspec" target="_blank" class="tw:link tw:link-primary tw:text-[10px]">Syntax Docs</a>
-                            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Web-Status-Configuration" target="_blank" class="tw:link tw:link-primary tw:text-[10px]">Wiki Guide</a>
+                            <a href="https://docs.python.org/3/library/string.html#formatspec" target="_blank" class="tw:link tw:link-primary tw:text-[10px] tw:font-bold tw:uppercase">Syntax Docs</a>
+                            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Web-Status-Configuration" target="_blank" class="tw:link tw:link-primary tw:text-[10px] tw:font-bold tw:uppercase">Wiki Guide</a>
                         </div>
                     </div>
                     <div class="settings-control">
                         {{ form_config.WEB_STATUS_TEMPLATE(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:font-mono tw:text-[10px] tw:w-full', rows='8') }}
+                        <div id="WEB_STATUS_TEMPLATE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
 
@@ -178,6 +184,7 @@
                     </div>
                     <div class="settings-control">
                         {{ form_config.WEB_EXTRA_TEXT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:w-full tw:bg-base-100') }}
+                        <div id="WEB_EXTRA_TEXT-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -187,7 +194,7 @@
         <div class="config-card">
             <div class="config-card-header">
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:opacity-70">Chart Slots</h3>
-                <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px]">RESTART REQUIRED</span>
+                <span class="tw:badge tw:badge-info tw:badge-outline tw:text-[9px] tw:font-bold">RESTART REQUIRED</span>
             </div>
             <div class="tw:p-4 tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-x-8 tw:gap-y-4">
                 {% for i in range(1, 10) %}
@@ -217,21 +224,21 @@
                 <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Admin Actions</h3>
             </div>
             <div class="tw:p-4 tw:flex tw:flex-col tw:gap-2">
-                <a href="{{ url_for('indi_allsky.config_list_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content">
+                <a href="{{ url_for('indi_allsky.config_list_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content tw:no-underline">
                     <i class="tw:icon-[lucide--history] tw:w-4 tw:h-4 tw:text-primary"></i>
-                    Config History
+                    <span class="tw:text-xs tw:font-bold tw:uppercase">Config History</span>
                 </a>
-                <a href="{{ url_for('indi_allsky.config_download_view', id=config_id) }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content">
+                <a href="{{ url_for('indi_allsky.config_download_view', id=config_id) }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content tw:no-underline">
                     <i class="tw:icon-[lucide--download] tw:w-4 tw:h-4 tw:text-primary"></i>
-                    Backup Config
+                    <span class="tw:text-xs tw:font-bold tw:uppercase">Backup Config</span>
                 </a>
-                <a href="{{ url_for('indi_allsky.config_download_view', id=config_id, redact=1) }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content">
+                <a href="{{ url_for('indi_allsky.config_download_view', id=config_id, redact=1) }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-base-content tw:no-underline">
                     <i class="tw:icon-[lucide--shield-off] tw:w-4 tw:h-4 tw:text-primary"></i>
-                    Redacted Config
+                    <span class="tw:text-xs tw:font-bold tw:uppercase">Redacted Config</span>
                 </a>
-                <a href="{{ url_for('indi_allsky.config_restore_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-error">
+                <a href="{{ url_for('indi_allsky.config_restore_view') }}" class="tw:btn tw:btn-sm tw:h-11 tw:justify-start tw:gap-3 tw:bg-base-300 tw:hover:tw:bg-base-100 tw:border-none tw:text-error tw:no-underline">
                     <i class="tw:icon-[lucide--rotate-ccw] tw:w-4 tw:h-4 tw:text-error"></i>
-                    Restore Config
+                    <span class="tw:text-xs tw:font-bold tw:uppercase">Restore Config</span>
                 </a>
             </div>
         </div>
@@ -246,19 +253,20 @@
                     <label class="field-micro-label">Admin Networks</label>
                     {{ form_config.ADMIN_NETWORKS_FLASK(class='tw:textarea tw:textarea-bordered tw:bg-base-100 tw:font-mono tw:text-[10px] tw:leading-relaxed', rows='5') }}
                     <p class="tw:text-[9px] tw:mt-1 tw:opacity-50">Local subnets are auto-added.</p>
+                    <div id="ADMIN_NETWORKS_FLASK-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                 </div>
                 
                 <div class="tw:space-y-1">
-                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                        <span class="tw:label-text tw:text-[11px] tw:font-medium">Non-Local Images</span>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-1">
+                        <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:tracking-wide tw:opacity-70">Non-Local Images</span>
                         {{ form_config.WEB_NONLOCAL_IMAGES(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                     </label>
-                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                        <span class="tw:label-text tw:text-[11px] tw:font-medium">Admin Local Access</span>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-1">
+                        <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:tracking-wide tw:opacity-70">Admin Local Access</span>
                         {{ form_config.WEB_LOCAL_IMAGES_ADMIN(class='tw:toggle tw:toggle-xs tw:toggle-primary') }}
                     </label>
-                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-0">
-                        <span class="tw:label-text tw:text-[11px] tw:font-medium">Encrypt Passwords</span>
+                    <label class="tw:label tw:cursor-pointer tw:justify-between tw:p-1">
+                        <span class="tw:label-text tw:text-[11px] tw:font-bold tw:uppercase tw:tracking-wide tw:opacity-70">Encrypt Passwords</span>
                         {{ form_config.ENCRYPT_PASSWORDS(class='tw:toggle tw:toggle-xs tw:toggle-warning') }}
                     </label>
                 </div>
@@ -274,10 +282,12 @@
                 <div class="tw:form-control">
                     <span class="field-micro-label">Disk Warn %</span>
                     {{ form_config.HEALTHCHECK__DISK_USAGE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    <div id="HEALTHCHECK__DISK_USAGE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                 </div>
                 <div class="tw:form-control">
                     <span class="field-micro-label">Swap Warn %</span>
                     {{ form_config.HEALTHCHECK__SWAP_USAGE(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100') }}
+                    <div id="HEALTHCHECK__SWAP_USAGE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                 </div>
             </div>
         </div>

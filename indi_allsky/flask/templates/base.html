@@ -4,48 +4,29 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ url_for('indi_allsky.static', filename='images/favicon_32.png') }}" sizes="32x32">
     <link rel="icon" type="image/png" href="{{ url_for('indi_allsky.static', filename='images/favicon_128.png') }}" sizes="128x128">
-    <link href="{{ url_for('indi_allsky.static', filename='bootstrap/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('indi_allsky.static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('indi_allsky.static', filename='css/dist.css') }}" rel="stylesheet">    
     <script src="{{ url_for('indi_allsky.static', filename='js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ url_for('indi_allsky.static', filename='bootstrap/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('indi_allsky.static', filename='js/indi-allsky-tabs.js') }}"></script>
-    <link href="{{ url_for('indi_allsky.static', filename='css/dist.css') }}" rel="stylesheet">
+    
     <style>
-    /* Hacks override styles, could be used to override bootstrap so some might be redundant later */
-    /* 1. Force summary blocks to behave as full-width flex rows */
-    .tw\:menu summary {
+    /* Final UI Refinements */
+    
+    /* 1. Reset details/summary for DaisyUI menus */
+    .tw\:menu details > summary {
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
         width: 100% !important;
         list-style: none !important;
     }
-
-    /* 2. Strip default HTML markers completely */
-    .tw\:menu summary::-webkit-details-marker { display: none !important; }
-    .tw\:menu summary::marker { display: none !important; content: "" !important; }
-    .tw\:menu summary::before, .tw\:menu summary::after { display: none !important; content: none !important; }
-
-    /* 3. Nuke gross blue colors and underlines from the menu links */
-    .tw\:menu a, 
-    .tw\:menu a:hover, 
-    .tw\:menu a:focus,
-    .tw\:menu summary:focus {
-        color: inherit !important;
+    .tw\:menu details > summary::-webkit-details-marker { display: none !important; }
+    
+    /* 2. Menu link normalization */
+    .tw\:menu a {
         text-decoration: none !important;
     }
 
-    /* Side drawer left padding - Targets the exact tag signature to erase the 2rem padding */
-    .tw\:drawer-side ul, 
-    .tw\:drawer-side ol {
-        padding-left: 0px !important;
-    }
-    
-    /* 5. INDENT FIX: Gives just the links inside the dropdown menus a clean, crisp alignment */
-    .tw\:menu ul a {
-        padding-left: 1rem !important;
-    }
-    /* FORCE DAISYUI TYPOGRAPHY INSIDE WORKSPACE AREA */
+    /* 3. Typography Isolation */
     .tw\:drawer-content h1, 
     .tw\:drawer-content h2, 
     .tw\:drawer-content h3, 
@@ -55,18 +36,34 @@
         color: inherit !important;
         font-weight: inherit !important;
         margin-top: 0 !important;
-        margin-bottom: 0.5rem !important;
+    }
+
+    /* 4. Scrollbar Theming */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: oklch(var(--b3));
+    }
+    ::-webkit-scrollbar-thumb {
+        background: oklch(var(--bc) / 0.1);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: oklch(var(--bc) / 0.2);
     }
     </style>
     {% block head %}{% endblock %}
   </head>
 
-<body class="tw:bg-base-300 tw:min-h-screen">
+<body class="tw:bg-base-300 tw:min-h-screen tw:font-sans">
     <div class="tw:drawer tw:lg:drawer-open">
         <input id="main-drawer" type="checkbox" class="tw:drawer-toggle"  />
         
         <div class="tw:drawer-content tw:flex tw:flex-col">
-            <div class="tw:navbar tw:bg-base-100 tw:lg:hidden tw:shadow-sm tw:z-10">
+            <!-- Mobile Top Navbar -->
+            <div class="tw:navbar tw:bg-base-100 tw:lg:hidden tw:shadow-sm tw:z-10 tw:border-b tw:border-base-content/5">
                 <div class="tw:flex-none">
                     <label for="main-drawer" class="tw:btn tw:btn-square tw:btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="tw:inline-block tw:w-6 tw:h-6 tw:stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -77,250 +74,146 @@
                 </div>
             </div>
 
+            <!-- Workspace Area -->
             <main class="tw:p-4 lg:tw:p-8 tw:grow tw:overflow-auto tw:bg-base-100 tw:text-base-content">
                 {% block content %}{% endblock %}
             </main>
         </div>
         
-        <div class="tw:drawer-side tw:z-30">          
+        <!-- Sidebar Navigation -->
+        <div class="tw:drawer-side tw:z-30">
+            <label for="main-drawer" aria-label="close sidebar" class="tw:drawer-overlay"></label>          
             <div class="tw:flex tw:flex-col tw:w-80 tw:h-screen tw:bg-base-200 tw:text-base-content tw:border-r tw:border-base-content/5 tw:overflow-hidden">
                 
                 <div class="tw:flex-shrink-0">
+                    <!-- Branding Block -->
                     <div class="tw:px-6 tw:py-8 tw:flex tw:items-center tw:justify-center">
-                        <a href="https://github.com/aaronwmorris/indi-allsky" target="_blank">
-                            <img src="{{ url_for('indi_allsky.static', filename='images/logo_outline_full.png') }}" class="tw:h-20 tw:w-auto tw:transition-transform hover:tw:scale-105" alt="indi-allsky">
+                        <a href="https://github.com/aaronwmorris/indi-allsky" target="_blank" class="tw:no-underline">
+                            <img src="{{ url_for('indi_allsky.static', filename='images/logo_outline_full.png') }}" class="tw:h-20 tw:w-auto tw:transition-transform hover:tw:scale-105" alt="indi-allsky logo">
                         </a>
                     </div>
 
+                    <!-- Camera Context Selector -->
                     <div class="tw:px-6 tw:py-2 tw:mb-2">
                         <form id="form_camera_select" onSubmit="return false;">
-                            {{ form_camera_select.CAMERA_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:w-full tw:font-bold tw:text-warning tw:bg-neutral focus:tw:outline-offset-0') }}
+                            {{ form_camera_select.CAMERA_SELECT(class='tw:select tw:select-bordered tw:select-sm tw:w-full tw:font-bold tw:text-warning tw:bg-neutral focus:tw:outline-none') }}
                         </form>
-                        <div class="tw:text-[10px] tw:uppercase tw:tracking-wider tw:opacity-40 tw:mt-2 tw:px-1 tw:font-semibold">Cameras Available: {{ camera_count }}</div>
+                        <div class="tw:text-[10px] tw:uppercase tw:tracking-widest tw:opacity-40 tw:mt-3 tw:px-1 tw:font-black">Cameras: {{ camera_count }}</div>
                     </div>
                 </div>
 
+                <!-- Scrollable Menu Section -->
                 <div class="tw:grow tw:overflow-y-auto tw:px-4 tw:pb-4">
-                    <ul class="tw:menu tw:w-full tw:p-0 tw:pl-0 tw:flex-nowrap tw:gap-1">
+                    <ul class="tw:menu tw:w-full tw:p-0 tw:flex-nowrap tw:gap-1">
                         <li>
-                            <a href="{{ url_for('indi_allsky.index_view') }}" class="tw:flex tw:items-center tw:gap-3 tw:py-2">
-                                <img src="{{ url_for('indi_allsky.static', filename='svg/house-fill.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70" alt="Latest">
+                            <a href="{{ url_for('indi_allsky.index_view') }}" class="tw:flex tw:items-center tw:gap-3 tw:py-2.5 tw:font-semibold">
+                                <img src="{{ url_for('indi_allsky.static', filename='svg/house-fill.svg') }}" class="tw:w-4.5 tw:h-4.5 tw:opacity-60" alt="">
                                 Latest
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url_for('indi_allsky.image_loop_view') }}" class="tw:flex tw:items-center tw:gap-3 tw:py-2">
-                                <img src="{{ url_for('indi_allsky.static', filename='svg/repeat.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70" alt="Loop">
+                            <a href="{{ url_for('indi_allsky.image_loop_view') }}" class="tw:flex tw:items-center tw:gap-3 tw:py-2.5 tw:font-semibold">
+                                <img src="{{ url_for('indi_allsky.static', filename='svg/repeat.svg') }}" class="tw:w-4.5 tw:h-4.5 tw:opacity-60" alt="">
                                 Loop
                             </a>
                         </li>
 
+                        <!-- Collapsible Groups -->
+                        {% for group_id, group_label, group_icon, group_items in [
+                            ('media', 'Media', 'collection-play-fill.svg', [
+                                ('indi_allsky.gallery_view', 'Visual Gallery', false),
+                                ('indi_allsky.imageviewer_view', 'Frame Browser', false),
+                                ('indi_allsky.videoviewer_view', 'Nightly Renders', false),
+                                ('indi_allsky.mini_videoviewer_view', 'Event Clips', false),
+                                ('indi_allsky.latest_panorama_view', 'Latest Panorama', false),
+                                ('indi_allsky.panorama_loop_view', 'Panorama Loop', false),
+                                ('indi_allsky.realtime_keogram_view', 'Live Keogram', false),
+                                ('indi_allsky.longterm_keogram_view', 'Long Term History', false),
+                                ('indi_allsky.fitsimageviewer_view', 'FITS Browser', true)
+                            ]),
+                            ('info', 'Info', 'info-square-fill.svg', [
+                                ('indi_allsky.sqm_view', 'SQM Analytics', false),
+                                ('indi_allsky.chart_view', 'Performance Charts', false),
+                                ('indi_allsky.sensor_panel_view', 'Hardware Monitors', false),
+                                ('indi_allsky.darks_view', 'Dark Library', true),
+                                ('indi_allsky.rolling_adu_view', 'ADU History', true),
+                                ('indi_allsky.image_lag_view', 'Timing Lag', true),
+                                ('indi_allsky.filespaceusage_view', 'Storage Usage', true),
+                                ('indi_allsky.camera_lens_view', 'Optical Specs', true)
+                            ]),
+                            ('tools', 'Tools', 'tools.svg', [
+                                ('indi_allsky.virtualsky_view', 'VirtualSky StarMap', false),
+                                ('indi_allsky.camera_simulator_view', 'FOV Simulator', false),
+                                ('indi_allsky.astropanel_view', 'Ephemeris Panel', false),
+                                ('indi_allsky.generate_view', 'Manual Generation', true),
+                                ('indi_allsky.focus_view', 'Focal Assistant', true),
+                                ('indi_allsky.image_processing_view', 'FITS Processor', true),
+                                ('indi_allsky.image_circle_helper_view', 'Circle Calibrator', true),
+                                ('indi_allsky.mask_view', 'Mask Generator', true),
+                                ('indi_allsky.log_view', 'System Logs', true),
+                                ('indi_allsky.support_info_view', 'Support Bundle', true)
+                            ]),
+                            ('system', 'System', 'gear-fill.svg', [
+                                ('indi_allsky.config_view', 'Global Config', true),
+                                ('indi_allsky.network_manager_view', 'Network Manager', true),
+                                ('indi_allsky.drive_manager_view', 'Storage Manager', true),
+                                ('indi_allsky.manual_gpio_view', 'GPIO Control', true),
+                                ('indi_allsky.system_view', 'Platform Info', true)
+                            ])
+                        ] %}
                         <li class="tw:w-full">
-                            <details class="tw:w-full [&_summary::-webkit-details-marker]:tw:hidden">
-                                <summary class="tw:flex tw:items-center tw:w-full tw:px-3 tw:py-2 tw:bg-base-200/50 hover:tw:bg-base-300/80 tw:rounded-lg tw:cursor-pointer tw:list-none tw:border tw:border-base-content/10 active:tw:scale-[0.99] tw:transition-all">
-                                    <div class="tw:flex tw:items-center tw:justify-between tw:w-full">
-                                        <div class="tw:flex tw:items-center tw:gap-3">
-                                            <img src="{{ url_for('indi_allsky.static', filename='svg/collection-play-fill.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70 tw:flex-shrink-0" alt="Media">
-                                            <span class="tw:font-medium tw:text-[14px]">Media</span>
-                                        </div>
-                                        <span class="tw:text-xs tw:opacity-40 tw:transition-transform tw:duration-200 class-open:tw:rotate-180">▼</span>
+                            <details class="tw:w-full" id="menu-group-{{ group_id }}">
+                                <summary class="tw:flex tw:items-center tw:w-full tw:px-3 tw:py-2.5 tw:bg-base-200/50 hover:tw:bg-base-300/80 tw:rounded-lg tw:cursor-pointer tw:border tw:border-base-content/5 tw:transition-all">
+                                    <div class="tw:flex tw:items-center tw:gap-3">
+                                        <img src="{{ url_for('indi_allsky.static', filename='svg/' ~ group_icon) }}" class="tw:w-4.5 tw:h-4.5 tw:opacity-60" alt="">
+                                        <span class="tw:font-bold tw:text-xs tw:uppercase tw:tracking-wider">{{ group_label }}</span>
                                     </div>
+                                    <span class="tw:text-[8px] tw:opacity-30">▼</span>
                                 </summary>
-                                <ul class="tw:mt-1 tw:pl-4 tw:ml-4 tw:border-l tw:border-base-content/15 tw:flex tw:flex-col tw:gap-1">
-                                    {% set menu_items = [
-                                        ('indi_allsky.gallery_view', 'Gallery'),
-                                        ('indi_allsky.imageviewer_view', 'Images'),
-                                        ('indi_allsky.videoviewer_view', 'Timelapses'),
-                                        ('indi_allsky.mini_videoviewer_view', 'Mini-Timelapses'),
-                                        ('indi_allsky.latest_panorama_view', 'Panorama'),
-                                        ('indi_allsky.panorama_loop_view', 'Panorama Loop'),
-                                        ('indi_allsky.realtime_keogram_view', 'Realtime Keogram'),
-                                        ('indi_allsky.longterm_keogram_view', 'Long Term Keogram')
-                                    ] %}
-
-                                    {% for endpoint, label in menu_items %}
-                                    <li>
-                                        <a href="{{ url_for(endpoint) }}" 
-                                        class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                            {{ label }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-
-                                    {% if current_user.is_authenticated or login_disabled %}
-                                    <li>
-                                        <a href="{{ url_for('indi_allsky.fitsimageviewer_view') }}" 
-                                        class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                            FITS Viewer
-                                        </a>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </details>
-                        </li>
-
-                        <li class="tw:w-full">
-                            <details class="tw:w-full [&_summary::-webkit-details-marker]:tw:hidden">
-                                <summary class="tw:flex tw:items-center tw:w-full tw:px-3 tw:py-2 tw:bg-base-200/50 hover:tw:bg-base-300/80 tw:rounded-lg tw:cursor-pointer tw:list-none tw:border tw:border-base-content/10 active:tw:scale-[0.99] tw:transition-all">
-                                    <div class="tw:flex tw:items-center tw:justify-between tw:w-full">
-                                        <div class="tw:flex tw:items-center tw:gap-3">
-                                            <img src="{{ url_for('indi_allsky.static', filename='svg/info-square-fill.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70 tw:flex-shrink-0" alt="Info">
-                                            <span class="tw:font-medium tw:text-[14px]">Info</span>
-                                        </div>
-                                        <span class="tw:text-xs tw:opacity-40 tw:transition-transform tw:duration-200 class-open:tw:rotate-180">▼</span>
-                                    </div>
-                                </summary>
-                                <ul class="tw:mt-1 tw:pl-4 tw:ml-4 tw:border-l tw:border-base-content/15 tw:flex tw:flex-col tw:gap-1">
-                                    {% set info_items = [
-                                        ('indi_allsky.sqm_view', 'SQM'),
-                                        ('indi_allsky.chart_view', 'Charts'),
-                                        ('indi_allsky.sensor_panel_view', 'Sensor Panel')
-                                    ] %}
-
-                                    {% for endpoint, label in info_items %}
-                                    <li>
-                                        <a href="{{ url_for(endpoint) }}" 
-                                        class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                            {{ label }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-
-                                    {% if current_user.is_authenticated or login_disabled %}
-                                        {% set auth_items = [
-                                            ('indi_allsky.darks_view', 'Dark Library'),
-                                            ('indi_allsky.rolling_adu_view', 'ADU History'),
-                                            ('indi_allsky.image_lag_view', 'Image Lag'),
-                                            ('indi_allsky.filespaceusage_view', 'File Space Usage'),
-                                            ('indi_allsky.camera_lens_view', 'Camera Info')
-                                        ] %}
-                                        
-                                        {% for endpoint, label in auth_items %}
+                                <ul class="tw:mt-1 tw:pl-4 tw:ml-4 tw:border-l tw:border-base-content/10 tw:flex tw:flex-col tw:gap-0.5">
+                                    {% for endpoint, label, needs_auth in group_items %}
+                                        {% if not needs_auth or (current_user.is_authenticated or login_disabled) %}
                                         <li>
                                             <a href="{{ url_for(endpoint) }}" 
-                                            class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
+                                            class="tw:block tw:py-2 tw:px-3 tw:text-[13px] tw:text-base-content/70 hover:tw:text-primary hover:tw:bg-primary/5 tw:rounded-md tw:transition-all">
                                                 {{ label }}
                                             </a>
                                         </li>
-                                        {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </details>
-                        </li>
-
-                        <li class="tw:w-full">
-                            <details class="tw:w-full [&_summary::-webkit-details-marker]:tw:hidden">
-                                <summary class="tw:flex tw:items-center tw:w-full tw:px-3 tw:py-2 tw:bg-base-200/50 hover:tw:bg-base-300/80 tw:rounded-lg tw:cursor-pointer tw:list-none tw:border tw:border-base-content/10 active:tw:scale-[0.99] tw:transition-all">
-                                    <div class="tw:flex tw:items-center tw:justify-between tw:w-full">
-                                        <div class="tw:flex tw:items-center tw:gap-3">
-                                            <img src="{{ url_for('indi_allsky.static', filename='svg/tools.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70 tw:flex-shrink-0" alt="Tools">
-                                            <span class="tw:font-medium tw:text-[14px]">Tools</span>
-                                        </div>
-                                        <span class="tw:text-xs tw:opacity-40 tw:transition-transform tw:duration-200 class-open:tw:rotate-180">▼</span>
-                                    </div>
-                                </summary>
-                                <ul class="tw:mt-1 tw:pl-4 tw:ml-4 tw:border-l tw:border-base-content/15 tw:flex tw:flex-col tw:gap-1">
-                                    {% set tool_items = [
-                                        ('indi_allsky.virtualsky_view', 'VirtualSky'),
-                                        ('indi_allsky.camera_simulator_view', 'Camera Simulator'),
-                                        ('indi_allsky.astropanel_view', 'Astropanel')
-                                    ] %}
-
-                                    {% for endpoint, label in tool_items %}
-                                    <li>
-                                        <a href="{{ url_for(endpoint) }}" 
-                                        class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                            {{ label }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-
-                                    {% if current_user.is_authenticated or login_disabled %}
-                                        {% set auth_tool_items = [
-                                            ('indi_allsky.generate_view', 'Generate'),
-                                            ('indi_allsky.focus_view', 'Focus'),
-                                            ('indi_allsky.image_processing_view', 'Process FITS'),
-                                            ('indi_allsky.image_circle_helper_view', 'Image Circle Helper'),
-                                            ('indi_allsky.mask_view', 'Mask Base'),
-                                            ('indi_allsky.log_view', 'Log'),
-                                            ('indi_allsky.support_info_view', 'Support Info')
-                                        ] %}
-                                        
-                                        {% for endpoint, label in auth_tool_items %}
-                                        <li>
-                                            <a href="{{ url_for(endpoint) }}" 
-                                            class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                                {{ label }}
-                                            </a>
-                                        </li>
-                                        {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </details>
-                        </li>
-
-                        {% if current_user.is_authenticated or login_disabled %}
-                        <li class="tw:w-full">
-                            <details class="tw:w-full [&_summary::-webkit-details-marker]:tw:hidden">
-                                <summary class="tw:flex tw:items-center tw:w-full tw:px-3 tw:py-2 tw:bg-base-200/50 hover:tw:bg-base-300/80 tw:rounded-lg tw:cursor-pointer tw:list-none tw:border tw:border-base-content/10 active:tw:scale-[0.99] tw:transition-all">
-                                    <div class="tw:flex tw:items-center tw:justify-between tw:w-full">
-                                        <div class="tw:flex tw:items-center tw:gap-3">
-                                            <img src="{{ url_for('indi_allsky.static', filename='svg/gear-fill.svg') }}" class="tw:w-5 tw:h-5 tw:opacity-70 tw:flex-shrink-0" alt="System">
-                                            <span class="tw:font-medium tw:text-[14px]">System</span>
-                                        </div>
-                                        <span class="tw:text-xs tw:opacity-40 tw:transition-transform tw:duration-200 class-open:tw:rotate-180">▼</span>
-                                    </div>
-                                </summary>
-                                <ul class="tw:mt-1 tw:pl-4 tw:ml-4 tw:border-l tw:border-base-content/15 tw:flex tw:flex-col tw:gap-1">
-                                    {% set system_items = [
-                                        ('indi_allsky.config_view', 'Config'),
-                                        ('indi_allsky.network_manager_view', 'Network'),
-                                        ('indi_allsky.drive_manager_view', 'Drives'),
-                                        ('indi_allsky.manual_gpio_view', 'GPIO Control'),
-                                        ('indi_allsky.system_view', 'System Info')
-                                    ] %}
-
-                                    {% for endpoint, label in system_items %}
-                                    <li>
-                                        <a href="{{ url_for(endpoint) }}" 
-                                        class="tw:block tw:py-1.5 tw:px-3 tw:text-sm tw:text-base-content/70 hover:tw:text-base-content hover:tw:bg-base-content/5 tw:rounded-md tw:transition-all tw:duration-200 hover:tw:translate-x-0.5">
-                                            {{ label }}
-                                        </a>
-                                    </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </details>
                         </li>
-                        {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
 
-                <div class="tw:p-4 tw:bg-base-200/60 tw:border-t tw:border-base-content/10 tw:flex-shrink-0">
-                    <div id="status_text" class="tw:text-[12.5px] tw:leading-relaxed tw:opacity-85 tw:grid tw:grid-cols-[auto_1fr] tw:gap-x-3 tw:gap-y-0.5 [&_br]:tw:hidden [&_b]:tw:font-semibold [&_b]:tw:text-base-content/70 [&_b]:after:tw:content-[':']">
+                <!-- Footer Status & Profile Section -->
+                <div class="tw:p-4 tw:bg-base-200/80 tw:border-t tw:border-base-content/5 tw:flex-shrink-0">
+                    <div id="status_text" class="tw:text-[11px] tw:leading-relaxed tw:opacity-70 tw:grid tw:grid-cols-[auto_1fr] tw:gap-x-3 tw:gap-y-0.5 [&_br]:tw:hidden [&_b]:tw:font-bold [&_b]:tw:text-base-content/40 [&_b]:after:tw:content-[':']">
                         {{ status_text|safe }}
                     </div>
 
-                    <div class="tw:divider tw:my-2.5 tw:opacity-40"></div>
+                    <div class="tw:divider tw:my-3 tw:opacity-20"></div>
 
                     <div class="tw:flex tw:gap-2">
+                        <!-- Login / User Button -->
                         <div class="tw:flex-1">
-                            <div tabindex="0" role="button" 
-                                 onclick="window.location.href='{{ url_for('auth_indi_allsky.login_view') if not current_user.is_authenticated else '#' }}'"
-                                 class="tw:btn tw:btn-sm tw:btn-outline tw:btn-block tw:rounded-md tw:h-8 tw:min-h-0 tw:border-base-content/20 hover:tw:bg-base-content/10 tw:text-sm tw:font-medium tw:text-base-content tw:cursor-pointer">
+                            <a href="{{ url_for('auth_indi_allsky.login_view') if not current_user.is_authenticated else url_for('indi_allsky.user_view') }}"
+                               class="tw:btn tw:btn-sm tw:btn-outline tw:btn-block tw:rounded-lg tw:h-9 tw:min-h-0 tw:border-base-content/10 hover:tw:bg-base-content/5 tw:text-[11px] tw:font-black tw:uppercase tw:tracking-widest tw:no-underline">
                                 {{ username_text|safe if current_user.is_authenticated else 'Login' }}
-                            </div>
+                            </a>
                         </div>
 
+                        <!-- Theme Control -->
                         <div class="tw:dropdown tw:dropdown-top tw:flex-1">
-                            <div tabindex="0" role="button" class="tw:btn tw:btn-sm tw:btn-outline tw:btn-block tw:rounded-md tw:h-8 tw:min-h-0 tw:border-base-content/20 hover:tw:bg-base-content/10 tw:text-sm tw:font-medium tw:text-base-content">
+                            <div tabindex="0" role="button" class="tw:btn tw:btn-sm tw:btn-outline tw:btn-block tw:rounded-lg tw:h-9 tw:min-h-0 tw:border-base-content/10 hover:tw:bg-base-content/5 tw:text-[11px] tw:font-black tw:uppercase tw:tracking-widest">
                                 Theme
                             </div>
-                            <ul tabindex="0" class="tw:dropdown-content tw:z-40 tw:menu tw:p-1 tw:shadow-2xl tw:bg-base-100 tw:rounded-lg tw:w-full tw:mb-2 tw:border tw:border-base-content/10 tw:gap-0.5">
-                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start" aria-label="Default" value="default"/></li>
-                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start" aria-label="Valentine" value="valentine"/></li>
-                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start" aria-label="Dark" value="dark"/></li>
-                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start" aria-label="Night" value="night"/></li>
-                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start" aria-label="Dracula" value="dracula"/></li>
+                            <ul tabindex="0" class="tw:dropdown-content tw:z-40 tw:menu tw:p-1.5 tw:shadow-2xl tw:bg-base-100 tw:rounded-xl tw:w-full tw:mb-3 tw:border tw:border-base-content/10 tw:gap-0.5">
+                                {% for theme in ['default', 'dark', 'night', 'dracula', 'luxury', 'coffee'] %}
+                                <li><input type="radio" name="theme-dropdown" class="tw:theme-controller tw:btn tw:btn-xs tw:btn-ghost tw:justify-start tw:font-bold tw:uppercase tw:text-[9px]" aria-label="{{ theme|capitalize }}" value="{{ theme }}"/></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -329,26 +222,38 @@
         </div>
     </div>
 
+    <!-- System Notification Component -->
     <dialog id="notificationModal" class="tw:modal">
-      <div class="tw:modal-box">
-        <h3 class="tw:text-base-content! tw:font-bold! tw:text-lg!" id="notificationLabel"></h3>
-        <div id="notification_date" class="tw:text-base-content tw:text-sm tw:opacity-70 tw:mb-4"></div>
-        <p id="notification_body" class="tw:text-base-content tw:py-4"></p>
+      <div class="tw:modal-box tw:border tw:border-base-content/10 tw:shadow-2xl">
+        <div class="tw:flex tw:items-center tw:gap-3 tw:mb-4">
+            <div class="tw:p-2 tw:bg-primary/10 tw:text-primary tw:rounded-lg">
+                <i class="tw:icon-[lucide--bell-ring] tw:w-5 tw:h-5"></i>
+            </div>
+            <div>
+                <h3 class="tw:text-sm tw:font-black tw:uppercase tw:tracking-widest tw:m-0" id="notificationLabel"></h3>
+                <div id="notification_date" class="tw:text-[10px] tw:opacity-40 tw:font-mono tw:mt-0.5"></div>
+            </div>
+        </div>
+        
+        <p id="notification_body" class="tw:text-sm tw:leading-relaxed tw:bg-base-300/50 tw:p-4 tw:rounded-xl tw:border tw:border-white/5"></p>
+        
         <div class="tw:modal-action">
-          <form method="dialog">
-            <button id="ack_button" class="tw:text-base-content tw:btn tw:btn-primary">Acknowledge</button>
+          <form method="dialog" class="tw:w-full">
+            <button id="ack_button" class="tw:btn tw:btn-primary tw:btn-block tw:rounded-lg tw:font-bold tw:uppercase tw:text-xs">Acknowledge</button>
           </form>
         </div>
       </div>
     </dialog>
 
     <script>
+        // Global AJAX CSRF Handshake
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
             }
         });
 
+        // Notification Engine
         function ackNotification(notice_id, onDone, onError) {
             postData = { 'camera_id' : camera_id, 'ack_id' : notice_id };
             $.ajax({
@@ -376,12 +281,13 @@
             if ( data.id == 0 ) return;
             $("#ack_button").off().on("click", function() { ackNotification(data.id, showNotification); });
             const modal = document.getElementById("notificationModal");
-            document.getElementById('notificationLabel').textContent = "Notification: " + data.category;
-            document.getElementById('notification_date').textContent = "Date: " + data.createDate;
+            document.getElementById('notificationLabel').textContent = data.category;
+            document.getElementById('notification_date').textContent = data.createDate;
             document.getElementById('notification_body').textContent = data.notification;
             modal.showModal();
         }
 
+        // Camera Management
         function changeCamera() {
             postData = { 'camera_id' : $("#CAMERA_SELECT").val() };
             $.ajax({
@@ -393,6 +299,7 @@
             });
         }
 
+        // Status Update Engine
         function getStatusText() {
             $.ajax({
                 type: "GET",
@@ -407,18 +314,23 @@
             setTimeout(getStatusText, 101000);
         }
 
+        // Page Lifecycle
         $(document).ready(function() {
+            // Theme Hydration
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 $('html').attr('data-theme', savedTheme);
                 $(`input[name="theme-dropdown"][value="${savedTheme}"]`).prop('checked', true);
             }
+            
             $('input[name="theme-dropdown"]').on('change', function() {
                 const theme = $(this).val();
                 $('html').attr('data-theme', theme);
                 localStorage.setItem('theme', theme);
             });
-            loadNotification({'camera_id' : camera_id});
+
+            // Initialize Background Tasks
+            loadNotification();
             setTimeout(getStatusText, 101000);
             $("#CAMERA_SELECT").on("change", changeCamera);
         });

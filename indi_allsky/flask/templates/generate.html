@@ -4,8 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-</style>
 <link href="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.css') }}" rel="stylesheet">
 <script src="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.js') }}"></script>
 <script type="text/javascript">
@@ -26,16 +24,17 @@ var camera_id = {{ camera_id }};
     </div>
 
     <style>
+        /* Direct override block to bypass parent container layout restrictions */
         .allsky-workspace-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            width: 100%;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+            width: 100% !important;
         }
         @media (min-width: 1024px) {
             .allsky-workspace-grid {
                 grid-template-columns: 2fr 1fr !important;
-                align-items: start;
+                align-items: start !important;
             }
         }
     </style>
@@ -82,7 +81,7 @@ var camera_id = {{ camera_id }};
                     </button>
                 </div>
 
-                <div class="tw:w-full">
+                <div class="tw:w-full tw:mt-2">
                     <div id="form_timelapsegen_success-message" class="tw:alert tw:alert-success tw:text-sm tw:font-medium" style="display: none;"></div>
                     <div id="form_timelapsegen_failure-message" class="tw:alert tw:alert-error tw:text-sm tw:font-medium" style="display: none;"></div>
                 </div>
@@ -94,17 +93,13 @@ var camera_id = {{ camera_id }};
             <div class="tw:bg-base-200 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:w-full">
                 <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-3">Documentation Wiki Links</h3>
                 <div class="tw:flex tw:flex-col tw:gap-2 tw:grow tw:justify-center">
-                    <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Timelapses" class="tw:btn tw:btn-neutral tw:btn-sm tw:text-xs tw:justify-between tw:bg-base-100 hover:tw:bg-base-300 tw:w-full" target="_blank">
+                    <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Timelapses" class="tw:btn tw:btn-neutral tw:btn-sm tw:text-xs tw:justify-between tw:bg-base-100 hover:tw:bg-base-300 tw:w-full tw:no-underline tw:border-none" target="_blank">
                         Timelapse Guide
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5 tw:opacity-60">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                        </svg>
+                        <i class="tw:icon-[lucide--external-link] tw:w-3.5 tw:h-3.5 tw:opacity-60"></i>
                     </a>
-                    <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Mini-Timelapses" class="tw:btn tw:btn-neutral tw:btn-sm tw:text-xs tw:justify-between tw:bg-base-100 hover:tw:bg-base-300 tw:w-full" target="_blank">
+                    <a href="https://github.com/aaronwmorris/indi-allsky/wiki/Mini-Timelapses" class="tw:btn tw:btn-neutral tw:btn-sm tw:text-xs tw:justify-between tw:bg-base-100 hover:tw:bg-base-300 tw:w-full tw:no-underline tw:border-none" target="_blank">
                         Mini-Timelapse Guide
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3.5 tw:h-3.5 tw:opacity-60">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                        </svg>
+                        <i class="tw:icon-[lucide--external-link] tw:w-3.5 tw:h-3.5 tw:opacity-60"></i>
                     </a>
                 </div>
             </div>
@@ -132,34 +127,34 @@ var camera_id = {{ camera_id }};
         <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:pl-1">System Tasks Queue</h2>
         
         <div class="tw:overflow-x-auto tw:border tw:border-base-content/10 tw:rounded-xl tw:bg-base-200 tw:w-full">
-            <table id="tasks-table" class="tw:table tw:table-zebra tw:table-compact tw:w-full tw:text-base-content">
+            <table id="tasks-table" class="tw:table tw:table-xs tw:w-full tw:m-0">
                 <thead>
-                    <tr class="tw:bg-base-300/50 tw:text-base-content/70 tw:text-xs tw:border-b tw:border-base-content/10">
-                        <th class="tw:font-bold tw:py-3">ID</th>
-                        <th class="tw:font-bold tw:py-3">Date</th>
-                        <th class="tw:font-bold tw:py-3">Queue</th>
-                        <th class="tw:font-bold tw:py-3">Action</th>
-                        <th class="tw:font-bold tw:py-3">State</th>
-                        <th class="tw:font-bold tw:py-3">Result</th>
+                    <tr class="tw:bg-base-300/50 tw:text-base-content/70 tw:text-[11px] tw:uppercase tw:tracking-wider tw:border-b tw:border-base-content/10">
+                        <th class="tw:pl-4 tw:py-3">ID</th>
+                        <th class="tw:py-3">Date</th>
+                        <th class="tw:py-3">Queue</th>
+                        <th class="tw:py-3">Action</th>
+                        <th class="tw:py-3">State</th>
+                        <th class="tw:pr-4 tw:py-3">Result</th>
                     </tr>
                 </thead>
-                <tbody class="tw:text-xs">
+                <tbody class="tw:divide-y tw:divide-base-content/5">
                     {% for task in task_list %}
-                    <tr class="hover:tw:bg-base-content/5 tw:border-b tw:border-base-content/5 last:tw:border-none">
-                        <td class="tw:font-mono tw:font-bold tw:text-base-content/90">{{ task.id }}</td>
+                    <tr class="hover:tw:bg-base-content/5 tw:transition-colors tw:text-xs">
+                        <td class="tw:pl-4 tw:font-mono tw:font-bold tw:text-base-content/90">{{ task.id }}</td>
                         <td class="tw:whitespace-nowrap tw:text-base-content/80">{{ task.createDate.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td><span class="tw:badge tw:badge-sm tw:badge-ghost tw:font-semibold tw:text-base-content/70">{{ task.queue }}</span></td>
+                        <td><span class="tw:badge tw:badge-sm tw:badge-ghost tw:font-semibold tw:text-[9px] tw:uppercase">{{ task.queue }}</span></td>
                         <td class="tw:font-medium tw:text-base-content/90">{{ task.action }}</td>
                         <td>
                             {% if task.state == 'failed' or task.state == 'error' %}
-                            <span class="tw:badge tw:badge-error tw:badge-sm tw:font-bold tw:text-white">{{ task.state }}</span>
+                            <span class="tw:badge tw:badge-error tw:badge-sm tw:font-bold tw:text-white tw:uppercase tw:text-[9px]">{{ task.state }}</span>
                             {% elif task.state == 'completed' or task.state == 'success' %}
-                            <span class="tw:badge tw:badge-success tw:badge-sm tw:font-bold tw:text-white">{{ task.state }}</span>
+                            <span class="tw:badge tw:badge-success tw:badge-sm tw:font-bold tw:text-white tw:uppercase tw:text-[9px]">{{ task.state }}</span>
                             {% else %}
-                            <span class="tw:badge tw:badge-info tw:badge-sm tw:font-bold">{{ task.state }}</span>
+                            <span class="tw:badge tw:badge-info tw:badge-sm tw:font-bold tw:uppercase tw:text-[9px]">{{ task.state }}</span>
                             {% endif %}
                         </td>
-                        <td class="tw:max-w-xs tw:truncate tw:font-mono tw:text-base-content/60" title="{{ task.result }}">{{ task.result }}</td>
+                        <td class="tw:pr-4 tw:max-w-xs tw:truncate tw:font-mono tw:text-[11px] tw:text-base-content/60" title="{{ task.result }}">{{ task.result }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -203,9 +198,6 @@ form_timelapsegen_fields['form_global'] = {
 };
 
 
-// ajax setup later
-
-
 $('#form_timelapsegen').on('submit', function() {
     if (! $("#CONFIRM1").prop('checked')) {
         console.log('Flush checkbox not checked');
@@ -222,9 +214,9 @@ $('#form_timelapsegen').on('submit', function() {
     };
 
 
-    $("#generate-button").attr("class", "btn btn-primary");
+    $("#generate-button").attr("class", "tw:btn tw:btn-neutral");
     $("#generate-button").html(
-      '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span role="status">Generate</span>'
+      '<span class="tw:loading tw:loading-spinner tw:loading-xs"></span> Generation Processing...'
     );
 
 
@@ -232,6 +224,9 @@ $('#form_timelapsegen').on('submit', function() {
     form_timelapsegen_successMessage.css({'display' : 'none'});
     Object.keys(form_timelapsegen_fields).forEach((key) => {
         form_timelapsegen_fields[key].error.css({'display' : 'none'});
+        if(form_timelapsegen_fields[key].input) {
+            form_timelapsegen_fields[key].input.removeClass('tw:border-error');
+        }
     });
 
 
@@ -254,27 +249,23 @@ $('#form_timelapsegen').on('submit', function() {
         contentType: "application/json",
         data: JSON.stringify(json_data),
         success: function(rdata){
-            $("#generate-button").attr("class", "btn btn-success");
-            $("#generate-button").html(
-              'Generate'
-            );
+            $("#generate-button").attr("class", "tw:btn tw:btn-success tw:btn-sm");
+            $("#generate-button").html('Generate');
 
             $("#ACTION_SELECT").val('none');
             form_timelapsegen_successMessage.html(rdata['success-message']);
             form_timelapsegen_successMessage.css({'display' : 'block'});
             setTimeout(function() {
-                form_timelapsegen_successMessage.css({'display' : 'none'});
+                form_timelapsegen_successMessage.fadeOut();
             }, 15000);
         },
         error: function(rdata){
-            $("#generate-button").attr("class", "btn btn-danger");
-            $("#generate-button").html(
-              'Generate'
-            );
+            $("#generate-button").attr("class", "tw:btn tw:btn-error tw:btn-sm");
+            $("#generate-button").html('Generate');
 
             var errors = JSON.parse(rdata.responseText);
             Object.keys(errors).forEach((key) => {
-                form_timelapsegen_fields[key].input.addClass('is-invalid');
+                form_timelapsegen_fields[key].input.addClass('tw:border-error');
                 form_timelapsegen_fields[key].error.html(errors[key][0]);
                 form_timelapsegen_fields[key].error.css({'display' : 'block'});
             });

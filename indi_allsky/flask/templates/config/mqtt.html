@@ -1,140 +1,148 @@
+<style>
+    /* Enforce absolute dark baseline properties across input types */
+    .allsky-input-dark {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8f9fa !important;
+    }
+    .allsky-input-dark:focus {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        border-color: var(--p) !important;
+    }
+    .field-micro-label {
+        @apply tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-base-content/50 tw:mb-1 !important;
+        display: block !important;
+    }
+</style>
+
 <div class="tw:flex tw:flex-col tw:gap-6 tw:w-full">
 
-    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
-        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Broker Broker Connectivity</h3>
+    <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-6">
+        <div class="tw:flex tw:items-center tw:justify-between">
+            <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+                <i class="tw:icon-[lucide--network] tw:w-4 tw:h-4"></i>
+                Broker Connectivity
+            </h3>
+            <a href="https://github.com/aaronwmorris/indi-allsky/wiki/MQTT-Broker-Publishing" target="_blank" class="tw:btn tw:btn-xs tw:btn-info tw:btn-outline tw:gap-1.5 tw:no-underline tw:px-3">
+                <i class="tw:icon-[lucide--book-open] tw:w-3 tw:h-3"></i>
+                Wiki
+            </a>
+        </div>
 
-        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4 tw:items-center tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
-            <div class="md:tw:col-span-4 tw:flex tw:items-center tw:gap-3">
-                {{ form_config.MQTTPUBLISH__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+        <div class="tw:flex tw:items-center tw:gap-4 tw:bg-base-300/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5">
+            {{ form_config.MQTTPUBLISH__ENABLE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
+            <div class="tw:flex tw:flex-col">
                 <label for="MQTTPUBLISH__ENABLE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
-                    {{ form_config.MQTTPUBLISH__ENABLE.label.text if form_config.MQTTPUBLISH__ENABLE.label.text else "Enable MQTT Publishing" }}
+                    Enable MQTT Publishing
                 </label>
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Ship telemetry and status frames to your local or remote MQTT message cluster.</span>
             </div>
-            <div id="MQTTPUBLISH__ENABLE-error" class="tw:text-error tw:text-xs md:tw:col-span-3" style="display: none;"></div>
-            
-            <div class="md:tw:col-span-5 md:tw:text-right">
-                <a href="https://github.com/aaronwmorris/indi-allsky/wiki/MQTT-Broker-Publishing" class="tw:btn tw:btn-xs tw:btn-neutral tw:bg-base-100 hover:tw:bg-base-300 tw:text-info tw:gap-2 tw:border-none" target="_blank">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="tw:w-3 tw:h-3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                    </svg>
-                    MQTT Publishing Wiki
-                </a>
-            </div>
+            <div id="MQTTPUBLISH__ENABLE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
         </div>
 
-        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4">
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-6">
             <div class="tw:form-control tw:w-full md:tw:col-span-8">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Host / IP Address</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='localhost or broker.local') }}
-                <div id="MQTTPUBLISH__HOST-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Host / IP Address</label>
+                {{ form_config.MQTTPUBLISH__HOST(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs', placeholder='localhost or broker.local') }}
+                <div id="MQTTPUBLISH__HOST-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
 
             <div class="tw:form-control tw:w-full md:tw:col-span-4">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Port</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary tw:font-mono', placeholder='1883') }}
-                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Standard: 1883 | Secure TLS: 8883</span>
-                <div id="MQTTPUBLISH__PORT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Port</label>
+                {{ form_config.MQTTPUBLISH__PORT(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs', placeholder='1883') }}
+                <span class="tw:text-[9px] tw:text-base-content/30 tw:mt-1.5 tw:font-mono uppercase">Std: 1883 | Secure: 8883</span>
+                <div id="MQTTPUBLISH__PORT-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
             </div>
         </div>
 
-        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
             <div class="tw:form-control tw:w-full">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Transport</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__TRANSPORT(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
-                <div id="MQTTPUBLISH__TRANSPORT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Transport</label>
+                {{ form_config.MQTTPUBLISH__TRANSPORT(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                <div id="MQTTPUBLISH__TRANSPORT-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
 
             <div class="tw:form-control tw:w-full">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Protocol Version</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__PROTOCOL(class='tw:select tw:select-bordered tw:select-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary') }}
-                <div id="MQTTPUBLISH__PROTOCOL-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Protocol Version</label>
+                {{ form_config.MQTTPUBLISH__PROTOCOL(class='tw:select tw:select-bordered tw:select-sm tw:h-11 allsky-input-dark') }}
+                <div id="MQTTPUBLISH__PROTOCOL-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
         </div>
     </div>
 
-    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
-        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Authentication & Telemetry Scope</h3>
+    <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-6">
+        <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+            <i class="tw:icon-[lucide--shield-check] tw:w-4 tw:h-4"></i>
+            Authentication & Telemetry Scope
+        </h3>
 
-        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-6">
             <div class="tw:form-control tw:w-full">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Username</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='Optional broker user...') }}
-                <div id="MQTTPUBLISH__USERNAME-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Username</label>
+                {{ form_config.MQTTPUBLISH__USERNAME(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark') }}
+                <div id="MQTTPUBLISH__USERNAME-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
 
             <div class="tw:form-control tw:w-full">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">MQTT Password</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', type='password', placeholder='Optional broker password...') }}
-                <div id="MQTTPUBLISH__PASSWORD-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">MQTT Password</label>
+                {{ form_config.MQTTPUBLISH__PASSWORD(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark', type='password') }}
+                <div id="MQTTPUBLISH__PASSWORD-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
         </div>
 
-        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-4">
+        <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-12 tw:gap-6">
             <div class="tw:form-control tw:w-full md:tw:col-span-8">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">Base Root Topic</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__BASE_TOPIC(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content tw:font-mono focus:tw:outline-none focus:tw:border-primary', placeholder='indi-allsky/allsky') }}
-                <div id="MQTTPUBLISH__BASE_TOPIC-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">Base Root Topic</label>
+                {{ form_config.MQTTPUBLISH__BASE_TOPIC(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs', placeholder='indi-allsky/allsky') }}
+                <div id="MQTTPUBLISH__BASE_TOPIC-error" class="tw:text-error tw:text-[10px] tw:mt-1.5" style="display: none;"></div>
             </div>
 
             <div class="tw:form-control tw:w-full md:tw:col-span-4">
-                <label class="tw:label tw:pb-1">
-                    <span class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/60 tw:uppercase tw:tracking-wider">QoS Level</span>
-                </label>
-                {{ form_config.MQTTPUBLISH__QOS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 tw:bg-base-100 tw:w-full tw:text-sm tw:text-base-content focus:tw:outline-none focus:tw:border-primary', placeholder='0') }}
-                <span class="tw:text-[10px] tw:text-base-content/40 tw:mt-1 tw:font-medium">Valid entries: 0 (default), 1, or 2</span>
-                <div id="MQTTPUBLISH__QOS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                <label class="field-micro-label">QoS Level</label>
+                {{ form_config.MQTTPUBLISH__QOS(class='tw:input tw:input-bordered tw:input-sm tw:h-11 allsky-input-dark tw:font-mono tw:text-xs', placeholder='0') }}
+                <span class="tw:text-[9px] tw:text-base-content/30 tw:mt-1.5 tw:font-mono uppercase">Range: 0 (default) to 2</span>
+                <div id="MQTTPUBLISH__QOS-error" class="tw:text-error tw:text-[10px] tw:mt-1" style="display: none;"></div>
             </div>
         </div>
     </div>
 
-    <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
-        <h3 class="tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-widest tw:text-base-content/40 tw:mb-1">Security Framework & Payload Control</h3>
+    <div class="tw:bg-base-200/50 tw:p-6 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
+        <h3 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest tw:text-primary tw:flex tw:items-center tw:gap-2">
+            <i class="tw:icon-[lucide--lock] tw:w-4 tw:h-4"></i>
+            Security Framework & Payload Control
+        </h3>
 
         <div class="tw:grid tw:grid-cols-1 md:tw:grid-cols-2 tw:gap-4">
-            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5">
                 {{ form_config.MQTTPUBLISH__TLS(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
                 <div class="tw:flex tw:flex-col">
-                    <label for="MQTTPUBLISH__TLS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
-                        {{ form_config.MQTTPUBLISH__TLS.label.text if form_config.MQTTPUBLISH__TLS.label.text else "Enable TLS / SSL Connection" }}
+                    <label for="MQTTPUBLISH__TLS" class="tw:label-text tw:text-[11px] tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Enable TLS / SSL Connection
                     </label>
-                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Encrypts transmissions across standard internet nodes.</span>
+                    <span class="tw:text-[10px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Encrypts transmissions across standard internet nodes.</span>
                 </div>
                 <div id="MQTTPUBLISH__TLS-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
             </div>
 
-            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5">
+            <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5">
                 {{ form_config.MQTTPUBLISH__CERT_BYPASS(class='tw:toggle tw:toggle-warning tw:toggle-sm') }}
                 <div class="tw:flex tw:flex-col">
-                    <label for="MQTTPUBLISH__CERT_BYPASS" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
-                        {{ form_config.MQTTPUBLISH__CERT_BYPASS.label.text if form_config.MQTTPUBLISH__CERT_BYPASS.label.text else "Bypass Certificate Validation" }}
+                    <label for="MQTTPUBLISH__CERT_BYPASS" class="tw:label-text tw:text-[11px] tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                        Bypass Certificate Validation
                     </label>
-                    <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Useful when hitting internal infrastructure with self-signed keys.</span>
+                    <span class="tw:text-[10px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Useful when hitting internal infrastructure with self-signed keys.</span>
                 </div>
                 <div id="MQTTPUBLISH__CERT_BYPASS-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
             </div>
         </div>
 
-        <div class="tw:flex tw:items-center tw:gap-3 tw:bg-base-300/30 tw:p-3 tw:rounded-lg tw:border tw:border-base-content/5 tw:mt-1">
+        <div class="tw:flex tw:items-center tw:gap-4 tw:bg-base-300/30 tw:p-4 tw:rounded-xl tw:border tw:border-base-content/5 tw:mt-1">
             {{ form_config.MQTTPUBLISH__PUBLISH_IMAGE(class='tw:toggle tw:toggle-success tw:toggle-sm') }}
             <div class="tw:flex tw:flex-col">
-                <label for="MQTTPUBLISH__PUBLISH_IMAGE" class="tw:label-text tw:text-xs tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
-                    {{ form_config.MQTTPUBLISH__PUBLISH_IMAGE.label.text if form_config.MQTTPUBLISH__PUBLISH_IMAGE.label.text else "Publish Base64 Image Frame Payload" }}
+                <label for="MQTTPUBLISH__PUBLISH_IMAGE" class="tw:label-text tw:text-[11px] tw:font-bold tw:text-base-content/70 tw:uppercase tw:tracking-wider tw:cursor-pointer">
+                    Publish Base64 Image Frame Payload
                 </label>
-                <span class="tw:text-[11px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Encodes and ships the last live capture frame directly over the MQTT cluster thread topic channels.</span>
+                <span class="tw:text-[10px] tw:text-base-content/40 tw:font-medium tw:mt-0.5">Encodes and ships the last live capture frame directly over the MQTT cluster thread channels.</span>
             </div>
             <div id="MQTTPUBLISH__PUBLISH_IMAGE-error" class="tw:text-error tw:text-xs tw:ml-auto" style="display: none;"></div>
         </div>

@@ -19,21 +19,6 @@
         }
     }
 
-    .loader {
-        display: none;
-        border: 3px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
     .fits-viewer-container {
         width: 100%;
         background-color: #000;
@@ -71,11 +56,11 @@ var fullscreen = false;  //initial state
         <!-- Hidden/Metadata Fields -->
         <div class="tw:hidden">
             {{ form_image_processing.CAMERA_ID() }}
-            <div id="CAMERA_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div id="CAMERA_ID-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
             {{ form_image_processing.FRAME_TYPE() }}
-            <div id="FRAME_TYPE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div id="FRAME_TYPE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
             {{ form_image_processing.FITS_ID() }}
-            <div id="FITS_ID-error" class="invalid-feedback text-danger" style="display: none;"></div>
+            <div id="FITS_ID-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
         </div>
 
         <!-- ROW 1: Image Viewer & Action Bar -->
@@ -105,7 +90,7 @@ var fullscreen = false;  //initial state
                 <div class="tw:card tw:bg-base-200 tw:shadow-sm">
                     <div class="tw:card-body tw:p-4 tw:flex-row tw:items-center tw:gap-4">
                         <button type="submit" class="tw:btn tw:btn-primary tw:btn-sm tw:h-11 tw:px-6">PROCESS</button>
-                        <div class="loader" id="loader_processing"></div>
+                        <span id="loader_processing" class="tw:loading tw:loading-spinner tw:loading-sm tw:text-primary" style="display: none;"></span>
                         
                         <div class="tw:divider tw:divider-horizontal"></div>
 
@@ -121,7 +106,7 @@ var fullscreen = false;  //initial state
                                 <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Output Type</span>
                             </label>
                             {{ form_image_processing.OUTPUT_IMAGE_TYPE(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                            <div id="OUTPUT_IMAGE_TYPE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                            <div id="OUTPUT_IMAGE_TYPE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                         </div>
                     </div>
                 </div>
@@ -129,7 +114,7 @@ var fullscreen = false;  //initial state
                 <!-- Feedback Messages -->
                 <div id="success-message" class="tw:alert tw:alert-success tw:py-2 tw:text-sm" style="display: none;"></div>
                 <div id="failure-message" class="tw:alert tw:alert-error tw:py-2 tw:text-sm" style="display: none;"></div>
-                <div id="form_global-error" class="invalid-feedback text-danger tw:text-center tw:font-bold" style="display: none;"></div>
+                <div id="form_global-error" class="tw:text-error tw:text-xs tw:mt-1.5 tw:text-center tw:font-bold" style="display: none;"></div>
             </div>
         </div>
 
@@ -157,14 +142,14 @@ var fullscreen = false;  //initial state
                                         {{ form_image_processing.IMAGE_CALIBRATE_DARK(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Calibrate Dark</span>
                                     </label>
-                                    <div id="IMAGE_CALIBRATE_DARK-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_CALIBRATE_DARK-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-3">
                                         {{ form_image_processing.IMAGE_CALIBRATE_BPM(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Calibrate BPM</span>
                                     </label>
-                                    <div id="IMAGE_CALIBRATE_BPM-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_CALIBRATE_BPM-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -178,7 +163,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Manual Offset</span>
                                 </label>
                                 {{ form_image_processing.IMAGE_CALIBRATE_MANUAL_OFFSET(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                <div id="IMAGE_CALIBRATE_MANUAL_OFFSET-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="IMAGE_CALIBRATE_MANUAL_OFFSET-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <div class="tw:grid tw:grid-cols-2 tw:gap-4">
@@ -187,14 +172,14 @@ var fullscreen = false;  //initial state
                                         {{ form_image_processing.IMAGE_CALIBRATE_FIX_HOLES(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Fix Holes</span>
                                     </label>
-                                    <div id="IMAGE_CALIBRATE_FIX_HOLES-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_CALIBRATE_FIX_HOLES-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Hole Threshold</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_CALIBRATE_HOLE_THOLD(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_CALIBRATE_HOLE_THOLD-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_CALIBRATE_HOLE_THOLD-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -206,14 +191,14 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Bit Depth</span>
                                     </label>
                                     {{ form_image_processing.CCD_BIT_DEPTH(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                    <div id="CCD_BIT_DEPTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="CCD_BIT_DEPTH-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">SQM Region</span>
                                     </label>
                                     {{ form_image_processing.SQM_FOV_DIV(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                    <div id="SQM_FOV_DIV-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="SQM_FOV_DIV-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -222,7 +207,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Detection Mask (PNG)</span>
                                 </label>
                                 {{ form_image_processing.DETECT_MASK(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                <div id="DETECT_MASK-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="DETECT_MASK-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <!-- ROI Grid -->
@@ -235,10 +220,10 @@ var fullscreen = false;  //initial state
                                     {{ form_image_processing.SQM_ROI_Y2(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full', placeholder='Y2') }}
                                 </div>
                                 <div class="tw:flex tw:flex-col tw:gap-1">
-                                    <div id="SQM_ROI_X1-error" class="invalid-feedback text-danger" style="display: none;"></div>
-                                    <div id="SQM_ROI_Y1-error" class="invalid-feedback text-danger" style="display: none;"></div>
-                                    <div id="SQM_ROI_X2-error" class="invalid-feedback text-danger" style="display: none;"></div>
-                                    <div id="SQM_ROI_Y2-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="SQM_ROI_X1-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                                    <div id="SQM_ROI_Y1-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                                    <div id="SQM_ROI_X2-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
+                                    <div id="SQM_ROI_Y2-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -252,14 +237,14 @@ var fullscreen = false;  //initial state
                                             {{ form_image_processing.NIGHT_CONTRAST_ENHANCE(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">CLAHE (8-bit)</span>
                                         </label>
-                                        <div id="NIGHT_CONTRAST_ENHANCE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="NIGHT_CONTRAST_ENHANCE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                     <div class="tw:form-control">
                                         <label class="tw:label tw:cursor-pointer tw:justify-start tw:gap-3">
                                             {{ form_image_processing.CONTRAST_ENHANCE_16BIT(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">CLAHE (16-bit)</span>
                                         </label>
-                                        <div id="CONTRAST_ENHANCE_16BIT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="CONTRAST_ENHANCE_16BIT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                 </div>
                                 <div class="tw:grid tw:grid-cols-2 tw:gap-4">
@@ -268,14 +253,14 @@ var fullscreen = false;  //initial state
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Clip Limit</span>
                                         </label>
                                         {{ form_image_processing.CLAHE_CLIPLIMIT(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                        <div id="CLAHE_CLIPLIMIT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="CLAHE_CLIPLIMIT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                     <div class="tw:form-control">
                                         <label class="tw:label tw:py-1">
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Grid Size</span>
                                         </label>
                                         {{ form_image_processing.CLAHE_GRIDSIZE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                        <div id="CLAHE_GRIDSIZE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="CLAHE_GRIDSIZE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +273,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Stretch Algorithm</span>
                                 </label>
                                 {{ form_image_processing.IMAGE_STRETCH__CLASSNAME(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                <div id="IMAGE_STRETCH__CLASSNAME-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="IMAGE_STRETCH__CLASSNAME-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:bg-base-300/30 tw:p-3 tw:rounded-lg">
@@ -297,14 +282,14 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M1 Gamma</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE1_GAMMA(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE1_GAMMA-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE1_GAMMA-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M1 StdDevs</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE1_STDDEVS(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE1_STDDEVS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE1_STDDEVS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -314,21 +299,21 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M2 Shadows</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE2_SHADOWS(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE2_SHADOWS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE2_SHADOWS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M2 Mid</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE2_MIDTONES(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE2_MIDTONES-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE2_MIDTONES-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M2 High</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE2_HIGHLIGHTS(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE2_HIGHLIGHTS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE2_HIGHLIGHTS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -338,28 +323,28 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M3 Black Clip</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE3_BLACK_CLIP(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE3_BLACK_CLIP-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE3_BLACK_CLIP-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M3 Shadows</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE3_SHADOWS(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE3_SHADOWS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE3_SHADOWS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M3 Mid</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE3_MIDTONES(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE3_MIDTONES-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE3_MIDTONES-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">M3 High</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_STRETCH__MODE3_HIGHLIGHTS(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_STRETCH__MODE3_HIGHLIGHTS-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STRETCH__MODE3_HIGHLIGHTS-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -372,14 +357,14 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">CFA Pattern</span>
                                     </label>
                                     {{ form_image_processing.CFA_PATTERN(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                    <div id="CFA_PATTERN-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="CFA_PATTERN-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">SCNR Algo</span>
                                     </label>
                                     {{ form_image_processing.SCNR_ALGORITHM(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                    <div id="SCNR_ALGORITHM-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="SCNR_ALGORITHM-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
                             <div class="tw:form-control">
@@ -387,7 +372,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">SCNR Midtones</span>
                                 </label>
                                 {{ form_image_processing.SCNR_MTF_MIDTONES(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                <div id="SCNR_MTF_MIDTONES-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="SCNR_MTF_MIDTONES-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <div class="tw:divider tw:my-0"></div>
@@ -399,14 +384,14 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Denoise Method</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_DENOISE(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_DENOISE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_DENOISE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Strength (1-5)</span>
                                     </label>
                                     {{ form_image_processing.IMAGE_DENOISE_STRENGTH(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="IMAGE_DENOISE_STRENGTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_DENOISE_STRENGTH-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:grid tw:grid-cols-2 tw:gap-4">
                                     <div class="tw:form-control">
@@ -414,14 +399,14 @@ var fullscreen = false;  //initial state
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Bilateral Color</span>
                                         </label>
                                         {{ form_image_processing.BILATERAL_SIGMA_COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                        <div id="BILATERAL_SIGMA_COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="BILATERAL_SIGMA_COLOR-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                     <div class="tw:form-control">
                                         <label class="tw:label tw:py-1">
                                             <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Bilateral Space</span>
                                         </label>
                                         {{ form_image_processing.BILATERAL_SIGMA_SPACE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                        <div id="BILATERAL_SIGMA_SPACE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                        <div id="BILATERAL_SIGMA_SPACE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -435,7 +420,7 @@ var fullscreen = false;  //initial state
                                         {{ form_image_processing.AUTO_WB(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Auto White Balance</span>
                                     </label>
-                                    <div id="AUTO_WB-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="AUTO_WB-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:grid tw:grid-cols-3 tw:gap-2">
                                     <div class="tw:form-control">
@@ -488,21 +473,21 @@ var fullscreen = false;  //initial state
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Saturation</span>
                                     </label>
                                     {{ form_image_processing.SATURATION_FACTOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="SATURATION_FACTOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="SATURATION_FACTOR-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Gamma</span>
                                     </label>
                                     {{ form_image_processing.GAMMA_CORRECTION(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="GAMMA_CORRECTION-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="GAMMA_CORRECTION-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:form-control">
                                     <label class="tw:label tw:py-1">
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Sharpen</span>
                                     </label>
                                     {{ form_image_processing.SHARPEN_AMOUNT(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                    <div id="SHARPEN_AMOUNT-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="SHARPEN_AMOUNT-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -511,7 +496,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Colormap</span>
                                 </label>
                                 {{ form_image_processing.IMAGE_COLORMAP(class='tw:select tw:select-bordered tw:select-sm tw:h-10 tw:w-full') }}
-                                <div id="IMAGE_COLORMAP-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="IMAGE_COLORMAP-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <div class="tw:divider tw:my-0"></div>
@@ -527,7 +512,7 @@ var fullscreen = false;  //initial state
                                 </div>
                                 <div class="tw:form-control">
                                     {{ form_image_processing.IMAGE_BORDER__COLOR(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full', placeholder='Color R,G,B') }}
-                                    <div id="IMAGE_BORDER__COLOR-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_BORDER__COLOR-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                             </div>
 
@@ -536,7 +521,7 @@ var fullscreen = false;  //initial state
                                     {{ form_image_processing.IMAGE_CROP_IMAGE_CIRCLE(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Crop to Circle</span>
                                 </label>
-                                <div id="IMAGE_CROP_IMAGE_CIRCLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="IMAGE_CROP_IMAGE_CIRCLE-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                             </div>
 
                             <div class="tw:divider tw:my-0"></div>
@@ -603,7 +588,7 @@ var fullscreen = false;  //initial state
                                         {{ form_image_processing.IMAGE_STACK_ALIGN(class='tw:toggle tw:toggle-primary tw:toggle-xs') }}
                                         <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Align Frames</span>
                                     </label>
-                                    <div id="IMAGE_STACK_ALIGN-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                    <div id="IMAGE_STACK_ALIGN-error" class="tw:text-error tw:text-xs tw:mt-1" style="display: none;"></div>
                                 </div>
                                 <div class="tw:grid tw:grid-cols-3 tw:gap-2">
                                     <div class="tw:form-control">
@@ -1072,7 +1057,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Lens Image Circle</span>
                                 </label>
                                 {{ form_image_processing.LENS_IMAGE_CIRCLE(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                <div id="LENS_IMAGE_CIRCLE-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="LENS_IMAGE_CIRCLE-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                             </div>
 
                             <div class="tw:grid tw:grid-cols-2 tw:gap-4">
@@ -1095,7 +1080,7 @@ var fullscreen = false;  //initial state
                                     <span class="tw:label-text tw:text-[10px] tw:font-bold tw:uppercase tw:tracking-wide tw:text-base-content/60">Lens Azimuth</span>
                                 </label>
                                 {{ form_image_processing.LENS_AZIMUTH(class='tw:input tw:input-bordered tw:input-sm tw:h-10 tw:w-full') }}
-                                <div id="LENS_AZIMUTH-error" class="invalid-feedback text-danger" style="display: none;"></div>
+                                <div id="LENS_AZIMUTH-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
                             </div>
 
                         </div>
@@ -1230,14 +1215,16 @@ fields['form_global'] = { 'input': failureMessage, 'error': $('#form_global-erro
 
 function submitProcessingData() {
     $('#processing_time').text('Processing...');
-    $("#loader_processing").css('display', 'block');
+    $("#loader_processing").show();
     successMessage.hide();
     failureMessage.hide();
     $('#form_global-error').hide();
     
     Object.keys(fields).forEach(key => {
         fields[key].error.hide();
-        fields[key].input.removeClass('tw:input-error');
+        if(fields[key].input) {
+            fields[key].input.removeClass('tw:border-error');
+        }
     });
 
     var submit_data = {};
@@ -1262,6 +1249,7 @@ function submitProcessingData() {
                 $('<a />', {
                     'href': "data:" + mime_type + ";base64," + json_data['image_b64'],
                     'download': "image_processor_" + Math.floor(Date.now() / 1000) + ext,
+                    'class' : "tw:no-underline",
                 }).append($('<span />', {
                     'text': 'DOWNLOAD',
                     'class': "tw:badge tw:badge-info tw:font-bold tw:text-[10px]",
@@ -1273,10 +1261,12 @@ function submitProcessingData() {
             $('#processing_message').text(json_data['message']);
         },
         error: function(rdata){
+            $("#generate-button").attr("class", "tw:btn tw:btn-error tw:btn-sm");
+            
             var errors = JSON.parse(rdata.responseText);
             Object.keys(errors).forEach((key) => {
                 if(fields[key]) {
-                    fields[key].input.addClass('tw:input-error');
+                    fields[key].input.addClass('tw:border-error');
                     fields[key].error.html(errors[key][0]).show();
                 }
             });

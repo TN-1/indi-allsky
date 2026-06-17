@@ -23,23 +23,23 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] cameraLens.html
 - [x] cameras.html
 - [x] chart.html
-- [ ] config.html
-  - [ ] admin.html
-  - [ ] camera.html
-  - [ ] filetransfer.html
-  - [ ] location.html
-  - [ ] overlays.html
-  - [ ] s3.html
-  - [ ] sensors.html
-  - [ ] timelapse.html
-  - [ ] adsb.html
-  - [ ] devices.html
-  - [ ] image.html
-  - [ ] mqtt.html
-  - [ ] processing.html
-  - [ ] sat_track.html
-  - [ ] syncapi.html
-  - [ ] youtube.html
+- [x] config.html
+  - [x] admin.html
+  - [x] adsb.html
+  - [x] camera.html
+  - [x] devices.html
+  - [x] filetransfer.html
+  - [x] image.html
+  - [x] location.html
+  - [x] mqtt.html
+  - [x] overlays.html
+  - [x] processing.html
+  - [x] s3.html
+  - [x] sat_track.html
+  - [x] sensors.html
+  - [x] syncapi.html
+  - [x] timelapse.html
+  - [x] youtube.html
 - [x] config_list.html
 - [x] config_restore.html
 - [x] darks.html
@@ -48,18 +48,18 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] fitsimageviewer.html
 - [x] focus.html
 - [x] gallery.html
-- [ ] generate.html
-- [ ] imagecirclehelper.html
-- [ ] imageprocessing.html
-- [ ] imageviewer.html
+- [x] generate.html
+- [x] imagecirclehelper.html
+- [x] imageprocessing.html
+- [x] imageviewer.html
 - [x] index_canvas.html
 - [x] index_img.html
 - [x] lag.html
 - [x] log.html
 - [x] login.html
 - [x] longterm_keogram.html
-- [ ] loop_canvas.html
-- [ ] loop_img.html
+- [x] loop_canvas.html
+- [x] loop_img.html
 - [x] manual_gpio.html
 - [x] mask.html
 - [x] mini_generate.html
@@ -76,7 +76,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 - [x] users.html
 - [x] videoviewer.html
 - [x] view_image.html
-- [ ] virtualsky.html
+- [x] virtualsky.html
 - [x] watch_video.html
 
 ## To Test
