@@ -18,7 +18,7 @@ To migrate indi-allsky from Bootstrap to Tailwind CSS using DaisyUI as a compone
 
 - [x] adu.html
 - [x] astropanel.html
-- [ ] base.html
+- [x] base.html
 - [x] camera_simulator.html
 - [x] cameraLens.html
 - [x] cameras.html
