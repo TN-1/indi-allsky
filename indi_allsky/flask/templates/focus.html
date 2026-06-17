@@ -4,12 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-canvas {
-    width: 80%;
-    height: auto;
-};
-</style>
 <script type="text/javascript" src="{{ url_for('indi_allsky.static', filename='js/chart.umd.js') }}"></script>
 <script type="text/javascript">
 var img;
@@ -263,20 +257,11 @@ function closeFullscreen() {
     fullscreen = false;
 }
 
-
-
 </script>
 {% endblock %}
 
 {% block content %}
 <style>
-    /* Prevent legacy style bleed on form elements */
-    .focus-wrapper input, 
-    .focus-wrapper select {
-        background-image: none !important;
-        color: oklch(var(--bc)) !important;
-    }
-
     /* Force row layout on desktop screens layout bypass */
     @media (min-width: 1024px) {
         .force-desktop-row {
@@ -289,27 +274,6 @@ function closeFullscreen() {
             flex: 1 1 0% !important; /* Forces equal width columns */
             min-width: 0 !important;
         }
-    }
-
-    /* Tactile hardware button styling for the focuser stepper */
-    .focuser-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 75px;
-        height: 75px;
-        border-radius: 1rem;
-        font-family: monospace;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-    .focuser-btn:active {
-        transform: scale(0.95);
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
     }
 </style>
 

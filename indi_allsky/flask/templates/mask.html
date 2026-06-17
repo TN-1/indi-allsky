@@ -4,15 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-.fit {
-    max-width: 100%;
-    max-height: 80vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-</style>
 <script>
 var camera_id = {{ camera_id }};
 var url = '{{ mask_image_uri }}';
@@ -58,6 +49,7 @@ var url = '{{ mask_image_uri }}';
 
     </div>
 </div>
+
 <script>
 function init() {
     $('#mask_img').attr('src', url + '?' + new Date().getTime());
@@ -79,7 +71,5 @@ function init() {
 $( document ).ready(function() {
     init();
 });
-
 </script>
-
 {% endblock %}

@@ -4,37 +4,10 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-#wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-#latest-image {
-    max-width: 100%;
-    max-height: 75vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-
-#starmap_container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    /* Debugging */
-    /* border: 3px solid red; */
-    /* box-sizing: border-box; */
-}
-
-#starmap {
-    position: relative;
-}
-</style>
 <script src="{{ url_for('indi_allsky.static', filename='virtualsky/stuquery.min.js') }}"></script>
 <script src="{{ url_for('indi_allsky.static', filename='virtualsky/virtualsky.min.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('indi_allsky.static', filename='html2canvas/html2canvas.min.js') }}" type="text/javascript"></script>
+
 <script type="text/javascript">
 var img;
 var json_data = {

@@ -4,12 +4,6 @@
 
 {% block head %}
 <meta charset="UTF-8">
-<style>
-canvas {
-    width: 100%;
-    height: auto;
-};
-</style>
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 var refreshInterval = {{ refreshInterval | int }};
@@ -201,7 +195,6 @@ $( document ).ready(function() {
 
     init();
 });
-
 </script>
 {% endblock %}
 

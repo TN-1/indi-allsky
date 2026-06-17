@@ -6,14 +6,13 @@
 <meta charset="UTF-8">
 <link href="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.css') }}" rel="stylesheet">
 <script src="{{ url_for('indi_allsky.static', filename='DataTables/datatables.min.js') }}"></script>
+
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 </script>
-
 {% endblock %}
 
 {% block content %}
-
 <div class="tw:container tw:mx-auto tw:flex tw:flex-col tw:gap-4 tw:p-4 tw:w-full">
 
     <div class="tw:alert tw:alert-info tw:bg-info/5 tw:border-info/10 tw:text-info tw:text-xs tw:rounded-xl tw:py-3">

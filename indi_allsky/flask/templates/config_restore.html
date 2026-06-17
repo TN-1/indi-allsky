@@ -4,42 +4,13 @@
 
 {% block head %}
 <meta charset="UTF-8">
+
 <script type="text/javascript">
 var camera_id = {{ camera_id }};
 </script>
 {% endblock %}
 
 {% block content %}
-<style>
-    .allsky-input-dark {
-        background-color: rgba(0, 0, 0, 0.2) !important;
-        border-color: rgba(255, 255, 255, 0.1) !important;
-        color: #f8f9fa !important;
-    }
-    .allsky-input-dark:focus {
-        background-color: rgba(0, 0, 0, 0.4) !important;
-        border-color: var(--p) !important;
-    }
-    /* Custom styling for the native file input button state to match theme */
-    .allsky-file-input::file-selector-button {
-        background-color: #2a323c !important;
-        color: #a6adbb !important;
-        border: none !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        font-size: 0.75rem !important;
-        letter-spacing: 0.05em !important;
-        padding: 0 1rem !important;
-        height: 100% !important;
-        margin-right: 1rem !important;
-        cursor: pointer !important;
-        transition: background-color 0.15s ease-in-out !important;
-    }
-    .allsky-file-input::file-selector-button:hover {
-        background-color: #414558 !important;
-    }
-</style>
-
 <div class="tw:w-full tw:flex tw:flex-col tw:gap-6">
 
     <div class="tw:bg-base-200/50 tw:p-5 tw:rounded-xl tw:border tw:border-base-content/5 tw:flex tw:flex-col tw:gap-4">
@@ -70,7 +41,7 @@ var camera_id = {{ camera_id }};
                         {{ form_config_restore.CONFIG_UPLOAD.label.text }}
                     </span>
                 </label>
-                {{ form_config_restore.CONFIG_UPLOAD(class='tw:file-input tw:file-input-bordered tw:file-input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm allsky-file-input') }}
+                {{ form_config_restore.CONFIG_UPLOAD(class='tw:file-input tw:file-input-bordered tw:file-input-sm tw:h-11 allsky-input-dark tw:w-full tw:text-sm') }}
                 <div id="CONFIG_UPLOAD-error" class="tw:text-error tw:text-xs tw:mt-1.5" style="display: none;"></div>
             </div>
 

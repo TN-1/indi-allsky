@@ -337,20 +337,6 @@ $( document ).ready(function() {
 
 {% block content %}
 <style>
-    /* Prevent legacy Bootstrap table background colors and bleed overrides */
-    .astropanel-wrapper table,
-    .astropanel-wrapper thead,
-    .astropanel-wrapper tr,
-    .astropanel-wrapper th,
-    .astropanel-wrapper td {
-        background-color: transparent !important;
-        background-image: none !important;
-        --bs-table-bg: transparent !important;
-        --bs-table-accent-bg: transparent !important;
-        --bs-table-striped-bg: transparent !important;
-        color: inherit !important;
-    }
-
     /* Clean text-only tabs with a custom cute indicator dot */
     .astropanel-text-tab {
         position: relative;
@@ -403,20 +389,6 @@ $( document ).ready(function() {
     .astropanel-text-tab:checked::before {
         opacity: 1 !important;
         transform: translateY(-50%) scale(1.2);
-    }
-
-    /* Responsive workspace grid override */
-    .allsky-workspace-grid {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
-        width: 100% !important;
-    }
-    @media (min-width: 1024px) {
-        .allsky-workspace-grid {
-            grid-template-columns: 2fr 3fr !important;
-            align-items: start !important;
-        }
     }
 
     /* Optical finder containment box */
