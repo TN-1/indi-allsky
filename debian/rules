@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Build self-contained production virtualenv directly at package build time
+	mkdir -p debian/venv
+	python3 -m venv debian/venv
+	debian/venv/bin/pip install --no-cache-dir --upgrade pip wheel setuptools
+	debian/venv/bin/pip install --no-cache-dir \
+		-r requirements/requirements_latest.txt \
+		-r requirements/requirements_optional.txt \
+		-r requirements/requirements_gpio.txt
+	# Prune unneeded caches and static archives
+	find debian/venv -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	find debian/venv -type f -name "*.pyc" -delete 2>/dev/null || true
+	find debian/venv -type f -name "*.a" -delete 2>/dev/null || true
+	# Fix shebang lines in virtualenv bin/ directory to point to runtime path (/var/lib/indi-allsky/venv)
+	find debian/venv/bin -type f -exec sed -i '1s|^#!.*python.*|#!/var/lib/indi-allsky/venv/bin/python3|' {} +
+	# Set relative symlinks for python inside venv
+	ln -sf python3 debian/venv/bin/python
+	# Link application source directory and system dist-packages into virtualenv site-packages
+	for sp in debian/venv/lib/python*/site-packages; do \
+		if [ -d "$$sp" ]; then \
+			echo "/usr/share/indi-allsky" > "$$sp/indi-allsky.pth"; \
+			echo "/usr/lib/python3/dist-packages" > "$$sp/dist-packages.pth"; \
+		fi; \
+	done
+
+# Pre-compiled third-party binary wheels inside venv lack DWARF debuginfo symbols
+override_dh_dwz:
+
+override_dh_strip:
+	dh_strip -Xvar/lib/indi-allsky/venv
+
+# No compiled C/C++ binaries built from source needing dynamic ELF shlib resolution
+override_dh_shlibdeps:
+
+
+override_dh_installsystemd:
+	# Enable indi-allsky, gunicorn, and indiserver services
+	dh_installsystemd -pindi-allsky --name=indi-allsky
+	dh_installsystemd -pindi-allsky --name=gunicorn-indi-allsky
+	dh_installsystemd -pindi-allsky --name=indiserver
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 440 debian/indi-allsky/etc/sudoers.d/indi-allsky
+
+override_dh_auto_clean:
+	rm -rf debian/venv debian/wheels
+	dh_auto_clean

@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer for the indiserver service
+
+[Timer]
+### Start 30 seconds after boot
+OnBootSec=30sec
+
+[Install]
+WantedBy=timers.target

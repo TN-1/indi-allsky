@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer for the indi-allsky service
+
+[Timer]
+### Start 2 minutes after boot
+OnBootSec=2min
+
+[Install]
+WantedBy=timers.target
