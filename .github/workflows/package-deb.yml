@@ -380,6 +380,9 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/indi_v') || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Download all built .deb artifacts
         uses: actions/download-artifact@v4
         with:
@@ -401,15 +404,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "=== Cleaning previous assets on nightly release ==="
-          # Delete any previous assets to keep nightly down to the 6 current packages
-          for asset_id in $(gh api "repos/${{ github.repository }}/releases/tags/nightly" --jq '.assets[].id' 2>/dev/null || true); do
-            gh api -X DELETE "repos/${{ github.repository }}/releases/assets/${asset_id}" 2>/dev/null || true
-          done
+          echo "=== Resetting nightly pre-release ==="
+          # Delete existing nightly release and its tag in 1 call to wipe old assets instantly
+          gh release delete nightly -y --cleanup-tag 2>/dev/null || true
 
-          # Upload fresh artifacts to nightly release
-          gh release upload nightly downloaded-debs/*.deb --clobber 2>/dev/null || \
-          gh release create nightly downloaded-debs/*.deb --title "Nightly Build" --prerelease --notes-file downloaded-debs/release_notes.md
+          # Create fresh nightly release with target commit SHA
+          NOTES_FLAG="--notes 'Automated INDI Allsky Nightly Build'"
+          if [ -f "downloaded-debs/release_notes.md" ]; then
+            NOTES_FLAG="--notes-file downloaded-debs/release_notes.md"
+          fi
+
+          gh release create nightly downloaded-debs/*.deb \
+            --title "Nightly Build" \
+            --prerelease \
+            --target "${{ github.sha }}" \
+            $NOTES_FLAG
 
   deploy-apt-repo:
     name: Build & Deploy APT Repo (GitHub Pages)
