@@ -396,17 +396,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Attach .deb to Nightly Pre-Release
+      - name: Prune Stale Nightly Assets & Publish Release
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/v') && !startsWith(github.ref, 'refs/tags/indi_v'))
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "nightly"
-          prerelease: true
-          body_path: downloaded-debs/release_notes.md
-          generate_release_notes: false
-          files: downloaded-debs/*.deb
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Cleaning previous assets on nightly release ==="
+          # Delete any previous assets to keep nightly down to the 6 current packages
+          for asset_id in $(gh api "repos/${{ github.repository }}/releases/tags/nightly" --jq '.assets[].id' 2>/dev/null || true); do
+            gh api -X DELETE "repos/${{ github.repository }}/releases/assets/${asset_id}" 2>/dev/null || true
+          done
+
+          # Upload fresh artifacts to nightly release
+          gh release upload nightly downloaded-debs/*.deb --clobber 2>/dev/null || \
+          gh release create nightly downloaded-debs/*.deb --title "Nightly Build" --prerelease --notes-file downloaded-debs/release_notes.md
 
   deploy-apt-repo:
     name: Build & Deploy APT Repo (GitHub Pages)
@@ -488,10 +491,40 @@ jobs:
           if [[ "${{ github.ref }}" == refs/tags/indi_v* ]] || [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             echo "Processing tagged release -> indexing to 'main' component"
             cp debs/*.deb debs-main/ 2>/dev/null || true
+            CURRENT_TAG="${GITHUB_REF_NAME}"
           else
             echo "Processing dev/nightly build -> indexing to 'nightly' component"
             cp debs/*.deb debs-nightly/ 2>/dev/null || true
+            CURRENT_TAG="nightly"
           fi
+
+          # Index all historical tagged releases into 'main' component
+          echo "=== Fetching all tagged stable release packages from GitHub Releases ==="
+          mkdir -p debs-tags
+          for tag in $(gh release list --exclude-drafts --limit 50 --json tagName --jq '.[].tagName' 2>/dev/null | grep -v '^nightly$' || true); do
+            mkdir -p "debs-tags/$tag"
+            gh release download "$tag" --pattern '*.deb' --dir "debs-tags/$tag" 2>/dev/null || true
+            for deb in debs-tags/"$tag"/*.deb; do
+              if [ -f "$deb" ]; then
+                case "$deb" in
+                  *+bookworm*) reprepro -C main -b apt-repo --ignore=ignore includedeb bookworm "$deb" || true ;;
+                  *+trixie*)   reprepro -C main -b apt-repo --ignore=ignore includedeb trixie "$deb" || true ;;
+                  *+noble*)    reprepro -C main -b apt-repo --ignore=ignore includedeb noble "$deb" || true ;;
+                esac
+              fi
+            done
+          done
+
+          # Index current stable packages if tagged
+          for deb in debs-main/*.deb; do
+            if [ -f "$deb" ]; then
+              case "$deb" in
+                *+bookworm*) reprepro -C main -b apt-repo --ignore=ignore includedeb bookworm "$deb" || true ;;
+                *+trixie*)   reprepro -C main -b apt-repo --ignore=ignore includedeb trixie "$deb" || true ;;
+                *+noble*)    reprepro -C main -b apt-repo --ignore=ignore includedeb noble "$deb" || true ;;
+              esac
+            fi
+          done
 
           # Index nightly packages into 'nightly' component
           echo "=== Indexing nightly packages into reprepro ==="
@@ -505,22 +538,74 @@ jobs:
             fi
           done
 
-          # Index stable packages into 'main' component
-          echo "=== Indexing stable packages into reprepro ==="
-          for deb in debs-main/*.deb; do
-            if [ -f "$deb" ]; then
-              case "$deb" in
-                *+bookworm*) reprepro -C main -b apt-repo --ignore=ignore includedeb bookworm "$deb" || true ;;
-                *+trixie*)   reprepro -C main -b apt-repo --ignore=ignore includedeb trixie "$deb" || true ;;
-                *+noble*)    reprepro -C main -b apt-repo --ignore=ignore includedeb noble "$deb" || true ;;
-              esac
-            fi
-          done
-
           # Export all distributions Release & InRelease indices
           reprepro -b apt-repo export
 
-          # Disable Jekyll on GitHub Pages to serve all raw APT pool and dists files
+          # Build mapping of deb filename to release tag
+          REPO="${{ github.repository }}"
+          mkdir -p /tmp/map
+          find debs-tags -name "*.deb" 2>/dev/null | while read -r p; do
+            tag=$(echo "$p" | cut -d/ -f2)
+            fn=$(basename "$p")
+            echo "$fn $tag"
+          done > /tmp/deb_tag_map.txt
+
+          # Rewrite Filename in Packages to direct GitHub Releases download URLs
+          for pkg_file in $(find apt-repo/dists -type f -name "Packages"); do
+            if [ -f "$pkg_file" ]; then
+              comp=$(echo "$pkg_file" | awk -F'/' '{print $(NF-2)}')
+              if [ "$comp" = "main" ]; then
+                # Replace filenames using the tag map or current tag
+                while read -r fn tag; do
+                  [ -n "$fn" ] && [ -n "$tag" ] && sed -i -E "s|Filename: pool/main/(.*/)?(${fn})|Filename: https://github.com/${REPO}/releases/download/${tag}/\2|g" "$pkg_file"
+                done < /tmp/deb_tag_map.txt
+                # Fallback for current build packages
+                sed -i -E "s|Filename: pool/main/(.*/)?(.*\.deb)|Filename: https://github.com/${REPO}/releases/download/${CURRENT_TAG}/\2|g" "$pkg_file"
+              else
+                sed -i -E "s|Filename: pool/nightly/(.*/)?(.*\.deb)|Filename: https://github.com/${REPO}/releases/download/nightly/\2|g" "$pkg_file"
+              fi
+              gzip -cn9 "$pkg_file" > "${pkg_file}.gz"
+            fi
+          done
+
+          # Regenerate Release manifests with new Packages hashes and sign with GPG
+          BASE_DIR="$PWD"
+          for distro_dir in apt-repo/dists/*; do
+            if [ -d "$distro_dir" ]; then
+              codename=$(basename "$distro_dir")
+              cd "$distro_dir"
+              {
+                echo "Origin: INDI Allsky"
+                echo "Label: indi-allsky"
+                echo "Codename: ${codename}"
+                echo "Date: $(date -Ru)"
+                echo "Architectures: amd64 arm64"
+                echo "Components: main nightly"
+                echo "Description: INDI Allsky APT Repository for ${codename}"
+                echo "MD5Sum:"
+                for f in $(find . -type f \( -name "Packages" -o -name "Packages.gz" -o -name "Release" \) ! -name "*.new" ! -name "InRelease" ! -name "Release.gpg"); do
+                  clean_f=$(echo "$f" | sed 's|^\./||')
+                  echo " $(md5sum "$clean_f" | awk '{print $1}') $(stat -c%s "$clean_f") ${clean_f}"
+                done
+                echo "SHA256:"
+                for f in $(find . -type f \( -name "Packages" -o -name "Packages.gz" -o -name "Release" \) ! -name "*.new" ! -name "InRelease" ! -name "Release.gpg"); do
+                  clean_f=$(echo "$f" | sed 's|^\./||')
+                  echo " $(sha256sum "$clean_f" | awk '{print $1}') $(stat -c%s "$clean_f") ${clean_f}"
+                done
+              } > Release
+
+              if [ -n "$GPG_KEY_ID" ]; then
+                gpg --batch --yes --clearsign -o InRelease Release 2>/dev/null || true
+                gpg --batch --yes -abs -o Release.gpg Release 2>/dev/null || true
+              fi
+              cd "$BASE_DIR"
+            fi
+          done
+
+          # Remove heavy binary pool directory completely from GitHub Pages deployment
+          rm -rf apt-repo/pool
+
+          # Disable Jekyll on GitHub Pages
           touch apt-repo/.nojekyll
 
           # Install landing page index.html and assets
