@@ -53,3 +53,55 @@ sudo systemctl status indi-allsky.service
 sudo systemctl status gunicorn-indi-allsky.service
 sudo systemctl status indiserver.service
 ```
+
+---
+
+## Special Scenarios & INDI Driver Management
+
+### Scenario A: Preserving Source-Built INDI (Custom Builds)
+If you previously compiled INDI / drivers from source (e.g., using `setup.sh`'s source build or manual git builds) and want to ensure APT does not overwrite your custom binaries:
+
+#### Option 1: Protect Before Install (from Existing Git Checkout)
+From your existing `indi-allsky` git clone directory:
+```bash
+sudo bash misc/indi-allsky-ctl protect-source-indi
+sudo apt install -y indi-allsky
+```
+
+#### Option 2: Lean Initial Install + Post-Install Protection
+If you don't have the git checkout handy:
+```bash
+# 1. Install without downloading recommended driver packages
+sudo apt install --no-install-recommends -y indi-allsky
+
+# 2. Register source build so all future 'apt upgrade' runs are safe
+sudo indi-allsky-ctl protect-source-indi
+```
+
+Both options register a local `indi-local-source` dummy package (version `99.0.0`) in the `dpkg` database that satisfies all INDI dependencies. APT will recognize your source build and will never overwrite your binaries in `/usr/bin` or `/usr/lib`.
+
+---
+
+### Scenario B: Pinning (Holding) Installed APT INDI Driver Versions
+If you install INDI drivers via APT but want to guarantee that full system upgrades (`sudo apt upgrade`) do not touch or update your camera drivers:
+
+1. **Pin (Hold) Drivers**:
+   ```bash
+   sudo indi-allsky-ctl hold-indi
+   ```
+2. **Check Pin Status**:
+   ```bash
+   indi-allsky-ctl status-indi-hold
+   ```
+3. **Unpin (Allow Upgrades)**:
+   ```bash
+   sudo indi-allsky-ctl unhold-indi
+   ```
+
+---
+
+### Scenario C: Raspberry Pi HQ / Camera Module (Lean Install)
+If you are using a native Raspberry Pi camera (`rpicam-apps` / `libcamera`) and do not want to download the 3rd-party USB camera driver bundle:
+```bash
+sudo apt install --no-install-recommends -y indi-allsky rpicam-apps
+```

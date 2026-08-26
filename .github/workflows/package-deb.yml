@@ -535,6 +535,13 @@ jobs:
             fi
           done
 
+          # If building a stable release, also fetch existing nightly packages so nightly component remains populated
+          if [ "${CURRENT_TAG}" != "nightly" ]; then
+            echo "=== Fetching existing nightly release packages from GitHub Releases ==="
+            mkdir -p debs-nightly
+            gh release download nightly --pattern '*.deb' --dir debs-nightly 2>/dev/null || true
+          fi
+
           # Index nightly packages into 'nightly' component
           echo "=== Indexing nightly packages into reprepro ==="
           for deb in debs-nightly/*.deb; do

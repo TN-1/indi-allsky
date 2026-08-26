@@ -41,6 +41,12 @@ Peripheral Configuration:
   setup-rtc                Configure I2C hardware Real-Time Clock
   setup-usb-mount          Configure automatic USB flash drive automount
 
+Package & Driver Management:
+  hold-indi                Pin installed INDI packages so 'apt upgrade' won't touch them
+  unhold-indi              Unpin INDI packages to allow upgrades with 'apt upgrade'
+  protect-source-indi      Register source-built INDI with APT (prevents repo overwrites)
+  status-indi-hold         Show current APT hold status for INDI packages
+
 Service Control:
   status                   Show status of indi-allsky and gunicorn services
   restart                  Restart indi-allsky and gunicorn services
@@ -137,6 +143,96 @@ fix_permissions() {
     echo "indi-allsky: Directory permissions and ownership successfully restored."
 }
 
+protect_source_indi() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "Error: protect-source-indi requires root privileges. Please run with sudo:"
+        echo "  sudo indi-allsky-ctl protect-source-indi"
+        exit 1
+    fi
+
+    echo "indi-allsky: Protecting local source-built INDI installation..."
+    
+    if ! command -v equivs-build >/dev/null 2>&1; then
+        echo "Installing 'equivs' package builder..."
+        apt-get update -qq && apt-get install -y equivs -qq
+    fi
+
+    TMP_DIR=$(mktemp -d)
+    cd "$TMP_DIR"
+
+    cat <<EOF > indi-local-source.control
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Package: indi-local-source
+Provides: libindi1, libindiclient1, libindidriver1, libindi-data, libindi-dev, indi-bin, indi-3rdparty
+Version: 99.0.0
+Architecture: all
+Maintainer: Local System Administrator <root@localhost>
+Description: Local source build of INDI Framework
+ Registers locally compiled INDI server and drivers in the dpkg database
+ so that APT dependencies are satisfied without overwriting source files.
+EOF
+
+    equivs-build indi-local-source.control >/dev/null
+    dpkg -i indi-local-source_99.0.0_all.deb
+
+    cd /
+    rm -rf "$TMP_DIR"
+
+    echo "indi-allsky: Local source INDI successfully registered with APT (dummy package version 99.0.0)."
+    echo "APT will now recognize your source build and will not overwrite it with repo packages."
+}
+
+hold_indi() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "Error: hold-indi requires root privileges. Please run with sudo:"
+        echo "  sudo indi-allsky-ctl hold-indi"
+        exit 1
+    fi
+
+    INDI_PKGS="indi-bin indi-3rdparty libindi1 libindiclient1 libindi-data libindi-dev indi-dbg"
+    INSTALLED_PKGS=""
+    for pkg in $INDI_PKGS; do
+        if dpkg -l "$pkg" 2>/dev/null | grep -q "^ii"; then
+            INSTALLED_PKGS="$INSTALLED_PKGS $pkg"
+        fi
+    done
+
+    if [ -z "$INSTALLED_PKGS" ]; then
+        echo "No standard INDI APT packages are currently installed."
+        echo "If you installed INDI from source, use: sudo indi-allsky-ctl protect-source-indi"
+        return 0
+    fi
+
+    echo "indi-allsky: Pinning (holding) INDI packages from automatic upgrades:"
+    apt-mark hold $INSTALLED_PKGS
+    echo "INDI packages are now pinned. System 'apt upgrade' will not modify them."
+}
+
+unhold_indi() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "Error: unhold-indi requires root privileges. Please run with sudo:"
+        echo "  sudo indi-allsky-ctl unhold-indi"
+        exit 1
+    fi
+
+    INDI_PKGS="indi-bin indi-3rdparty libindi1 libindiclient1 libindi-data libindi-dev indi-dbg"
+    echo "indi-allsky: Releasing hold on INDI packages:"
+    apt-mark unhold $INDI_PKGS
+    echo "INDI packages will now upgrade normally with system updates."
+}
+
+status_indi_hold() {
+    echo "Current APT holds on INDI packages:"
+    SHOW_HOLDS=$(apt-mark showhold | grep -E "indi" || true)
+    if [ -n "$SHOW_HOLDS" ]; then
+        echo "$SHOW_HOLDS"
+    else
+        echo "No INDI packages are currently on hold."
+    fi
+}
+
 COMMAND="${1:-}"
 # Normalize --command or -command to command
 COMMAND="${COMMAND#--}"
@@ -204,6 +300,20 @@ case "$COMMAND" in
         ;;
     setup-usb-mount)
         exec bash "${APP_DIR}/misc/setup_usb_automount.sh" "$@"
+        ;;
+
+    # Package & Driver Management
+    protect-source-indi)
+        protect_source_indi
+        ;;
+    hold-indi|pin-indi)
+        hold_indi
+        ;;
+    unhold-indi|unpin-indi)
+        unhold_indi
+        ;;
+    status-indi-hold|show-indi-hold)
+        status_indi_hold
         ;;
 
     # Service Control
